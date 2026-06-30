@@ -1,0 +1,37 @@
+// Order Rail Status Pills
+.status-pill {
+    font-family: $font-family-label;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &.pill-danger {
+        background-color: rgba($danger-color, 0.15);
+        color: darken($danger-color, 5%);
+    }
+
+    &.pill-warning {
+        background-color: rgba($brand-primary, 0.15);
+        color: darken($brand-primary, 10%);
+    }
+
+    &.pill-success {
+        background-color: rgba($brand-secondary, 0.25);
+        color: darken($brand-secondary, 20%);
+    }
+}
+
+// Background utility overrides for standard badges
+.bg-primary-subtle {
+    background-color: rgba($brand-primary, 0.1) !important;
+}
+.text-primary-custom {
+    color: $brand-primary !important;
+}
+.bg-primary-custom {
+    background-color: $brand-primary !important;
+    color: #ffffff;
+}

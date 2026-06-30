@@ -1,0 +1,31 @@
+// components/_buttons.scss
+@import "../abstracts/variables";
+
+.btn-primary {
+  --bs-btn-bg: #{$tavern-rust};
+  --bs-btn-border-color: #{$tavern-rust};
+  
+  // Hand-picked darker tones for interaction states
+  --bs-btn-hover-bg: #9c4f39; 
+  --bs-btn-hover-border-color: #9c4f39;
+  --bs-btn-active-bg: #854330;
+  --bs-btn-active-border-color: #854330;
+  
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+}
+
+.btn-add {
+    background-color: #ede7dc;
+    color: $tavern-dark; // Uses variable from abstracts
+    width: 42px;
+    height: 42px;
+    border: 1px solid #d0c8b8;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #e2dac9;
+        color: $tavern-dark;
+    }
+}

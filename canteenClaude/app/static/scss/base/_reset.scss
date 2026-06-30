@@ -1,0 +1,17 @@
+// base/_reset.scss
+@import "../abstracts/variables";
+
+
+
+:root {
+  --bs-primary: #{map-get($theme-colors, "primary")};
+  --bs-primary-rgb: 181, 93, 68; // Required for transparent background utilities
+  --bs-body-bg: #{map-get($theme-colors, "light")};
+  --bs-body-color: #{map-get($theme-colors, "dark")};
+}
+
+body {
+  // Fix layout spacing for the fixed navbars
+  padding-top: 70px;
+  padding-bottom: 80px;
+}

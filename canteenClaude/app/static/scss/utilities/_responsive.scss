@@ -1,0 +1,37 @@
+// Extra small screens: you had a commented block – uncomment and refine
+@media (max-width: 480px) {
+  .proposition-item {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  .proposition-text {
+    text-align: center;
+  }
+}
+
+// Very short viewport tweaks
+@media (max-height: 550px) {
+  .hero-banner p.text-uppercase.small {
+    display: none;
+  }
+  .hero-banner {
+    gap: 0.5rem !important;
+  }
+}
+
+// Responsive adjustments for mobile menu layouts
+@media (max-width: 576px) {
+    .menu-item-img {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+// Utility tracking for small sub-headers
+.tracking-wide {
+    letter-spacing: 0.1em;
+}
+.fs-7 {
+    font-size: 0.85rem;
+}

@@ -1,0 +1,30 @@
+/* Injecting the Tavern Theme into Bootstrap's Core */
+:root {
+  /* Colors */
+  --bs-primary: #B55D44;         /* The rust color for branding, active states, and buttons */
+  --bs-primary-rgb: 181, 93, 68;
+  --bs-body-bg: #F4F1E9;         /* Warm cream background */
+  --bs-body-color: #4A4036;      /* Dark wood text color */
+  
+  /* Typography */
+  --bs-font-serif: 'Georgia', 'Playfair Display', serif;
+}
+
+/* Custom Utility for the specific serif elements in the mockup */
+.font-serif {
+  font-family: var(--bs-font-serif);
+}
+
+/* Custom Utility for the bottom nav border */
+.border-dashed-top {
+  border-top: 1px dashed #DCD6CD !important;
+}
+
+/* Crucial layout fix for fixed top/bottom navbars. 
+  This prevents the main content from hiding behind the navigation 
+  without needing complex flex-grow rules on the main container.
+*/
+body {
+  padding-top: 70px;
+  padding-bottom: 80px;
+}

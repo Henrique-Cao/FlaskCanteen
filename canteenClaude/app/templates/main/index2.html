@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block title %}Club 33 – Tavern & Canteen{% endblock
+%} {% block content %}
+<section class="hero-section bg-black text-white text-center d-flex flex-column align-items-center min-vh-100 ">
+
+    <!--Hero Banner-->
+    <div class="hero-banner d-flex flex-column justify-content-center align-content-center
+    gap-3 py-4">
+        <div>   
+            <div class="gold-bar mx-auto"></div>
+            <h1 class="order-headline display-1 my-2 fw-bold">
+                CLUB <span class="gold-text">33</span>
+            </h1>
+            <div class="gold-bar mx-auto"></div>
+        </div>
+        <p class="text-uppercase small mb-0 ">online ordering</p>
+        
+    </div>
+    <!--Hero Body Card-->
+    <div class="hero-body-card w-100 d-flex flex-column justify-content-start align-items-center
+    gap-4 p-3 p-md-4 p-lg-5 text-dark rounded-5 shadow-lg">
+
+        <h2 class="tagline fw-bold fs-1">
+            Order Fresh.<br><span class="gold-text">Collect Fast.</span>
+        </h2>
+
+            <!--Proposition List--> 
+        <div class="proposition-list d-flex flex-column gap-4 align-content-center align-items-sm-start  ">
+            <div class="proposition-item d-flex flex-column flex-sm-row align-items-center gap-3 ">
+                <div class="proposition-icon d-flex align-items-center justify-content-center rounded-4 shadow p-2">
+                    <i class="bi bi-fork-knife fs-3"></i>
+                </div>
+                <div class="proposition-text text-center text-sm-start ">
+                    <p class="proposition-title fw-bold mb-1 fs-5">PICK FROM MENU</p>
+                    <p class="proposition-desc mb-0 fs-5">Fresh, delicious meals at your fingertips.</p>
+                </div>
+            </div>
+            <div class="proposition-item d-flex flex-column flex-sm-row align-items-center gap-3 ">
+                <div class="proposition-icon d-flex align-items-center justify-content-center rounded-4 shadow p-2">
+                    <i class="bi bi-chevron-right fs-3"></i>
+                </div>
+                <div class="proposition-text text-center text-sm-start">
+                    <p class="proposition-title fw-bold mb-1 fs-5">QUICK CHECKOUT</p>
+                    <p class="proposition-desc mb-0 fs-5">Order in just 2 simple steps</p>
+                </div>
+            </div>
+            <div class="proposition-item d-flex flex-column flex-sm-row align-items-center gap-3">
+                <div class="proposition-icon d-flex align-items-center justify-content-center rounded-4 shadow p-3">
+                    <i class="bi bi-box2-fill fs-3"></i>
+                </div>
+                <div class="proposition-text text-center text-sm-start">
+                    <p class="proposition-title fw-bold mb-1 fs-5">READY ON ARRIVAL</p>
+                    <p class="proposition-desc mb-0 fs-5">Skip the queue, enjoy the food</p>
+                </div>
+            </div>
+        </div>
+        <div class="cta-button text-wrap m-2">
+            <a href="/menu" class="btn bg-black text-light btn-lg fw-bold fs-4 w-100 py-3 py-lg-4 px-4">START MY ORDER</a>
+        </div>
+    </div>
+    
+        
+</section>
+
+{% endblock %}

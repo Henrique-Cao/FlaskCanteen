@@ -1,0 +1,173 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Club33 - Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container my-4 dashboard-desktop-container">
+    <div class="row g-4">
+        
+        <div class="col-12 col-lg-8">
+            
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-sm-4">
+                    <div class="custom-card p-3 d-flex justify-content-between align-items-start h-100">
+                        <div>
+                            <p class="label-font text-muted mb-1 text-uppercase fs-7 tracking-wide">Active Orders</p>
+                            <h2 class="headline-font display-5 mb-0 text-dark fw-bold">12</h2>
+                            <small class="text-muted body-font d-block mt-1"><i class="bi bi-graph-up-arrow"></i> 8% vs last hour</small>
+                        </div>
+                        <i class="bi bi-question-circle text-primary-custom fs-5"></i>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-4">
+                    <div class="custom-card p-3 d-flex justify-content-between align-items-start h-100">
+                        <div>
+                            <p class="label-font text-muted mb-1 text-uppercase fs-7 tracking-wide">Today's Revenue</p>
+                            <h2 class="headline-font display-5 mb-0 text-dark fw-bold">$2,840</h2>
+                            <small class="text-muted body-font d-block mt-1"><i class="bi bi-graph-up-arrow"></i> 12% over goal</small>
+                        </div>
+                        <i class="bi bi-cash-stack text-primary-custom fs-5"></i>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-4">
+                    <div class="custom-card p-3 d-flex justify-content-between align-items-start h-100">
+                        <div>
+                            <p class="label-font text-muted mb-1 text-uppercase fs-7 tracking-wide">Avg Prep Time</p>
+                            <h2 class="headline-font display-5 mb-0 text-dark fw-bold">14m</h2>
+                            <small class="text-muted body-font d-block mt-1"><i class="bi bi-graph-down-arrow"></i> Faster than usual</small>
+                        </div>
+                        <i class="bi bi-stopwatch text-primary-custom fs-5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="custom-card p-0 overflow-hidden mb-4">
+                <div class="p-4 pb-2 d-flex justify-content-between align-items-center">
+                    <h2 class="h3 headline-font mb-0 text-dark fw-bold">Active Kitchen Queue</h2>
+                    <button class="btn btn-link text-muted text-decoration-none p-0 label-font text-end small d-flex align-items-center gap-1">
+                        <i class="bi bi-arrow-clockwise"></i> Live Update
+                    </button>
+                </div>
+
+                <div class="row px-4 text-muted label-font small border-bottom border-secondary border-opacity-25 pb-2 mx-0">
+                    <div class="col-2 px-1">Order #</div>
+                    <div class="col-5 px-1">Items</div>
+                    <div class="col-2 px-1 text-center">Time Elapsed</div>
+                    <div class="col-3 px-1 text-end pe-3">Action</div>
+                </div>
+
+                <div class="d-flex flex-column px-4 py-2">
+                    <div class="row align-items-center py-3 border-bottom border-secondary border-opacity-25 mx-0">
+                        <div class="col-2 px-1 label-font text-muted fw-bold">#4208</div>
+                        <div class="col-5 px-1 body-font text-dark">
+                            <strong class="d-block">2x Shepherd's Pie</strong>
+                            <span class="text-muted fst-italic lh-sm d-block mt-1" style="font-size: 0.85em;">Extra gravy, No onions</span>
+                        </div>
+                        <div class="col-2 px-1 text-center">
+                            <span class="status-pill pill-danger">18:42</span>
+                        </div>
+                        <div class="col-3 px-1 text-end">
+                            <button class="btn btn-sage text-uppercase px-3 py-2 btn-sm fw-bold">Mark Ready</button>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center py-3 border-bottom border-secondary border-opacity-25 mx-0">
+                        <div class="col-2 px-1 label-font text-muted fw-bold">#4212</div>
+                        <div class="col-5 px-1 body-font text-dark">
+                            <strong class="d-block">1x Roasted Root Veg, 1x Hearth Burger</strong>
+                            <span class="text-muted fst-italic lh-sm d-block mt-1" style="font-size: 0.85em;">Burger medium rare</span>
+                        </div>
+                        <div class="col-2 px-1 text-center">
+                            <span class="status-pill pill-warning">08:15</span>
+                        </div>
+                        <div class="col-3 px-1 text-end">
+                            <button class="btn btn-sage text-uppercase px-3 py-2 btn-sm fw-bold">Mark Ready</button>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center py-3 mx-0">
+                        <div class="col-2 px-1 label-font text-muted fw-bold">#4213</div>
+                        <div class="col-5 px-1 body-font text-dark">
+                            <strong class="d-block">3x Honey Glazed Bread, 1x Ale Stew</strong>
+                        </div>
+                        <div class="col-2 px-1 text-center">
+                            <span class="status-pill pill-success">03:50</span>
+                        </div>
+                        <div class="col-3 px-1 text-end">
+                            <button class="btn btn-sage text-uppercase px-3 py-2 btn-sm fw-bold">Mark Ready</button>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center py-2 border-top border-secondary border-opacity-10 mt-2">
+                        <small class="text-muted fst-italic body-font">Scroll down for more active tickets</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            
+            <div class="custom-card mb-4">
+                <h3 class="h5 headline-font text-dark mb-3 fw-bold"><i class="bi bi-exclamation-triangle text-primary-custom me-1"></i> Inventory Alerts</h3>
+                
+                <div class="bg-white bg-opacity-50 rounded p-3 mb-2 d-flex justify-content-between align-items-center border border-secondary border-opacity-25">
+                    <div>
+                        <strong class="headline-font d-block text-dark fs-6">Root Beer Keg</strong>
+                        <small class="text-muted label-font" style="font-size: 0.8rem;">Current: 2L / Cap: 50L</small>
+                    </div>
+                    <span class="badge bg-danger rounded-1 px-2 py-1 font-monospace" style="font-size: 0.7rem; letter-spacing: 0.05em;">CRITICAL</span>
+                </div>
+
+                <div class="bg-white bg-opacity-50 rounded p-3 mb-3 d-flex justify-content-between align-items-center border border-secondary border-opacity-25">
+                    <div>
+                        <strong class="headline-font d-block text-dark fs-6">Shepherd's Pie</strong>
+                        <small class="text-muted label-font" style="font-size: 0.8rem;">Current: 5 units / Cap: 40 units</small>
+                    </div>
+                    <span class="badge bg-primary-custom rounded-1 px-2 py-1 font-monospace" style="font-size: 0.7rem; letter-spacing: 0.05em;">LOW</span>
+                </div>
+
+                <button class="btn btn-outlined w-100 label-font text-uppercase fw-bold text-center btn-sm py-2">Manage Inventory</button>
+            </div>
+
+            <div class="custom-card p-0 overflow-hidden mb-4 history-card-panel position-relative">
+                <div class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                    <h3 class="h5 headline-font mb-0 text-white fw-bold">Recent History</h3>
+                    <i class="bi bi-clock-history fs-5 opacity-75"></i>
+                </div>
+                <div class="p-4 d-flex flex-column gap-4 style-history-list position-relative" style="z-index: 2;">
+                    
+                    <div class="border-bottom border-secondary border-opacity-25 pb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="label-font text-muted small fw-bold">#4205</span>
+                            <small class="text-muted label-font">12:15 PM</small>
+                        </div>
+                        <p class="body-font text-dark mb-2 fw-bold">Ploughman's Lunch, Draft Ale</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="headline-font text-dark">$24.50</strong>
+                            <span class="status-pill pill-success d-inline-flex align-items-center gap-1 px-2 py-1"><i class="bi bi-check-circle"></i> PICKED UP</span>
+                        </div>
+                    </div>
+
+                    <div class="pb-2">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="label-font text-muted small fw-bold">#4204</span>
+                            <small class="text-muted label-font">12:08 PM</small>
+                        </div>
+                        <p class="body-font text-dark mb-2 fw-bold">Spiced Cider (x2)</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="headline-font text-dark">$12.00</strong>
+                            <span class="status-pill pill-success d-inline-flex align-items-center gap-1 px-2 py-1"><i class="bi bi-check-circle"></i> PAID</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="history-card-watermark"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

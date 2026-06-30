@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+
+/* Font Families */
+    /* Anton is the closest match for the 'Bison' style headlines */
+    --font-header: 'Anton', sans-serif; 
+    /* Montserrat handles the geometric 'PICK FROM MENU' and button text */
+    --font-ui: 'Montserrat', sans-serif;
+    /* Inter is best for the small, high-legibility body text */
+    --font-body: 'Inter', sans-serif;
+  --header-letter-spacing: 0.02em; 
+    --header-line-height: 0.85;
+    --header-weight: 400;
+  /* --- Primitive Color Palette --- */
+  --clr-black: #121212;
+  --clr-white: #ffffff;
+  --clr-off-white: #f5f4f0; /* The background of the bottom card */
+  --clr-gold: #c5a367;     /* The "33" and "COLLECT FAST" color */
+  --clr-dark-grey: #262626; /* Text color for "TAVERN & CANTEEN" */
+  --clr-light-grey: #a1a1a1; /* Subtext like "Daily specials..." */
+
+  /* --- Semantic Tokens (Usage) --- */
+  
+  /* Backgrounds */
+  --bg-header: var(--clr-black);
+  --bg-card: var(--clr-off-white);
+  --bg-icon-circle: var(--clr-white);
+
+  /* Typography */
+  --text-header-main: var(--clr-white);
+  --text-header-sub: var(--clr-light-grey);
+  --text-accent: var(--clr-gold);
+  --text-heading: var(--clr-dark-grey);
+  --text-body: var(--clr-light-grey);
+
+  /* Decorative */
+  --border-divider: var(--clr-gold);
+  --icon-color: var(--clr-gold);
+
+
+}
+
+.gold-text {
+  color: var(--text-accent);
+}
+.order-headline {
+  font-family: var(--font-header);
+  letter-spacing: -0.05em;
+}
+
+.hero-section {
+  min-height: 100vh;        /* full viewport height minimum */
+  display: flex;
+  flex-direction: column;
+}
+.hero-banner {
+  color: var(--text-header-main);
+  text-align: center;
+  height: 30vh;
+
+}
+.gold-bar{
+  width: 3rem;
+  height: 0.1rem;
+  background-color: var(--border-divider);
+}
+.hero-body-card {
+  max-width: 56rem;
+  background-color: var(--bg-card);
+}
+.tagline {
+  font-size: 8vw;
+  font-family: var(--font-header);
+}
+.proposition-icon{
+  width: clamp(55px, 6vw, 80px);
+  height: clamp(55px, 6vw, 80px);
+  background-color: var(--bg-icon-circle);
+  color: var(--icon-color);
+  
+}
+.proposition-title {
+  /* Min size: 1rem, Ideal: 1.5% of screen width, Max: 1.25rem */
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-family: var(--font-ui);
+} 
+
+.proposition-desc {
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-family: var(--font-body);
+  opacity: 0.8;
+}
+.cta-button .btn {
+  font-family: var(--font-ui);
+}
+.cta-button {
+    width: 100%;
+}
+@media (max-height: 550px) {
+    .hero-banner p.text-uppercase.small {
+        display: none;
+    }
+    /* Optional: reduce gap in the banner when text is gone */
+    .hero-banner {
+        gap: 0.5rem !important; /* or adjust as needed */
+    }
+}
+
+/* Tablet and up: 75% width */
+@media (min-width: 768px) {
+    .cta-button {
+        width: 75%;
+    }
+}
+
+/* @media (max-width: 480px) {
+  .proposition-item {
+    flex-wrap: wrap;
+    
+    justify-content: center;
+    text-align: center;
+  }
+  .proposition-text {
+    text-align: center;
+  }
+} */
+
+.cta-button .btn {
+    transition: all 0.25s ease-in-out;
+}
+
+.cta-button .btn:hover {
+    background-color: #2a2a2a !important;  /* lighter black */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Optional: make the text gold on hover */
+.cta-button .btn:hover {
+    color: var(--clr-gold) !important;
+}

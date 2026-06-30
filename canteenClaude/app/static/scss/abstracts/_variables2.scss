@@ -1,0 +1,27 @@
+// abstracts/_variables.scss
+
+$tavern-rust: #B55D44;
+$tavern-cream: #F4F1E9;
+$tavern-dark: #4A4036;
+$tavern-muted-text: #60524e;
+$font-serif: 'Georgia', 'Playfair Display', serif;
+
+
+// $tavern-bg: #f5f2eb;
+// $tavern-dark: #2c2523;
+// $tavern-accent: #a64b2a;
+// $tavern-muted-text: #60524e;
+// $tavern-border: #dcd7cd;
+
+// Global Bootstrap Overrides
+$body-bg: $tavern-cream;
+$body-color: $tavern-dark;
+$font-family-serif: 'Georgia', 'Playfair Display', serif;
+
+// Map to Bootstrap's Utility Classes
+$theme-colors: (
+  "primary":    $tavern-rust,
+  "secondary":  $tavern-muted-text,
+  "dark":       $tavern-dark,
+  "light":      $tavern-cream
+);

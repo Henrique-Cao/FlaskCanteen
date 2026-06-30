@@ -1,0 +1,10 @@
+.proposition-icon {
+  width: clamp(55px, 6vw, 80px);
+  height: clamp(55px, 6vw, 80px);
+  background-color: var(--bg-icon-circle);
+  color: var(--icon-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  // assume you want an SVG or font icon
+}

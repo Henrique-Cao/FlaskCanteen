@@ -1,0 +1,35 @@
+// ==========================================================================
+// 1. Core Palette Tokens (From image_9c3ebe.png)
+// ==========================================================================
+$brand-primary:   #C86B53;  // Terracotta / Rust
+$brand-secondary: #8B9D83;  // Sage Green
+$brand-tertiary:  #EBE4D8;  // Light Alabaster (App/Card Background Base)
+$brand-neutral:   #2C2B29;  // Charcoal Ink / Off-black
+
+// ==========================================================================
+// 2. Button Variant Tints & State Modifiers
+// ==========================================================================
+$btn-primary-bg:  #8A3E25;  // Deeper brick tone seen on the actual buttons
+$danger-color:    #A61C1C;  // Crimson Red seen on the floating delete action button
+
+// ==========================================================================
+// 3. Structural Typography System
+// ==========================================================================
+$font-family-headline: 'Fraunces', serif;
+$font-family-body:     'Newsreader', serif;
+$font-family-label:    'Fraunces', serif;
+
+// ==========================================================================
+// 4. Bootstrap Core Variable Mapping
+// ==========================================================================
+$body-bg:     $brand-tertiary;
+$body-color:  $brand-neutral;
+
+// Overwrites Bootstrap's native classes (.text-primary, .bg-secondary, etc.)
+$theme-colors: (
+  "primary":    $brand-primary,
+  "secondary":  $brand-secondary,
+  "dark":       $brand-neutral,
+  "light":      $brand-tertiary,
+  "danger":     $danger-color
+);
