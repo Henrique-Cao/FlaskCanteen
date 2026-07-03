@@ -26,3 +26,5 @@ def manage_menu():
     return render_template('admin/manage_menu.html', 
                            items_by_category=items_by_category, 
                            search_query=search_query)
+
+

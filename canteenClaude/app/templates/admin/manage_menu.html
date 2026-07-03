@@ -1,6 +1,7 @@
 {% extends "admin_base.html" %}
 
 {% block content %}
+
 <div class="container my-4 dashboard-desktop-container">
 <!--     
     <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
@@ -70,7 +71,7 @@
                     <div class="d-flex align-items-center justify-content-end gap-3 col-6 col-md-5 text-end">
                         <div class="d-flex align-items-center gap-2 me-2">
                             <span class="headline-font fs-5 text-dark fw-bold">${{ "%.2f"|format(item.price) }}</span>
-                            <button class="btn btn-link p-0 text-muted transition-color hover-dark" title="Edit Price"><i class="bi bi-pencil-fill small"></i></button>
+                            <button class="btn btn-link p-0 text-muted transition-color hover-dark" data-action="edit" data-item-id="{{ item.id }}" title="Edit Price"><i class="bi bi-pencil-fill small"></i></button>
                         </div>
                         
                         <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
@@ -97,7 +98,8 @@
     </div>
     {% endfor %}
 </div>
-
+{% include 'modals/admin_edit_item.html' %}
+{% include 'modals/admin_add_item.html' %}
 <script>
 function toggleVisibility(itemId) {
     fetch(`/admin/menu/toggle/${itemId}`, {
