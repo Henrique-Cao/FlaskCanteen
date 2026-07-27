@@ -1,0 +1,92 @@
+{% extends "base.html" %} {% block title %}Club 33 – Tavern & Canteen{% endblock
+%} {% block content %}
+<section class="hero_section d-flex flex-column min-vh-100">
+    <div
+        class="hero_banner d-flex flex flex-grow-1 align-items-center justify-content-center"
+    >
+        <div
+            class="branding text-md-start d-flex flex-column align-items-center"
+        >
+            <div class="gold-bar mb-2 mt-4 mx-auto"></div>
+
+            <h1 class="logo mb-0 d-flex flex-row gap-2 align-items-center">
+                <span class="logo_club">Club</span>
+                <span class="clogo_num">33</span>
+            </h1>
+            <p class="sub fs-6 mb-0 opacity-75">online ordering</p>
+            <div class="gold-bar mb-4 mt-2 mx-auto"></div>
+        </div>
+    </div>
+    <div
+        class="hero_body d-flex flex-column w-100 align-items-center border border-5 border-success"
+    >
+        <div
+            class="tag_line d-flex align-items-center justify-content-center justify-content-md-start gap-2 mt-2 mb-2"
+        >
+            <h2 class="hero_body_heading">
+                Order Fresh.<br /><span>Collect Fast.</span>
+            </h2>
+        </div>
+        <div class="proposition border border-5 border-warning">
+            <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                <li
+                    class="d-flex flex-row justify-content-start align-items-center"
+                >
+                    <div
+                        class="proposition_icon d-flex align-items-center justify-content-center me-2 rounded-circle bg-light"
+                        style="width: 2rem; height: 2rem"
+                    >
+                        <i class="bi bi-fork-knife"></i>
+                    </div>
+                    <div class="proposition_text d-flex flex-column">
+                        <p class="proposition_title mb-0">Fresh & Delicious</p>
+                        <p class="proposition_desc mb-0">
+                            Fresh, delicious meals at your fingertips.
+                        </p>
+                    </div>
+                </li>
+                <li
+                    class="d-flex flex-row justify-content-start align-items-center"
+                >
+                    <div
+                        class="proposition_icon d-flex align-items-center justify-content-center me-2 rounded-circle bg-light"
+                        style="width: 2rem; height: 2rem"
+                    >
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+                    <div class="proposition_text d-flex flex-column">
+                        <p class="proposition_title mb-0">Quick Checkout</p>
+                        <p class="proposition_desc mb-0">
+                            Order in just 2 simple steps.
+                        </p>
+                    </div>
+                </li>
+                <li
+                    class="d-flex flex-row justify-content-start align-items-center"
+                >
+                    <div
+                        class="proposition_icon d-flex align-items-center justify-content-center me-2 rounded-circle bg-light"
+                        style="width: 2rem; height: 2rem"
+                    >
+                        <i class="bi bi-box2"></i>
+                    </div>
+                    <div class="proposition_text d-flex flex-column">
+                        <p class="proposition_title mb-0">Ready on Arrival</p>
+                        <p class="proposition_desc mb-0">
+                            Skip the queue, enjoy hot food.
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div
+            class="hero_footer d-flex justify-content-center align-items-center gap-3 mt-4 mb-4 border border-5 border-info"
+        >
+            <a href="#" class="order_button btn btn-primary btn-lg"
+                >Start Order</a
+            >
+        </div>
+    </div>
+</section>
+
+{% endblock %}

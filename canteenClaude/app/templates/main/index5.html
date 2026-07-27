@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Club 33 – Tavern & Canteen{% endblock %}
+
+{% block content %}
+<section class="hero-section min-vh-100 d-flex flex-column">
+  <div class="hero-banner flex-grow-1 d-flex align-items-center">
+    <div class="container text-center">
+      <div class="gold-bar mx-auto mb-3"></div>
+      <h1 class="display-1 fw-bold text-white mb-0">
+        Club <span class="gold-text">33</span>
+      </h1>
+      <p class="text-white-50 text-uppercase small tracking-wide mb-0">online ordering</p>
+      <div class="gold-bar mx-auto mt-3"></div>
+    </div>
+  </div>
+
+  <div class="container pb-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="hero-body-card bg-light rounded-4 shadow-lg p-4 p-md-5">
+          <div class="text-center text-md-start mb-4">
+            <h2 class="display-6 fw-semibold text-dark">
+              Order Fresh.<br><span class="gold-text">Collect Fast.</span>
+            </h2>
+          </div>
+
+          <div class="row g-4 mb-5">
+            <!-- Item 1 -->
+            <div class="col-12 col-md-4">
+              <div class="proposition-item d-flex align-items-start gap-3">
+                <div class="proposition-icon bg-white rounded-circle shadow-sm flex-shrink-0">
+                  <i class="bi bi-fork-knife gold-text fs-5"></i>
+                </div>
+                <div>
+                  <p class="fw-bold text-uppercase small mb-0">Fresh & Delicious</p>
+                  <p class="text-secondary small mb-0">Fresh, delicious meals at your fingertips.</p>
+                </div>
+              </div>
+            </div>
+            <!-- Item 2 -->
+            <div class="col-12 col-md-4">
+              <div class="proposition-item d-flex align-items-start gap-3">
+                <div class="proposition-icon bg-white rounded-circle shadow-sm flex-shrink-0">
+                  <i class="bi bi-chevron-right gold-text fs-5"></i>
+                </div>
+                <div>
+                  <p class="fw-bold text-uppercase small mb-0">Quick Checkout</p>
+                  <p class="text-secondary small mb-0">Order in just 2 simple steps.</p>
+                </div>
+              </div>
+            </div>
+            <!-- Item 3 -->
+            <div class="col-12 col-md-4">
+              <div class="proposition-item d-flex align-items-start gap-3">
+                <div class="proposition-icon bg-white rounded-circle shadow-sm flex-shrink-0">
+                  <i class="bi bi-box2 gold-text fs-5"></i>
+                </div>
+                <div>
+                  <p class="fw-bold text-uppercase small mb-0">Ready on Arrival</p>
+                  <p class="text-secondary small mb-0">Skip the queue, enjoy hot food.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <a href="#" class="btn btn-order btn-lg rounded-pill px-5 py-3 fw-semibold">
+              Start Order <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -55,10 +55,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("edit_item_id").value = data.id;
                 document.getElementById("edit_name").value = data.name;
                 document.getElementById("edit_price").value = data.price;
-
+                document.getElementById("edit_category").value = data.category;
+                document.getElementById("edit_description").value = data.description;
                 
                 // 4. Update the form action string route dynamically
-                document.getElementById("editItemForm").action = `/admin/menu/update/${data.id}`;
+                document.getElementById("editItemForm").action = `/api/menu/update/${data.id}`;
 
                 // 5. Initialize and display the Bootstrap modal instance safely
                 const editModal = new bootstrap.Modal(document.getElementById('editItemModal'));
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function() {
             };
             
             // 4. Retrieve the action route string constructed dynamically by your interceptor click handler
-            const targetActionUrl = editItemForm.getAttribute("action") || `/admin/menu/update/${itemId}`;
+            const targetActionUrl = editItemForm.getAttribute("action") || `/api/menu/update/${itemId}`;
 
             // 5. Dispatch async JSON request package with strict header flags
             fetch(targetActionUrl, {

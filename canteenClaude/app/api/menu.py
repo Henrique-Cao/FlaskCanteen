@@ -94,7 +94,7 @@ def delete_menu_item(item_id):
         db.session.rollback()  # Safely roll back the transaction on error
         return jsonify({"error": f"Internal database error: {str(e)}"}), 500
     
-@menu_api.route('/admin/menu/update/<int:item_id>', methods=['POST'])
+@menu_api.route('/update/<int:item_id>', methods=['POST'])
 def update_menu_item(item_id):
     # 1. Locate the target item row or return an error clean log if missing
     item = MenuItem.query.get_or_404(item_id)
