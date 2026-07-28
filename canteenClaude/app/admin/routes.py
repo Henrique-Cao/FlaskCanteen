@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template,request, jsonify, redirect, url_for
-from app.models import MenuItem
+from app.models import MenuItem,Category
 admin_bp = Blueprint("admin", __name__)
 from collections import defaultdict
  
@@ -22,9 +22,11 @@ def manage_menu():
     items_by_category = defaultdict(list)
     for item in all_items:
         items_by_category[item.category].append(item)
-        
+
+    category_query = Category.query.order_by(Category.display_order.asc()).all()
     return render_template('admin/manage_menu.html', 
                            items_by_category=items_by_category, 
-                           search_query=search_query)
+                           search_query=search_query,
+                           categories=category_query)
 
 

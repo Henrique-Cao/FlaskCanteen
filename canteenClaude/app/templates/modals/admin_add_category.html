@@ -1,0 +1,59 @@
+
+<!-- Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg" style="background-color: #faf7f2; border-radius: 16px;">
+      
+      <!-- Modal Header -->
+      <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+        <h5 class="modal-title font-serif fs-4 fw-bold text-dark" id="addCategoryModalLabel">Add New Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Form -->
+      <form id="addCategoryForm" action="{{ url_for('api.categories_api.add_category') }}" method="POST">
+        <div class="modal-body p-4">
+          
+          <!-- Category Name -->
+          <div class="mb-3">
+            <label for="categoryName" class="form-label fw-semibold text-secondary small">Category Name</label>
+            <input 
+              type="text" 
+              class="form-control form-control-lg fs-6" 
+              id="categoryName" 
+              name="name" 
+              placeholder="e.g. Daily Specials, Desserts" 
+              required 
+              autocomplete="off"
+              maxlength="50"
+            >
+          </div>
+
+          <!-- Display Position / Order -->
+          <div class="mb-2">
+            <label for="displayOrder" class="form-label fw-semibold text-secondary small">Display Position</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="displayOrder" 
+              name="display_order" 
+              placeholder="1" 
+              value="1" 
+              min="1" 
+              required
+            >
+            <div class="form-text text-muted small">Controls tab ordering on the menu (1 = First tab).</div>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer border-top-0 pt-0 pb-4 px-4 justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary px-4 rounded-3" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn text-white px-4 rounded-3" style="background-color: #c05c3c; border-color: #c05c3c;">Save Category</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

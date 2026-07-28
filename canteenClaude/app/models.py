@@ -12,7 +12,15 @@ OrderItem — line items linking an Order to MenuItems
 from datetime import datetime, timezone
 from app.extensions import db
 
+class Category(db.Model):
+    __tablename__ = "categories"
 
+    id   = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True, nullable=False)
+    display_order = db.Column(db.Integer, default=0, nullable=False)
+    
+    def __repr__(self):
+        return f"<Category {self.name!r}>"
 class MenuItem(db.Model):
     __tablename__ = "menu_items"
 

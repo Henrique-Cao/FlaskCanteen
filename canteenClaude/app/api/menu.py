@@ -97,6 +97,7 @@ def delete_menu_item(item_id):
 @menu_api.route('/update/<int:item_id>', methods=['POST'])
 def update_menu_item(item_id):
     # 1. Locate the target item row or return an error clean log if missing
+
     item = MenuItem.query.get_or_404(item_id)
     
     # 2. Extract the incoming JSON payload bundle sent from your script

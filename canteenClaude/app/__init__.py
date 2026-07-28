@@ -16,7 +16,9 @@ def create_app(config_name: str | None = None) -> Flask:
         __name__,
         template_folder="templates",
         static_folder="static",
+        
     )
+    app.secret_key = os.environ.get("SECRET_KEY", "default_secret_key")
     app.config.from_object(config_map.get(config_name, config_map["default"]))
  
     # ── Extensions ────────────────────────────────────────────────────
@@ -26,7 +28,7 @@ def create_app(config_name: str | None = None) -> Flask:
     # ── Automatically Create Database & Tables ────────────────────────
     # This checks for the database/tables and creates them if missing
     with app.app_context():
-        from app.models import MenuItem, Order, OrderItem
+        from app.models import MenuItem, Order, OrderItem, Category
         db.create_all()
 
 

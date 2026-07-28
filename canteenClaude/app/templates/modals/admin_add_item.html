@@ -18,9 +18,9 @@
                     <label for="category" class="form-label label-font small text-muted text-uppercase fw-bold">Category</label>
                     <select class="form-select form-select-lg border-0 shadow-sm rounded-3" id="category" name="category" required>
                         <option value="" disabled selected>Select a category...</option>
-                        <option value="Main Meals">Main Meals</option>
-                        <option value="Drinks">Drinks</option>
-                        <option value="Sides">Sides</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}    
                     </select>
                 </div>
 

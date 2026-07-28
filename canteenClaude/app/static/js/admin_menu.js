@@ -39,6 +39,27 @@ async function deleteMenuItem(itemId, itemName) {
         alert("Unable to reach network server. Please check your system context connections.");
     }
 }
+function deleteCategory(categoryId, categoryName) {
+    console.log(`Attempting to delete category with ID: ${categoryId} and Name: "${categoryName}"`);
+    if (!confirm(`Are you sure you want to permanently delete the category "${categoryName}"? This action cannot be undone.`)) {
+        return;
+    }
+
+    fetch(`/api/categories/delete/${categoryId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json()) // Now safe because Flask sends JSON
+    .then(data => {
+        if (data.success) {
+            // Either refresh or remove the element from DOM directly
+            window.location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     // 1. Listen for clicks on elements marked with data-action="edit"
