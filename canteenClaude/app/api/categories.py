@@ -20,12 +20,12 @@ def get_all_categories():
 def add_category():
     # Extract the form fields using the 'name' attribute from your HTML input elements
     category_name = request.form.get('name')
-    display_order = request.form.get('display_order', type=int, default=1)
 
     if not category_name:
 
         return redirect(url_for('admin.manage_menu'))
 
+    display_order = db.session.query(Category).count() + 1  # Set display order to the next available position
     print(f"Adding new category: {category_name} with display order: {display_order}")  # Debugging line
     new_category = Category(name=category_name, display_order=display_order)
     db.session.add(new_category)
@@ -45,3 +45,30 @@ def delete_category(category_id):
         'success': True,
         'message': f'Category "{category.name}" deleted successfully!'
     }), 200
+
+@categories_api.route('/reorder', methods=['POST'])
+def reorder_categories():
+
+    data = request.get_json()
+    new_order = data.get('ordered_ids', [])
+
+    for index, category_id in enumerate(new_order):
+        category = Category.query.get(category_id)
+        if category:
+            category.display_order = index + 1  # Update display order based on the new position
+            db.session.add(category)
+
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Categories reordered successfully!'}), 200
+@categories_api.route('/update/<int:category_id>', methods=['POST'])
+def update_category(category_id):
+    category = Category.query.get_or_404(category_id)
+    new_name = request.form.get('name')
+
+    if not new_name:
+        return jsonify({'success': False, 'message': 'Category name is required.'}), 400
+
+    category.name = new_name
+    db.session.commit()
+    flash(f'Category "{category.name}" updated successfully!', 'success')
+    return redirect(url_for('admin.manage_menu'))

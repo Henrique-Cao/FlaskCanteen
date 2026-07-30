@@ -1,23 +1,7 @@
 {% extends "admin_base.html" %} {% block content %}
-
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <div class="container my-4 dashboard-desktop-container">
-    <!--     
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
-        <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-cup-hot-fill fs-3 text-primary-custom"></i>
-            <h1 class="h3 mb-0 headline-font text-primary-custom fw-bold">The Hearthside</h1>
-        </div>
-        
-        <div class="d-none d-md-flex align-items-center gap-4 label-font text-uppercase">
-            <a href="{{ url_for('admin.index') }}" class="text-muted text-decoration-none small">Dashboard</a>
-            <a href="{{ url_for('admin.manage_menu') }}" class="text-primary-custom text-decoration-none small border-bottom border-primary-custom pb-2 fw-bold" style="border-width: 2px !important;">Manage Menu</a>
-            <a href="#" class="text-muted text-decoration-none small">Live Orders</a>
-            <a href="#" class="text-muted text-decoration-none small">Staff</a>
-            <button class="btn btn-link text-primary-custom p-0"><i class="bi bi-person-circle fs-4"></i></button>
-        </div>
-    </div> -->
-
-    <div class="row g-3 align-items-center mb-5">
+    <div class="menu-dashboard-header row g-3 align-items-center mb-5">
         <div class="col-12 col-md-6 col-lg-5">
             <form
                 method="GET"
@@ -49,165 +33,166 @@
             </button>
         </div>
     </div>
-    <div class="categories-widget bg-light rounded-4 p-4 mb-5 shadow-sm">
-        <div
-            class="categories-header d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25"
-        >
-            <h2 class="h5 headline-font text-dark mb-0 fw-bold">Categories</h2>
+    <div class="menu-dashboard-body d-flex flex-column flex-lg-row gap-4">
+        <!-- LEFT COLUMN (CATEGORIES MANAGEMENT) -->
+        <div class="menu-dashboard-left-column col-12 col-md-4 col-lg-3">
             <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#addCategoryModal"
+                class="show-all-items-btn btn btn-outline-primary label-font text-uppercase py-1 mb-3"
+                id="showAllItemsBtn"
             >
-                <i class="bi bi-plus-lg me-1"></i> Add New Category
+                Show All Items
             </button>
-        </div>
-        <div class="categories-body">
-            {% if categories %}
-            <div class="d-flex flex-wrap gap-2">
-                {% for category in categories %}
-                <div
-                    class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-3 py-2 d-flex align-items-center gap-2"
-                >
-                    <span class="label-font small">{{ category.name }}</span>
-                    <button
-                        type="button"
-                        class="btn btn-link p-0 text-danger transition-color hover-dark"
-                        title="Delete Category"
-                        onclick="deleteCategory('{{ category.id }}', '{{ category.name }}')"
-                    >
-                        <i class="bi bi-trash-fill small"></i>
-                    </button>
-                </div>
-
-                {% endfor %}
-            </div>
-            {% else %}
-            <div
-                class="alert alert-info d-flex align-items-center gap-3"
-                role="alert"
-            >
-                <i class="bi bi-info-circle-fill fs-4"></i>
-                <div class="body-font">
-                    No categories found. Try adding new categories.
-                </div>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="d-flex flex-column gap-4">
-        {% if not items_by_category %}
-        <div
-            class="alert alert-info d-flex align-items-center gap-3"
-            role="alert"
-        >
-            <i class="bi bi-info-circle-fill fs-4"></i>
-            <div class="body-font">
-                No menu items found. Try adding new items or adjusting your
-                search.
-            </div>
-        </div>
-        {% endif %} {% for category, menu_items in items_by_category.items() %}
-        <div class="menu-category-section">
-            <div
-                class="d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25 pb-2 mb-3"
-            >
-                <h2 class="h4 headline-font text-dark mb-0 fw-bold">
-                    {{ category }}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0 headline-font text-dark fw-bold">
+                    Categories
                 </h2>
-                <span class="text-muted label-font small text-uppercase"
-                    >{{ menu_items|length }} Items</span
+                <button
+                    class="btn btn-outline-secondary label-font text-uppercase px-3 py-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addCategoryModal"
                 >
+                    Add Category
+                </button>
             </div>
 
-            <div
-                class="custom-card p-0 overflow-hidden bg-transparent border-0 shadow-none"
+            <!-- Category List -->
+            <ul
+                id="categoryList"
+                role="tablist"
+                class="list-group list-group-flush flex-column nav-pills"
             >
-                <div class="d-flex flex-column gap-3">
-                    {% for item in menu_items %}
+                {% for category in categories %}
+                <li
+                    class="list-group-item d-flex justify-content-between align-items-center py-2 px-3 border rounded-3 mb-2 shadow-sm"
+                    data-id="{{ category.id }}"
+                >
+                    <!-- ✅ FIXED: Group handle and name together -->
+                    <div class="d-flex align-items-center">
+                        <i
+                            class="bi bi-grip-vertical drag-handle me-2"
+                            style="cursor: grab"
+                        ></i>
+                        <span class="body-font text-dark"
+                            >{{ category.name }}</span
+                        >
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button 
+                            type="button"
+                            class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editCategoryModal-{{ category.id }}"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="btn btn-sm btn-outline-danger"
+                            onclick='deleteCategory("{{ category.id }}")'
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </li>
+                {% include 'modals/admin_edit_category.html' %}
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN (MENU ITEMS MANAGEMENT) -->
+        <div class="menu-dashboard-right-column col-md-8 col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0 headline-font text-dark fw-bold">
+                    Menu Items
+                </h2>
+            </div>
+            <div
+                id="menu-container tab-content"
+                class="d-flex flex-column gap-3"
+            >
+                {% if not items_by_category %}
+                <div
+                    class="alert alert-info d-flex align-items-center gap-3"
+                    role="alert"
+                >
+                    <i class="bi bi-info-circle-fill fs-4"></i>
+                    <div class="body-font">
+                        No menu items found. Try adding new items or adjusting
+                        your search.
+                    </div>
+                </div>
+                {% endif %} {% for category, menu_items in
+                items_by_category.items() %}
+                <div class="menu-category-section">
                     <div
-                        id="menu-item-row-{{ item.id }}"
-                        class="d-flex align-items-center justify-content-between bg-white bg-opacity-60 rounded-3 p-3 border border-secondary border-opacity-10 shadow-sm transition-hover"
+                        class="d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25 pb-2 mb-3"
                     >
-                        <div
-                            class="d-flex align-items-center gap-3 col-6 col-md-7"
+                        <h2 class="h4 headline-font text-dark mb-0 fw-bold">
+                            {{ category }}
+                        </h2>
+                        <span class="text-muted label-font small text-uppercase"
+                            >{{ menu_items|length }} Items</span
                         >
-                            {% if item.image_filename %}
-                            <img
-                                src="{{ url_for('static', filename='images/' + item.image_filename) }}"
-                                class="rounded object-cover d-none d-sm-block"
-                                style="width: 50px; height: 50px"
-                                alt="{{ item.name }}"
-                            />
-                            {% else %}
+                    </div>
+
+                    <div
+                        class="custom-card p-0 overflow-hidden bg-transparent border-0 shadow-none"
+                    >
+                        <div class="d-flex flex-column gap-3">
+                            {% if not menu_items %}
                             <div
-                                class="bg-secondary bg-opacity-10 rounded d-none d-sm-flex align-items-center justify-content-center text-muted"
-                                style="width: 50px; height: 50px"
+                                class="alert alert-info d-flex align-items-center gap-3"
+                                role="alert"
                             >
-                                <i class="bi bi-egg-fried fs-4"></i>
+                                <i class="bi bi-info-circle-fill fs-4"></i>
+                                <div class="body-font">
+                                    No menu items found in this category.
+                                </div>
                             </div>
-                            {% endif %}
-
-                            <div>
-                                <h3
-                                    class="h6 headline-font text-dark mb-1 fw-bold"
-                                >
-                                    {{ item.name }}
-                                </h3>
-                                <div
-                                    class="d-flex flex-wrap align-items-center gap-2"
-                                ></div>
-                            </div>
-                        </div>
-
-                        <div
-                            class="d-flex align-items-center justify-content-end gap-3 col-6 col-md-5 text-end"
-                        >
-                            <div class="d-flex align-items-center gap-2 me-2">
-                                <span
-                                    class="headline-font fs-5 text-dark fw-bold"
-                                    >${{ "%.2f"|format(item.price) }}</span
-                                >
-                                <button
-                                    class="btn btn-link p-0 text-muted transition-color hover-dark"
-                                    data-action="edit"
-                                    data-item-id="{{ item.id }}"
-                                    title="Edit Price"
-                                >
-                                    <i class="bi bi-pencil-fill small"></i>
-                                </button>
-                            </div>
-
+                            {% endif %} {% for item in menu_items %}
                             <div
-                                class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2"
+                                class="custom-card-item d-flex justify-content-between align-items-center p-3 rounded-3 bg-white shadow-sm"
                             >
-                                <span
-                                    class="label-font small text-muted text-uppercase d-none d-sm-inline"
-                                >
-                                    {{ 'Public' if item.is_public else 'Hidden'
-                                    }}
-                                </span>
-                                <!-- <input class="form-check-input ms-0 custom-toggle-switch" type="checkbox" role="switch" 
-                                    {% if item.is_public %}checked{% endif %}
-                                    onchange="toggleVisibility()"> -->
+                                <div class="d-flex align-items-center gap-3">
+                                    {% if item.image_filename %}
+                                    <img
+                                        src="{{ url_for('static', filename='uploads/' ~ item.image_filename) }}"
+                                        alt="{{ item.name }}"
+                                        width="60"
+                                        height="60"
+                                        class="rounded-circle object-fit-cover shadow-sm"
+                                    />
+                                    {% else %}
+                                    <div
+                                        class="rounded-circle bg-secondary d-flex justify-content-center align-items-center shadow-sm"
+                                        style="width: 60px; height: 60px"
+                                    >
+                                        <i
+                                            class="bi bi-image fs-4 text-white"
+                                        ></i>
+                                    </div>
+                                    {% endif %}
+                                    <div class="d-flex flex-column">
+                                        <span
+                                            class="body-font fw-semibold text-dark"
+                                            >{{ item.name }}</span
+                                        >
+                                        <span
+                                            class="label-font small text-muted"
+                                            >{{ item.category }}</span
+                                        >
+                                    </div>
+                                </div>
                             </div>
-                            <button
-                                onclick="deleteMenuItem('{{item.id}}', '{{item.name}}')"
-                                class="btn btn-link p-0 text-danger transition-color hover-dark"
-                                title="Delete Item"
-                            >
-                                <i class="bi bi-trash-fill small"></i>
-                            </button>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
         </div>
-
-        {% endfor %}
     </div>
+
+    <!-- Load SortableJS CDN -->
 </div>
 {% include 'modals/admin_edit_item.html' %} {% include
 'modals/admin_add_item.html' %} {% include 'modals/admin_add_category.html' %}

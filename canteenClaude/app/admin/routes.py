@@ -18,10 +18,12 @@ def manage_menu():
     
     all_items = query.order_by(MenuItem.name.asc()).all()
     
-    # 2. Re-map data structurally array bucket categories on the fly
+  
+    #2. Create a dictionary to hold items by category in the order of the categories
     items_by_category = defaultdict(list)
-    for item in all_items:
-        items_by_category[item.category].append(item)
+    categories = Category.query.order_by(Category.display_order.asc()).all()
+    for category in categories:
+        items_by_category[category.name] = [item for item in all_items if item.category == category.name]
 
     category_query = Category.query.order_by(Category.display_order.asc()).all()
     return render_template('admin/manage_menu.html', 

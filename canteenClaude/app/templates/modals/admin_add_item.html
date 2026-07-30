@@ -19,7 +19,7 @@
                     <select class="form-select form-select-lg border-0 shadow-sm rounded-3" id="category" name="category" required>
                         <option value="" disabled selected>Select a category...</option>
                         {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            <option value="{{ category.name }}">{{ category.name }}</option>
                         {% endfor %}    
                     </select>
                 </div>
