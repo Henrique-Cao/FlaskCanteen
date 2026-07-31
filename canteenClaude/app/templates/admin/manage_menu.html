@@ -66,7 +66,7 @@
                     class="list-group-item d-flex justify-content-between align-items-center py-2 px-3 border rounded-3 mb-2 shadow-sm"
                     data-id="{{ category.id }}"
                 >
-                    <!-- ✅ FIXED: Group handle and name together -->
+                    <!-- ✅ FIXED: Group handle and name together -->   
                     <div class="d-flex align-items-center">
                         <i
                             class="bi bi-grip-vertical drag-handle me-2"
@@ -80,8 +80,9 @@
                         <button 
                             type="button"
                             class="btn btn-sm btn-outline-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#editCategoryModal-{{ category.id }}"
+                            data-action="edit-category"
+                            data-category-id="{{ category.id }}"
+                            data-category-name="{{ category.name }}"
                         >
                             Edit
                         </button>
@@ -94,10 +95,11 @@
                         </button>
                     </div>
                 </li>
-                {% include 'modals/admin_edit_category.html' %}
+                
                 {% endfor %}
             </ul>
         </div>
+        
         <!-- RIGHT COLUMN (MENU ITEMS MANAGEMENT) -->
         <div class="menu-dashboard-right-column col-md-8 col-lg-9">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -196,7 +198,7 @@
 </div>
 {% include 'modals/admin_edit_item.html' %} {% include
 'modals/admin_add_item.html' %} {% include 'modals/admin_add_category.html' %}
-
+{% include 'modals/admin_edit_category.html' %}
 <script>
     function toggleVisibility(itemId) {
         fetch(`/admin/menu/toggle/${itemId}`, {

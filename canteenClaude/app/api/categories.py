@@ -63,12 +63,12 @@ def reorder_categories():
 @categories_api.route('/update/<int:category_id>', methods=['POST'])
 def update_category(category_id):
     category = Category.query.get_or_404(category_id)
-    new_name = request.form.get('name')
-
+    data = request.get_json()
+    new_name = data.get('name')
+    
     if not new_name:
         return jsonify({'success': False, 'message': 'Category name is required.'}), 400
 
     category.name = new_name
     db.session.commit()
-    flash(f'Category "{category.name}" updated successfully!', 'success')
     return redirect(url_for('admin.manage_menu'))

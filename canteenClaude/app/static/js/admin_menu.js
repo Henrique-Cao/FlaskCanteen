@@ -100,32 +100,46 @@ async function saveNewOrder(orderedIds) {
 // 4. EDIT MODAL TRIGGER
 function initEditModalTriggers() {
     document.body.addEventListener("click", async function (event) {
-        const trigger = event.target.closest('[data-action="edit"]');
-        if (!trigger) return;
+        
+        // --- A. MENU ITEM EDIT TRIGGER ---
+        const itemTrigger = event.target.closest('[data-action="edit"]');
+        if (itemTrigger) {
+            const itemId = itemTrigger.getAttribute("data-item-id");
+            try {
+                const data = await fetchJSON(`/api/menu/${itemId}`);
+                
+                document.getElementById("edit_item_id").value = data.id;
+                document.getElementById("edit_name").value = data.name;
+                document.getElementById("edit_price").value = data.price;
+                document.getElementById("edit_category").value = data.category;
+                document.getElementById("edit_description").value = data.description;
+                
+                document.getElementById("editItemForm").action = `/api/menu/update/${data.id}`;
 
-        const itemId = trigger.getAttribute("data-item-id");
+                const editModalEl = document.getElementById('editItemModal');
+                bootstrap.Modal.getOrCreateInstance(editModalEl).show();
+            } catch (err) {
+                console.error("Could not fetch item details:", err);
+                alert("Could not load item details.");
+            }
+            return; // Exit function after handling item
+        }
 
-        try {
-            const data = await fetchJSON(`/api/menu/${itemId}`);
-            
-            document.getElementById("edit_item_id").value = data.id;
-            document.getElementById("edit_name").value = data.name;
-            document.getElementById("edit_price").value = data.price;
-            document.getElementById("edit_category").value = data.category;
-            document.getElementById("edit_description").value = data.description;
-            
-            document.getElementById("editItemForm").action = `/api/menu/update/${data.id}`;
+        // --- B. CATEGORY EDIT TRIGGER ---
+        const categoryTrigger = event.target.closest('[data-action="edit-category"]');
+        if (categoryTrigger) {
+            const categoryId = categoryTrigger.getAttribute("data-category-id");
+            const categoryName = categoryTrigger.getAttribute("data-category-name");
 
-            const editModalEl = document.getElementById('editItemModal');
-            const editModal = bootstrap.Modal.getOrCreateInstance(editModalEl);
-            editModal.show();
-        } catch (err) {
-            console.error("Could not fetch item details:", err);
-            alert("Could not load item details.");
+            // Populate the static modal inputs directly from the button's data attributes
+            document.getElementById("edit_category_id").value = categoryId;
+            document.getElementById("edit_category_name").value = categoryName;
+
+            const editModalEl = document.getElementById('editCategoryModal');
+            bootstrap.Modal.getOrCreateInstance(editModalEl).show();
         }
     });
 }
-
 // 5. FORM SUBMISSIONS (ADD & EDIT)
 function initFormHandlers() {
     // Edit Form Handler
@@ -192,4 +206,35 @@ function initFormHandlers() {
             }
         });
     }
+
+    // --- Category Edit Form Handler ---
+    const editCategoryForm = document.getElementById("editCategoryForm");
+    if (editCategoryForm) {
+        editCategoryForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const categoryId = document.getElementById("edit_category_id").value;
+            const updatedName = document.getElementById("edit_category_name").value;
+            console.log("Submitting category edit for ID:", categoryId, "with new name:", updatedName);
+            try {
+                
+                fetchJSON(`/api/categories/update/${categoryId}`, {
+                    method: 'POST',
+                    body: JSON.stringify({ name: updatedName })
+                });
+
+                //Hide Modal
+                const modalEl = document.getElementById('editCategoryModal');
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
+
+                // Reload the page to show the new name, matching your menu item behavior
+                window.location.reload(); 
+            } catch (err) {
+                console.error("Error saving category edit:", err);
+                alert("Failed to save category changes.");
+            }
+        });
+    }
+    
 }
