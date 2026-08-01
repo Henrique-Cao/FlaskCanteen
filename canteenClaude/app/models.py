@@ -18,7 +18,8 @@ class Category(db.Model):
     id   = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
     display_order = db.Column(db.Integer, default=0, nullable=False)
-    
+
+    items = db.relationship("MenuItem", backref="category", lazy=True)
     def __repr__(self):
         return f"<Category {self.name!r}>"
 class MenuItem(db.Model):
@@ -28,7 +29,7 @@ class MenuItem(db.Model):
     name             = db.Column(db.String(100), nullable=False)
     description      = db.Column(db.String(255), default="")
     price            = db.Column(db.Float,       nullable=False)
-    category         = db.Column(db.String(64),  nullable=False)  # e.g. "Mains", "Drinks"
+    category_id      = db.Column(db.Integer, db.ForeignKey('categories.id', ondelete='SET NULL'), nullable=True)
     image_filename   = db.Column(db.String(120),  default="placeholder.jpg")
     is_available     = db.Column(db.Boolean,      default=True, nullable=False)
 

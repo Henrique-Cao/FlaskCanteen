@@ -27,14 +27,15 @@ def get_menu_item_details(item_id):
         'name': item.name,
         'description': item.description,
         'price': float(item.price),
-        'category': item.category,
+        'category_id': item.category_id,
+        'category_name': item.category.name if item.category else None,
         'image_filename': item.image_filename,
         'is_available': item.is_available
     })
 
 @menu_api.route('/', methods=['POST'])
 def add_menu_item():
-    print("Received request to add menu item")  # Debugging line
+    
     # 1. Extract the raw JSON data sent from the frontend
     data = request.get_json() or {}
 
@@ -49,8 +50,7 @@ def add_menu_item():
             name=data['name'],
             price=float(data['price']),
             description=data.get('description', ""),
-            # FIX: Pull category from incoming JSON, or default to "Mains"
-            category=data.get('category', "Mains"), 
+            category_id = data.get('category', None),  # Use None if no category is provided
             image_filename=data.get('image_filename', "placeholder.jpg"),
             is_available=data.get('is_available', True) 
         )
@@ -108,7 +108,7 @@ def update_menu_item(item_id):
     try:
         # 3. Map values from the payload into your database model instance attributes
         item.name = data.get('name', item.name)
-        item.category = data.get('category', item.category)
+        item.category_id = data.get('category', item.category_id)
         item.description = data.get('description', item.description)
         
         # Explicit type conversion prevents string comparison crashes in SQL engine

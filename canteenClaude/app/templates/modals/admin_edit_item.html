@@ -8,21 +8,21 @@
             </div>
             
             <div class="modal-body p-4 body-font text-dark">
-                <input type="hidden" id="edit_item_id" name="item_id">
+                <input type="hidden" id="editItemId" name="itemId">
 
                 <div class="mb-3">
-                    <label for="edit_name" class="form-label label-font small text-muted text-uppercase fw-bold">Item Name</label>
-                    <input type="text" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="edit_name" name="name" required>
+                    <label for="editName" class="form-label label-font small text-muted text-uppercase fw-bold">Item Name</label>
+                    <input type="text" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editName" name="name" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="edit_price" class="form-label label-font small text-muted text-uppercase fw-bold">Price ($)</label>
-                    <input type="number" step="0.01" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="edit_price" name="price" required>
+                    <label for="editPrice" class="form-label label-font small text-muted text-uppercase fw-bold">Price ($)</label>
+                    <input type="number" step="0.01" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editPrice" name="price" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="edit_category" class="form-label label-font small text-muted text-uppercase fw-bold">Category</label>
-                    <select class="form-select form-select-lg border-0 shadow-sm rounded-3" id="edit_category" name="category" required>
+                    <label for="editCategory" class="form-label label-font small text-muted text-uppercase fw-bold">Category</label>
+                    <select class="form-select form-select-lg border-0 shadow-sm rounded-3" id="editCategory" name="category" required>
                         <option value="" disabled>Select a category...</option>
                         {% for category in categories %}
                             <option value="{{ category.id }}">{{ category.name }}</option>
@@ -30,8 +30,8 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="edit_description" class="form-label label-font small text-muted text-uppercase fw-bold">Description</label>
-                    <textarea class="form-control form-control-lg border-0 shadow-sm rounded-3" id="edit_description" name="description" rows="3"></textarea>
+                    <label for="editDescription" class="form-label label-font small text-muted text-uppercase fw-bold">Description</label>
+                    <textarea class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editDescription" name="description" rows="3"></textarea>
                 </div>
                 
                 

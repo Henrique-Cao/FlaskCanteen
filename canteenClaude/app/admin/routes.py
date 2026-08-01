@@ -23,9 +23,12 @@ def manage_menu():
     items_by_category = defaultdict(list)
     categories = Category.query.order_by(Category.display_order.asc()).all()
     for category in categories:
-        items_by_category[category.name] = [item for item in all_items if item.category == category.name]
-
+        items_by_category[category.name] = [item for item in all_items if item.category_id == category.id]
+    
     category_query = Category.query.order_by(Category.display_order.asc()).all()
+    for item in all_items:
+            if item.category is None:
+                items_by_category["Uncategorized"].append(item)
     return render_template('admin/manage_menu.html', 
                            items_by_category=items_by_category, 
                            search_query=search_query,

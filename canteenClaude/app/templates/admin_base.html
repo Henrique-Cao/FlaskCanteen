@@ -67,6 +67,7 @@
 
   {% block content %}{% endblock %}
   
+  
   <nav class="navbar fixed-bottom bg-body border-dashed-top px-2 py-2 d-md-none">
         <div class="container-fluid d-flex justify-content-between px-1">
             
@@ -88,7 +89,7 @@
         </div>
     </nav>
 
-
+    {% block modals %}{% endblock %}
 
   {# Bootstrap JS bundle #}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

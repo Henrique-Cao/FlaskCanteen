@@ -69,7 +69,7 @@
                     <!-- ✅ FIXED: Group handle and name together -->   
                     <div class="d-flex align-items-center">
                         <i
-                            class="bi bi-grip-vertical drag-handle me-2"
+                            class="bi bi-grip-vertical dragHandle me-2"
                             style="cursor: grab"
                         ></i>
                         <span class="body-font text-dark"
@@ -77,13 +77,11 @@
                         >
                     </div>
                     <div class="d-flex gap-2">
-                        <button 
-                            type="button"
-                            class="btn btn-sm btn-outline-primary"
-                            data-action="edit-category"
-                            data-category-id="{{ category.id }}"
-                            data-category-name="{{ category.name }}"
-                        >
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-primary"
+                                data-action="edit-category"
+                                data-category-id="{{ category.id }}"
+                                data-category-name="{{ category.name }}">
                             Edit
                         </button>
 
@@ -178,11 +176,22 @@
                                             class="body-font fw-semibold text-dark"
                                             >{{ item.name }}</span
                                         >
-                                        <span
-                                            class="label-font small text-muted"
-                                            >{{ item.category }}</span
-                                        >
                                     </div>
+                                    <button
+                                        class="btn btn-link p-0 text-muted transition-color hover-dark"
+                                        data-action="edit"
+                                        data-item-id="{{ item.id }}"
+                                        title="Edit Item"
+                                    >
+                                        <i class="bi bi-pencil-fill small"></i>
+                                    </button>
+                                    <button
+                                        onclick="deleteMenuItem('{{item.id}}', '{{item.name}}')"
+                                        class="btn btn-link p-0 text-danger transition-color hover-dark"
+                                        title="Delete Item"
+                                    >
+                                        <i class="bi bi-trash-fill small"></i>
+                                    </button>
                                 </div>
                             </div>
                             {% endfor %}
@@ -194,11 +203,8 @@
         </div>
     </div>
 
-    <!-- Load SortableJS CDN -->
 </div>
-{% include 'modals/admin_edit_item.html' %} {% include
-'modals/admin_add_item.html' %} {% include 'modals/admin_add_category.html' %}
-{% include 'modals/admin_edit_category.html' %}
+
 <script>
     function toggleVisibility(itemId) {
         fetch(`/admin/menu/toggle/${itemId}`, {
@@ -213,3 +219,14 @@
 </script>
 <script src="{{ url_for('static', filename='js/admin_menu.js') }}"></script>
 {% endblock %}
+
+
+<!-- Place modals in their own block at root <body> level -->
+{% block modals %}
+    {% include 'modals/admin_edit_item.html' %} 
+    {% include 'modals/admin_add_item.html' %} 
+    {% include 'modals/admin_add_category.html' %}
+    {% include 'modals/admin_edit_category.html' %}
+{% endblock %}
+
+

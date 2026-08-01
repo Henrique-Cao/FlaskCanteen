@@ -1,12 +1,35 @@
+/**
+ * admin_menu.js
+ * Core management script for Canteen Admin operations (Menu Items & Categories).
+ * Handles dynamic modals, CRUD API interactions, event delegation, and drag-and-drop reordering.
+ */
+
 document.addEventListener("DOMContentLoaded", function () {
     initSortable();
-    initEditModalTriggers();
+    initActionTriggers();
     initFormHandlers();
 });
 
-// Helper for unified fetch calls
+
+// =============================================================================
+// 1. UTILITIES & API HELPERS
+// =============================================================================
+
+/**
+ * Wrapper for standard fetch API that handles JSON headers and CSRF tokens.
+ * @param {string} url - API Endpoint URL
+ * @param {Object} options - Fetch options (method, body, headers, etc.)
+ * @returns {Promise<Object>} Parsed JSON response
+ */
 async function fetchJSON(url, options = {}) {
-    const defaultHeaders = { 'Content-Type': 'application/json' };
+    // Retrieve CSRF token from HTML meta tag if Flask-WTF is active
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    const defaultHeaders = { 
+        'Content-Type': 'application/json',
+        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+    };
+
     const config = {
         ...options,
         headers: { ...defaultHeaders, ...options.headers }
@@ -21,14 +44,139 @@ async function fetchJSON(url, options = {}) {
     return data;
 }
 
-// 1. MENU ITEM DELETION
+/**
+ * Utility: Safely shows a Bootstrap modal by element ID
+ * @param {string} id - HTML ID of the modal
+ */
+function showModal(id) {
+    const modalEl = document.getElementById(id);
+    if (!modalEl) return;
+
+    // Move the modal directly to <body> to escape parent CSS stacking contexts
+    if (modalEl.parentNode !== document.body) {
+        document.body.appendChild(modalEl);
+    }
+
+    const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modalInstance.show();
+}
+/**
+ * Utility: Populates multiple form inputs at once using a key-value object map
+ * @param {Object} fieldMap - Object where keys are element IDs and values are field values
+ */
+function populateForm(fieldMap) {
+    Object.entries(fieldMap).forEach(([id, value]) => {
+        const input = document.getElementById(id);
+        if (input) input.value = value ?? '';
+    });
+}
+
+
+// =============================================================================
+// 2. EVENT DELEGATION & ACTION ROUTING
+// =============================================================================
+
+/**
+ * Action Dictionary: Maps data-action attribute values to handler functions
+ */
+const actions = {
+    'edit': handleEditItem,
+    'edit-category': handleEditCategory,
+    'delete-item': handleDeleteItem,
+    'delete-category': handleDeleteCategory
+};
+
+/**
+ * Single document-level click listener using event delegation.
+ * Catches clicks on elements with [data-action] and delegates to matching handler.
+ */
+function initActionTriggers() {
+    document.body.addEventListener("click", (event) => {
+        const btn = event.target.closest('[data-action]');
+        if (!btn) return;
+
+        const handler = actions[btn.dataset.action];
+        if (handler) handler(btn);
+    });
+}
+
+
+// =============================================================================
+// 3. ACTION HANDLERS (CLICK ROUTE TARGETS)
+// =============================================================================
+
+/**
+ * Fetches menu item data from API and opens edit modal populated with data.
+ * @param {HTMLElement} btn - The clicked button element containing dataset attributes
+ */
+async function handleEditItem(btn) {
+    const { itemId } = btn.dataset;
+    try {
+        const data = await fetchJSON(`/api/menu/${itemId}`);
+        
+        // Populates inputs using standard camelCase element IDs
+        populateForm({
+            'editItemId': data.id,
+            'editName': data.name,
+            'editPrice': data.price,
+            'editCategory': data.category_id ?? '',  // Use empty string if category_id is null
+            'editDescription': data.description
+        });
+        document.getElementById("editItemForm").action = `/api/menu/update/${data.id}`;
+        showModal('editItemModal');
+    } catch (err) {
+        alert("Could not load item details.");
+    }
+}
+
+/**
+ * Opens category edit modal using data stored directly in button dataset.
+ * @param {HTMLElement} btn - The clicked button element
+ */
+function handleEditCategory(btn) {
+    const { categoryId, categoryName } = btn.dataset;
+    
+    populateForm({
+        'editCategoryId': categoryId,
+        'editCategoryName': categoryName
+    });
+    console.log(`Editing category: ${categoryName} (ID: ${categoryId})`);
+    showModal('editCategoryModal');
+}
+
+/**
+ * Handler for menu item deletion trigger.
+ * @param {HTMLElement} btn 
+ */
+function handleDeleteItem(btn) {
+    const { itemId, itemName } = btn.dataset;
+    deleteMenuItem(itemId, itemName);
+}
+
+/**
+ * Handler for category deletion trigger.
+ * @param {HTMLElement} btn 
+ */
+function handleDeleteCategory(btn) {
+    const { categoryId, categoryName } = btn.dataset;
+    deleteCategory(categoryId, categoryName);
+}
+
+
+// =============================================================================
+// 4. API DELETE & SORT OPERATIONS
+// =============================================================================
+
+/**
+ * Sends DELETE request for a menu item and smoothly removes its row from DOM.
+ */
 async function deleteMenuItem(itemId, itemName) {
     if (!confirm(`Are you sure you want to permanently delete "${itemName}"?`)) return;
 
     try {
         await fetchJSON(`/api/menu/${itemId}`, { method: 'DELETE' });
         
-        const itemRow = document.getElementById(`menu-item-row-${itemId}`);
+        const itemRow = document.getElementById(`menuItemRow-${itemId}`);
         if (itemRow) {
             itemRow.style.transition = 'all 0.3s ease';
             itemRow.style.opacity = '0';
@@ -41,15 +189,16 @@ async function deleteMenuItem(itemId, itemName) {
     }
 }
 
-// 2. CATEGORY DELETION
+/**
+ * Sends POST request to delete a category and updates DOM dynamically.
+ */
 async function deleteCategory(categoryId, categoryName) {
     if (!confirm(`Are you sure you want to delete category "${categoryName}"?`)) return;
 
     try {
         await fetchJSON(`/api/categories/delete/${categoryId}`, { method: 'POST' });
         
-        // Dynamic DOM Removal instead of window.location.reload()
-        const catElement = document.getElementById(`category-row-${categoryId}`);
+        const catElement = document.getElementById(`categoryRow-${categoryId}`);
         if (catElement) {
             catElement.remove();
         } else {
@@ -61,20 +210,22 @@ async function deleteCategory(categoryId, categoryName) {
     }
 }
 
-// 3. SORTABLE CATEGORIES
+/**
+ * Initializes SortableJS drag-and-drop on category container if present.
+ */
 function initSortable() {
     const container = document.getElementById('categoryList');
     if (!container) return;
 
     const sortable = new Sortable(container, {
         animation: 200,
-        handle: '.drag-handle',
+        handle: '.dragHandle',
         onEnd: function () {
             const orderedIds = sortable.toArray().map(id => parseInt(id, 10));
 
-            // Update visible badge position counters
-            container.querySelectorAll('.drag-item').forEach((item, index) => {
-                const posBadge = item.querySelector('.badge-pos');
+            // Update visible position badge numbers in UI
+            container.querySelectorAll('.dragItem').forEach((item, index) => {
+                const posBadge = item.querySelector('.badgePos');
                 if (posBadge) posBadge.textContent = index;
             });
 
@@ -83,6 +234,9 @@ function initSortable() {
     });
 }
 
+/**
+ * Syncs reordered category list to backend database.
+ */
 async function saveNewOrder(orderedIds) {
     try {
         await fetchJSON('/api/categories/reorder', {
@@ -90,70 +244,31 @@ async function saveNewOrder(orderedIds) {
             body: JSON.stringify({ ordered_ids: orderedIds })
         });
         console.log('Order sync complete.');
-        // No page reload necessary - Sortable already updated DOM visually!
     } catch (error) {
         console.error('Error updating order:', error);
         alert("Failed to save category order.");
     }
 }
 
-// 4. EDIT MODAL TRIGGER
-function initEditModalTriggers() {
-    document.body.addEventListener("click", async function (event) {
-        
-        // --- A. MENU ITEM EDIT TRIGGER ---
-        const itemTrigger = event.target.closest('[data-action="edit"]');
-        if (itemTrigger) {
-            const itemId = itemTrigger.getAttribute("data-item-id");
-            try {
-                const data = await fetchJSON(`/api/menu/${itemId}`);
-                
-                document.getElementById("edit_item_id").value = data.id;
-                document.getElementById("edit_name").value = data.name;
-                document.getElementById("edit_price").value = data.price;
-                document.getElementById("edit_category").value = data.category;
-                document.getElementById("edit_description").value = data.description;
-                
-                document.getElementById("editItemForm").action = `/api/menu/update/${data.id}`;
 
-                const editModalEl = document.getElementById('editItemModal');
-                bootstrap.Modal.getOrCreateInstance(editModalEl).show();
-            } catch (err) {
-                console.error("Could not fetch item details:", err);
-                alert("Could not load item details.");
-            }
-            return; // Exit function after handling item
-        }
+// =============================================================================
+// 5. FORM SUBMISSION LISTENERS
+// =============================================================================
 
-        // --- B. CATEGORY EDIT TRIGGER ---
-        const categoryTrigger = event.target.closest('[data-action="edit-category"]');
-        if (categoryTrigger) {
-            const categoryId = categoryTrigger.getAttribute("data-category-id");
-            const categoryName = categoryTrigger.getAttribute("data-category-name");
-
-            // Populate the static modal inputs directly from the button's data attributes
-            document.getElementById("edit_category_id").value = categoryId;
-            document.getElementById("edit_category_name").value = categoryName;
-
-            const editModalEl = document.getElementById('editCategoryModal');
-            bootstrap.Modal.getOrCreateInstance(editModalEl).show();
-        }
-    });
-}
-// 5. FORM SUBMISSIONS (ADD & EDIT)
 function initFormHandlers() {
-    // Edit Form Handler
+    
+    // --- Edit Item Form ---
     const editItemForm = document.getElementById("editItemForm");
     if (editItemForm) {
         editItemForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const itemId = document.getElementById("edit_item_id").value;
+            const itemId = document.getElementById("editItemId").value;
             const payload = {
-                name: document.getElementById("edit_name").value,
-                price: parseFloat(document.getElementById("edit_price").value),
-                category: document.getElementById("edit_category").value,
-                description: document.getElementById("edit_description").value
+                name: document.getElementById("editName").value,
+                price: parseFloat(document.getElementById("editPrice").value),
+                category: document.getElementById("editCategory").value,
+                description: document.getElementById("editDescription").value
             };
 
             const targetUrl = editItemForm.getAttribute("action") || `/api/menu/update/${itemId}`;
@@ -163,11 +278,6 @@ function initFormHandlers() {
                     method: 'POST',
                     body: JSON.stringify(payload)
                 });
-
-                const modalEl = document.getElementById('editItemModal');
-                const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) modalInstance.hide();
-
                 window.location.reload(); 
             } catch (err) {
                 console.error("Error saving edit:", err);
@@ -176,17 +286,17 @@ function initFormHandlers() {
         });
     }
 
-    // Add Form Handler
+    // --- Add Item Form ---
     const addItemForm = document.getElementById("addItemForm");
     if (addItemForm) {
         addItemForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
             const payload = {
-                name: document.getElementById("name").value,
-                category: document.getElementById("category").value,
-                price: parseFloat(document.getElementById("price").value),
-                description: document.getElementById("description").value
+                name: document.getElementById("addName").value,
+                category: parseInt(document.getElementById("addCategory").value),
+                price: parseFloat(document.getElementById("addPrice").value),
+                description: document.getElementById("addDescription").value
             };
 
             try {
@@ -194,11 +304,6 @@ function initFormHandlers() {
                     method: 'POST',
                     body: JSON.stringify(payload)
                 });
-
-                const modalEl = document.getElementById('addItemModal');
-                const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) modalInstance.hide();
-
                 window.location.reload();
             } catch (err) {
                 console.error("Error adding item:", err);
@@ -207,28 +312,22 @@ function initFormHandlers() {
         });
     }
 
-    // --- Category Edit Form Handler ---
+    // --- Edit Category Form ---
     const editCategoryForm = document.getElementById("editCategoryForm");
     if (editCategoryForm) {
         editCategoryForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const categoryId = document.getElementById("edit_category_id").value;
-            const updatedName = document.getElementById("edit_category_name").value;
-            console.log("Submitting category edit for ID:", categoryId, "with new name:", updatedName);
+            const categoryId = document.getElementById("editCategoryId").value;
+            const updatedName = document.getElementById("editCategoryName").value;
+
             try {
-                
-                fetchJSON(`/api/categories/update/${categoryId}`, {
+                // FIXED: Await pause prevents instant reload bug
+                await fetchJSON(`/api/categories/update/${categoryId}`, {
                     method: 'POST',
                     body: JSON.stringify({ name: updatedName })
                 });
 
-                //Hide Modal
-                const modalEl = document.getElementById('editCategoryModal');
-                const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) modalInstance.hide();
-
-                // Reload the page to show the new name, matching your menu item behavior
                 window.location.reload(); 
             } catch (err) {
                 console.error("Error saving category edit:", err);
@@ -236,5 +335,24 @@ function initFormHandlers() {
             }
         });
     }
-    
+
+    // --- Add Category Form ---
+    const addCategoryForm = document.getElementById("addCategoryForm");
+    if (addCategoryForm) {
+        addCategoryForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const newCategoryName = document.getElementById("addCategoryName").value;
+            
+            try {
+                await fetchJSON('/api/categories/add', {
+                    method: 'POST',
+                    body: JSON.stringify({ name: newCategoryName })
+                });
+                window.location.reload(); 
+            } catch (err) {
+                console.error("Error adding category:", err);
+                alert("Failed to add category.");
+            }          
+        });
+    }
 }

@@ -30,8 +30,7 @@ def create_app(config_name: str | None = None) -> Flask:
     with app.app_context():
         from app.models import MenuItem, Order, OrderItem, Category
         db.create_all()
-
-
+        
 
     # ── Blueprints ────────────────────────────────────────────────────
     from app.main.routes   import main_bp
