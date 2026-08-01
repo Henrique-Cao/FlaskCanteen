@@ -1,7 +1,7 @@
 """
 app/__init__.py
 ~~~~~~~~~~~~~~~
-Application factory for Club33.
+Application factory for the Club33 Flask application.
 """
 import os
 from flask import Flask
@@ -10,6 +10,7 @@ from app.extensions import db, migrate
  
 
 def create_app(config_name: str | None = None) -> Flask:
+    """Create and configure the Flask application instance."""  
     config_name = config_name or os.environ.get("FLASK_ENV", "default")
  
     app = Flask(

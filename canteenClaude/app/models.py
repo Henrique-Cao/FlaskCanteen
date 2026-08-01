@@ -1,18 +1,22 @@
 """
 app/models.py
 ~~~~~~~~~~~~~
-Database models for Club33.
+Database models for the Club33 canteen application.
 
-Tables
-------
-MenuItem  — items auntie sells
-Order     — a customer order (name, phone, status)
-OrderItem — line items linking an Order to MenuItems
+This module defines the persistence layer used by the menu, ordering,
+and admin features. The main entities are:
+
+- Category: groups menu items into sections shown to customers.
+- MenuItem: a single item that can be sold from the menu.
+- Order: a customer purchase request with status and totals.
+- OrderItem: a line item that links an order to a menu item and stores
+  a snapshot of the price at the time of ordering.
 """
 from datetime import datetime, timezone
 from app.extensions import db
 
 class Category(db.Model):
+    """Represents a menu category such as Breakfast, Lunch, or Drinks."""
     __tablename__ = "categories"
 
     id   = db.Column(db.Integer, primary_key=True)
@@ -23,6 +27,7 @@ class Category(db.Model):
     def __repr__(self):
         return f"<Category {self.name!r}>"
 class MenuItem(db.Model):
+    """Represents a single menu item that can be ordered by customers."""
     __tablename__ = "menu_items"
 
     id               = db.Column(db.Integer, primary_key=True)
@@ -41,6 +46,7 @@ class MenuItem(db.Model):
 
 
 class Order(db.Model):
+    """Represents a customer order with status, totals, and line items."""
     __tablename__ = "orders"
 
     # Order status constants — use these instead of bare strings
@@ -69,6 +75,7 @@ class Order(db.Model):
 
 
 class OrderItem(db.Model):
+    """Represents one line item inside an order."""
     __tablename__ = "order_items"
 
     id           = db.Column(db.Integer, primary_key=True)
