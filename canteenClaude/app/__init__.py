@@ -46,7 +46,7 @@ def create_app(config_name: str | None = None) -> Flask:
     app.register_blueprint(menu_bp,   url_prefix="/menu")
     #app.register_blueprint(orders_bp, url_prefix="/orders")
     app.register_blueprint(admin_bp,  url_prefix="/admin")
- 
+    
     # ── Shell context ─────────────────────────────────────────────────
     @app.shell_context_processor
     def make_shell_context():

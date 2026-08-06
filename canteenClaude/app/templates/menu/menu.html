@@ -45,7 +45,7 @@
 
                                     <div class="row-auto d-flex justify-content-end">
                                         
-                                        <button class="btn-fab fab-rust btn-add rounded-circle d-flex align-items-center justify-content-center" aria-label="Add Shepherd's Pie to order">
+                                        <button class="btn-fab fab-rust btn-add add-to-cart-btn rounded-circle d-flex align-items-center justify-content-center" aria-label="Add {{ item.name }} to order" data-item-id="{{ item.id }}">
                                             <span class="fs-5">+</span>
                                         </button>
                                     </div>
@@ -85,4 +85,8 @@
 
     </div>
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/order_menu.js') }}"></script>
 {% endblock %}

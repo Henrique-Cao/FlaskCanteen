@@ -7,3 +7,6 @@ api_bp.register_blueprint(menu_api, url_prefix='/menu')
 
 from app.api.categories import categories_api
 api_bp.register_blueprint(categories_api, url_prefix='/categories')
+
+from app.api.cart import cart_api
+api_bp.register_blueprint(cart_api, url_prefix='/cart')
