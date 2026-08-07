@@ -82,8 +82,23 @@
                 </div>
             </div>
         </div> -->
-
+        
+        
     </div>
+    <!-- Updated floating bar wrapper -->
+<div id="sticky-cart-bar" 
+     class="position-fixed start-50 translate-middle-x w-100 px-3 pb-2 " 
+     style="bottom: 90px; max-width: 500px; z-index: 1040;">
+  
+  <button class="btn btn-dark w-100 py-3 px-4 rounded-4 shadow-lg d-flex justify-content-between align-items-center" 
+          data-bs-toggle="offcanvas" 
+          data-bs-target="#cartDrawer">
+    <span class="badge bg-light text-dark rounded-pill fs-6 px-3" id="bar-item-count">2 items</span>
+    <span class="fw-bold fs-6">View Order</span>
+    <span class="fw-bold fs-6" id="bar-total"></span>
+  </button>
+
+</div>
 </main>
 {% endblock %}
 

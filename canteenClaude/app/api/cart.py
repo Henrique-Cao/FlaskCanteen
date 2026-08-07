@@ -6,7 +6,7 @@ cart_api = Blueprint('cart_api', __name__)
 # 2. Update the route to match the JS endpoint '/add_to_cart'
 @cart_api.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    print("Received request to add item to cart")
+    
     
     data = request.get_json()
     if not data:
@@ -14,8 +14,7 @@ def add_to_cart():
 
     item_id = data.get('item_id')
     quantity = 1 
-    print(f"Adding item to cart: {item_id}, Quantity: {quantity}")
-
+    
     if not item_id:
         return jsonify({'success': False, 'message': 'Item ID is required.'}), 400
 
@@ -30,9 +29,15 @@ def add_to_cart():
         session['cart'][item_id] = quantity
 
     session.modified = True
-
+    print(f"Current cart contents: {session['cart']}")  # Debugging statement
     return jsonify({
         'success': True,
         'message': f'Item {item_id} added to cart.',
         'cart': session['cart']
     }), 200
+
+@cart_api.route('/get_cart', methods=['GET'])
+def get_cart():
+    # Return the current cart contents with details:
+    cart = session.get('cart', {})
+    return jsonify({'cart': cart}), 200
