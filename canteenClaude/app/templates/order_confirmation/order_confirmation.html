@@ -1,0 +1,33 @@
+
+{% extends "base.html" %} {% block title %}Club 33 – Tavern & Canteen{% endblock
+%} 
+
+
+{% block content %}
+<main class="container my-5 menu-container">
+    <div class="d-flex flex-column gap-4">
+        <div class="custom-card pb-4 border-bottom border-dotted">
+            <div class="col g-3 match-height">
+
+                <div class="row">
+                    <h2 class="menu-category-title h4 mb-3">Order Confirmation</h2>
+                    <p class="text-muted mb-3">Thank you for your order! Your order has been successfully placed.</p>
+                    <p class="text-muted mb-3">Order Number: {{ order_number }}</p>
+                    <p class="text-muted mb-3">Estimated Delivery Time: {{ estimated_delivery_time }}</p>
+                </div>
+
+                <div class="row-auto d-flex justify-content-end">
+                    <a href="{{ url_for('menu.index') }}" class="btn btn-primary">Back to Menu</a>
+                </div>
+            </div>
+        </div>  
+    </div>
+</main>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+{% endblock %}

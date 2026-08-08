@@ -10,3 +10,7 @@ api_bp.register_blueprint(categories_api, url_prefix='/categories')
 
 from app.api.cart import cart_api
 api_bp.register_blueprint(cart_api, url_prefix='/cart')
+
+from app.api.order import order_api
+api_bp.register_blueprint(order_api, url_prefix='/order')
+

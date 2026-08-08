@@ -12,8 +12,6 @@ cart_api = Blueprint('cart_api', __name__)
 # 2. Update the route to match the JS endpoint '/add_to_cart'
 @cart_api.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    
-    
     data = request.get_json()
     if not data:
         return jsonify({'success': False, 'message': 'Invalid JSON body.'}), 400

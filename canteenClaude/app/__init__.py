@@ -38,7 +38,7 @@ def create_app(config_name: str | None = None) -> Flask:
     from app.menu.routes   import menu_bp
     #from app.orders.routes import orders_bp
     from app.admin.routes  import admin_bp
-    
+    from app.order_confirmation.routes import order_confirmation_bp
 
     from app.api import api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
@@ -46,6 +46,7 @@ def create_app(config_name: str | None = None) -> Flask:
     app.register_blueprint(menu_bp,   url_prefix="/menu")
     #app.register_blueprint(orders_bp, url_prefix="/orders")
     app.register_blueprint(admin_bp,  url_prefix="/admin")
+    app.register_blueprint(order_confirmation_bp, url_prefix="/order_confirmation")
     
     # ── Shell context ─────────────────────────────────────────────────
     @app.shell_context_processor
