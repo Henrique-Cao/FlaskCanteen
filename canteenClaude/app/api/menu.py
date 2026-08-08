@@ -33,6 +33,7 @@ def get_menu_item_details(item_id):
         'is_available': item.is_available
     })
 
+
 @menu_api.route('/', methods=['POST'])
 def add_menu_item():
     

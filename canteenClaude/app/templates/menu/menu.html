@@ -86,19 +86,48 @@
         
     </div>
     <!-- Updated floating bar wrapper -->
-<div id="sticky-cart-bar" 
-     class="position-fixed start-50 translate-middle-x w-100 px-3 pb-2 " 
-     style="bottom: 90px; max-width: 500px; z-index: 1040;">
-  
-  <button class="btn btn-dark w-100 py-3 px-4 rounded-4 shadow-lg d-flex justify-content-between align-items-center" 
-          data-bs-toggle="offcanvas" 
-          data-bs-target="#cartDrawer">
-    <span class="badge bg-light text-dark rounded-pill fs-6 px-3" id="bar-item-count">2 items</span>
-    <span class="fw-bold fs-6">View Order</span>
-    <span class="fw-bold fs-6" id="bar-total"></span>
-  </button>
+    <div id="sticky-cart-bar" 
+        class="position-fixed start-50 translate-middle-x w-100 px-3 pb-2 " 
+        style="bottom: 90px; max-width: 500px; z-index: 1040;">
+    
+    <button class="btn btn-dark w-100 py-3 px-4 rounded-4 shadow-lg d-flex justify-content-between align-items-center" 
+            data-bs-toggle="offcanvas" 
+            data-bs-target="#cartDrawer">
+        <span class="badge bg-light text-dark rounded-pill fs-6 px-3" id="bar-item-count">2 items</span>
+        <span class="fw-bold fs-6">View Order</span>
+        <span class="fw-bold fs-6" id="bar-total"></span>
+    </button>
 
-</div>
+    </div>
+    <!-- Bootstrap 5 Offcanvas Cart Drawer -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold" id="cartDrawerLabel">Your Order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        
+        <div class="offcanvas-body d-flex flex-column">
+            <!-- Dynamic Itemized Container -->
+            <div id="cart-items-container" class="flex-grow-1 overflow-auto pe-1">
+            <div class="text-center text-muted py-4">Your cart is empty</div>
+            </div>
+
+            <!-- Summary & Checkout Footer -->
+            <!-- Inside #cartDrawer footer -->
+            <div class="border-top pt-3 mt-auto">
+            <div class="d-flex justify-content-between fs-5 fw-bold mb-3">
+                <span>Total</span>
+                <span id="drawer-grand-total">$0.00</span>
+            </div>
+            <a href="/checkout" class="btn btn-dark w-100 py-3 rounded-pill fw-bold mb-2">Proceed to Checkout</a>
+            
+            <!-- Secondary Text Link -->
+            <button id="clear-cart-btn" class="btn btn-link text-muted w-100 text-decoration-none btn-sm">
+                Clear Cart
+            </button>
+            </div>
+        </div>
+    </div>
 </main>
 {% endblock %}
 
