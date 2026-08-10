@@ -16,10 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 console.log('Order created successfully:', data);
                 // Redirect to order confirmation page
-                //window.location.href = '/order_confirmation';
+                console.log('Redirecting to order confirmation page:', data.redirect_url);
+                window.location.href = data.redirect_url; // Redirect to order confirmation page
             } catch (error) {
                 console.error('Error creating order:', error);
             }
         });
     }
 });
+

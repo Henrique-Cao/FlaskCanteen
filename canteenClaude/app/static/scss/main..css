@@ -81,11 +81,14 @@ label, .label-font, .badge {
   font-weight: 700;
   border: none;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
 }
 .btn-sage:hover {
   background-color: rgb(113.1621621622, 132.3783783784, 104.6216216216);
   color: #ffffff;
+}
+.btn-sage:active {
+  transform: scale(0.98);
 }
 
 .btn-fab {
@@ -181,6 +184,30 @@ label, .label-font, .badge {
   transform: translateY(-50%);
   color: rgba(44, 43, 41, 0.4);
   pointer-events: none;
+}
+
+.dashboard-desktop-container {
+  max-width: 1140px;
+  width: 100%;
+}
+
+.history-card-panel {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.45);
+}
+.history-card-panel .history-card-watermark {
+  position: absolute;
+  bottom: -10px;
+  right: 10px;
+  width: 130px;
+  height: 130px;
+  background-image: url("/static/images/tankard-watermark.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .proposition-icon {

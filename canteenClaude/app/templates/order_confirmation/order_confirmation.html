@@ -12,15 +12,38 @@
                 <div class="row">
                     <h2 class="menu-category-title h4 mb-3">Order Confirmation</h2>
                     <p class="text-muted mb-3">Thank you for your order! Your order has been successfully placed.</p>
-                    <p class="text-muted mb-3">Order Number: {{ order_number }}</p>
-                    <p class="text-muted mb-3">Estimated Delivery Time: {{ estimated_delivery_time }}</p>
+                    <p class="text-muted mb-3">Order Number: {{ order_number }}</p> 
+                    <p class="text-muted mb-3">Status: {{order.status}}</p>
                 </div>
 
                 <div class="row-auto d-flex justify-content-end">
                     <a href="{{ url_for('menu.index') }}" class="btn btn-primary">Back to Menu</a>
                 </div>
             </div>
-        </div>  
+        </div>
+        <div class="custom-card pb-4 border-bottom border-dotted">
+            <div class="col g-3 match-height">
+
+                <div class="row">
+                    <h2 class="menu-category-title h4 mb-3">Order Details</h2>
+                    <p class="text-muted mb-3">Here are the details of your order:</p>
+                    <ul class="list-group">
+                        {% for item in items_with_details %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.name }} (x{{ item.quantity }})
+                            <span>${{ "%.2f"|format(item.total_price) }}</span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                            Total:
+                            <span> ${{ "%.2f"|format(order.total_price)}}</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+
     </div>
 </main>
 

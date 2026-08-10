@@ -46,7 +46,7 @@ def create_order():
         )
         new_order.items.append(order_item)
         total_price += quantity * float(menu_item.price)
-
+    print("ordernum" + new_order.order_number)
     new_order.total_price = total_price
 
     # 5. Commit order to database
@@ -65,12 +65,14 @@ def create_order():
         "total_price": float(new_order.total_price),
         "status": new_order.status,
         "created_at": new_order.created_at.isoformat(),
-        "redirect_url": f"/order/{new_order.id}",
+        "redirect_url": f"/order_confirmation/{new_order.order_number}",
         "items": [
             {
                 "menu_item_id": item.menu_item_id,
                 "quantity": item.quantity,
-                "price": float(item.unit_price)
+                "price": float(item.unit_price),
+                "name": item.menu_item.name,
+                "order_number": order_number
             } for item in new_order.items
         ]
     }), 201
