@@ -5,6 +5,7 @@ from app.models import MenuItem, Order, OrderItem
 import uuid
 order_api = Blueprint('order_api', __name__)
 
+# Create a new order from the session cart and customer details
 @order_api.route('/', methods=['POST'])
 def create_order():
     data = request.get_json() or {}
@@ -46,7 +47,6 @@ def create_order():
         )
         new_order.items.append(order_item)
         total_price += quantity * float(menu_item.price)
-    print("ordernum" + new_order.order_number)
     new_order.total_price = total_price
 
     # 5. Commit order to database
@@ -76,3 +76,49 @@ def create_order():
             } for item in new_order.items
         ]
     }), 201
+
+# Get all orders (for admin view)
+@order_api.route('/', methods=['GET'])
+def get_orders():
+    orders = Order.query.order_by(Order.created_at.desc()).all()
+    return jsonify([{
+        "id": order.id,
+        "order_number": order.order_number,
+        "customer_name": order.customer_name,
+        "phone": order.phone,
+        "status": order.status,
+        "total_price": float(order.total_price),
+        "created_at": order.created_at.isoformat(),
+        "items": [
+            {
+                "menu_item_id": item.menu_item_id,
+                "quantity": item.quantity,
+                "price": float(item.unit_price),
+                "name": item.menu_item.name
+            } for item in order.items
+        ]
+    } for order in orders]), 200
+
+# modify order status (for admin)
+@order_api.route('/<int:order_id>/status', methods=['PUT'])
+def update_order_status(order_id):
+    print(f"Received request to update status for order ID: {order_id}")
+    data = request.get_json() or {}
+    new_status = data.get('status')
+
+    if new_status not in [Order.STATUS_PENDING, Order.STATUS_CONFIRMED, Order.STATUS_READY, Order.STATUS_COLLECTED]:
+        return jsonify({"error": "Invalid status value."}), 400
+
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({"error": "Order not found."}), 404
+
+    order.status = new_status
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "id": order.id,
+        "order_number": order.order_number,
+        "status": order.status
+    }), 200

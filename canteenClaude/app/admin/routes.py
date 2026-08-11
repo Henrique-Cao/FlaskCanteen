@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template,request, jsonify, redirect, url_for
-from app.models import MenuItem,Category
+from app.models import MenuItem,Category,Order
 admin_bp = Blueprint("admin", __name__)
 from collections import defaultdict
  
@@ -7,7 +7,7 @@ from collections import defaultdict
 def index():
     """Menu page."""
     return render_template("admin/dashboard.html")
-@admin_bp.route('/admin/manage-menu', methods=['GET'])
+@admin_bp.route('/manage-menu', methods=['GET'])
 def manage_menu():
     search_query = request.args.get('search', '').strip()
     
@@ -33,5 +33,12 @@ def manage_menu():
                            items_by_category=items_by_category, 
                            search_query=search_query,
                            categories=category_query)
+@admin_bp.route('/orders')
+def order_management():
+    """Render the order management page."""
+    orders = Order.query.order_by(Order.created_at.desc()).all()
+
+    return render_template('admin/orders.html', orders=orders)
+
 
 
