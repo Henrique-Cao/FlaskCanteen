@@ -3,6 +3,12 @@ from flask import Blueprint, jsonify, request, session, url_for
 from app.extensions import db
 from app.models import MenuItem, Order, OrderItem
 import uuid
+from datetime import datetime, timedelta, timezone
+
+
+# Singapore is permanently fixed at UTC+8
+SG_TZ = timezone(timedelta(hours=8))
+
 order_api = Blueprint('order_api', __name__)
 
 # Create a new order from the session cart and customer details
@@ -113,7 +119,13 @@ def update_order_status(order_id):
     if not order:
         return jsonify({"error": "Order not found."}), 404
 
+    
     order.status = new_status
+    if new_status == Order.STATUS_READY:
+        order.ready_at = datetime.now(SG_TZ)
+
+
+
     db.session.commit()
 
     return jsonify({
@@ -122,3 +134,4 @@ def update_order_status(order_id):
         "order_number": order.order_number,
         "status": order.status
     }), 200
+

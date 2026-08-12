@@ -1,89 +1,60 @@
 import sys
 from app import create_app, db
-from app.models import Category, MenuItem
-
+from app.models import Category, MenuItem, Order, OrderItem
+from datetime import datetime, timedelta
 # Initialize Flask Application Context
 app = create_app()
 
 def seed_database():
     with app.app_context():
-        print("--- Starting Database Seeding ---")
-        
-        # 1. Create database tables if they don't exist
+        # 1. Create all tables
         db.create_all()
 
-        # 2. Initial Category Data
-        categories_data = [
-            {"name": "Mains", "position": 1},
-            {"name": "Drinks", "position": 2},
-            {"name": "Snacks", "position": 3},
+        # 2. Seed Categories
+        if Category.query.first() is None:
+            categories = [
+                Category(name="Breakfast", display_order=1),
+                Category(name="Lunch", display_order=2),
+                Category(name="Drinks", display_order=3),
+            ]
+            db.session.bulk_save_objects(categories)
+            db.session.commit()
+
+        # 3. Seed Menu Items
+        menu_items = [
+            MenuItem(name="Pancakes", description="Fluffy pancakes with syrup", price=5.99, category_id=1),
+            MenuItem(name="Burger", description="Juicy beef burger with cheese", price=8.99, category_id=2),
+            MenuItem(name="Coffee", description="Freshly brewed coffee", price=2.99, category_id=3),
         ]
+        # 4. Seed Orders and OrderItems (if needed)
+        orders = [
+            Order(order_number="ORD-0001", customer_name="Alice", phone="12345678", status=Order.STATUS_PENDING, total_price=11.98,created_at=datetime.now()),
+            Order(order_number="ORD-0002", customer_name="Bob", phone="87654321", status=Order.STATUS_CONFIRMED, total_price=8.99,created_at=datetime.strptime("2026-08-11 09:00:00", "%Y-%m-%d %H:%M:%S")),
+        ]
+        # add order with status = ready and set ready_at to a specific time
+        orders.append(Order(order_number="ORD-0003", customer_name="Charlie", phone="55555555", status=Order.STATUS_READY, total_price=2.99,created_at=datetime.strptime("2026-08-12 00:01:00", "%Y-%m-%d %H:%M:%S"),ready_at=datetime.strptime("2026-08-12 00:10:00", "%Y-%m-%d %H:%M:%S")))
+        orders.append(Order(order_number="ORD-0004", customer_name="David", phone="44444444", status=Order.STATUS_COLLECTED, total_price=8.99,created_at=datetime.strptime("2026-08-12 00:02:00", "%Y-%m-%d %H:%M:%S"),ready_at=datetime.strptime("2026-08-12 00:09:00", "%Y-%m-%d %H:%M:%S")))
+        
 
-        category_map = {}
-        for cat_info in categories_data:
-            cat = Category.query.filter_by(name=cat_info["name"]).first()
-            if not cat:
-                cat = Category(name=cat_info["name"],display_order=cat_info["position"])
-                db.session.add(cat)
-                db.session.flush()  # Flushes session to get cat.id immediately
-                print(f"[+] Added Category: '{cat.name}' (ID: {cat.id})")
-            else:
-                print(f"[=] Category already exists: '{cat.name}' (ID: {cat.id})")
-            category_map[cat.name] = cat.id
 
+        db.session.bulk_save_objects(orders)
         db.session.commit()
 
-        # 3. Initial Menu Item Data (Linked to categories + 1 Uncategorized item)
-        items_data = [
-            {
-                "name": "Chicken Rice",
-                "price": 4.50,
-                "description": "Steamed chicken with fragrant rice and chili sauce.",
-                "category_id": category_map.get("Mains"),
-                "is_available": True
-            },
-            {
-                "name": "Iced Lemon Tea",
-                "price": 1.80,
-                "description": "Refreshing iced tea with fresh lemon slice.",
-                "category_id": category_map.get("Drinks"),
-                "is_available": True
-            },
-            {
-                "name": "Curry Puff",
-                "price": 1.50,
-                "description": "Crispy pastry filled with spiced potato and chicken.",
-                "category_id": category_map.get("Snacks"),
-                "is_available": True
-            },
-            {
-                "name": "Bottled Mineral Water",
-                "price": 1.00,
-                "description": "500ml cold mineral water.",
-                "category_id": None,  # Tests optional / uncategorized logic
-                "is_available": True
-            }
+        order_items = [
+            OrderItem(order_id=1, menu_item_id=1, quantity=2, unit_price=5.99),
+            OrderItem(order_id=2, menu_item_id=2, quantity=1, unit_price=8.99),
+            OrderItem(order_id=1, menu_item_id=3, quantity=1, unit_price=2.99),
+            OrderItem(order_id=2, menu_item_id=3, quantity=2, unit_price=2.99),
         ]
-
-        for item_info in items_data:
-            existing_item = MenuItem.query.filter_by(name=item_info["name"]).first()
-            if not existing_item:
-                new_item = MenuItem(
-                    name=item_info["name"],
-                    price=item_info["price"],
-                    description=item_info["description"],
-                    category_id=item_info["category_id"],
-                    is_available=item_info["is_available"],
-                    image_filename="placeholder.jpg"
-                )
-                db.session.add(new_item)
-                cat_display = item_info["category_id"] if item_info["category_id"] else "None (Uncategorized)"
-                print(f"[+] Added MenuItem: '{new_item.name}' -> Category ID: {cat_display}")
-            else:
-                print(f"[=] MenuItem already exists: '{existing_item.name}'")
-
+        db.session.bulk_save_objects(order_items)
         db.session.commit()
-        print("--- Database Seeding Complete! ---")
+
+
+
+        db.session.bulk_save_objects(menu_items)
+        db.session.commit()
+
+        print("Database seeded successfully.")
 
 if __name__ == "__main__":
     seed_database()

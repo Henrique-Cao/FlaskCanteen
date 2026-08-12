@@ -14,3 +14,5 @@ api_bp.register_blueprint(cart_api, url_prefix='/cart')
 from app.api.order import order_api
 api_bp.register_blueprint(order_api, url_prefix='/order')
 
+from app.api.analytics import analytics_api
+api_bp.register_blueprint(analytics_api, url_prefix='/analytics')

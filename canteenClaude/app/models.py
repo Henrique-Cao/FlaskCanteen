@@ -12,9 +12,9 @@ and admin features. The main entities are:
 - OrderItem: a line item that links an order to a menu item and stores
   a snapshot of the price at the time of ordering.
 """
-from datetime import datetime, timezone
+from datetime import datetime, timezone,timedelta
 from app.extensions import db
-
+SG_TZ = timezone(timedelta(hours=8))
 class Category(db.Model):
     """Represents a menu category such as Breakfast, Lunch, or Drinks."""
     __tablename__ = "categories"
@@ -63,9 +63,10 @@ class Order(db.Model):
     total_price    = db.Column(db.Float,       nullable=False, default=0.0)
     created_at     = db.Column(
         db.DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(SG_TZ),
         nullable=False,
     )
+    ready_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
     # Relationship to line items
     items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")

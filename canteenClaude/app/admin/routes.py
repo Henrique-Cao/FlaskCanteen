@@ -5,8 +5,9 @@ from collections import defaultdict
  
 @admin_bp.route("/")
 def index():
-    """Menu page."""
-    return render_template("admin/dashboard.html")
+    
+    
+    return render_template("admin/analytics.html")
 @admin_bp.route('/manage-menu', methods=['GET'])
 def manage_menu():
     search_query = request.args.get('search', '').strip()
@@ -39,6 +40,5 @@ def order_management():
     orders = Order.query.order_by(Order.created_at.desc()).all()
 
     return render_template('admin/orders.html', orders=orders)
-
 
 

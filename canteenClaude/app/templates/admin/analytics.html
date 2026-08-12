@@ -1,0 +1,148 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Club33 - Sales Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-5 py-4 dashboard-desktop-container">
+
+    <!-- Top Header & Date Filter -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold mb-1">Sales Analytics Dashboard</h2>
+            <p class="text-muted small mb-0">Overview of operational revenue, kitchen prep speed, and dish sales</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <label for="rangeFilter" class="form-label mb-0 fw-semibold text-nowrap">Date Range:</label>
+            <select id="rangeFilter" class="form-select shadow-sm" style="max-width: 200px;">
+                <option value="today">Today</option>
+                <option value="7d" selected>Last 7 Days</option>
+                <option value="30d">Last 30 Days</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Canteen KPI Cards (3 Cards) -->
+    <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+        <!-- Total Revenue -->
+        <div class="col">
+            <div class="card border-0 bg-dark text-white p-3 shadow-sm h-100 rounded-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <span class="text-uppercase text-white-50 fs-7 fw-bold">Total Revenue</span>
+                        <h3 class="fw-bold mt-1 mb-1" id="kpi-revenue">$0.00</h3>
+                        <span class="badge bg-success text-white" id="kpi-revenue-trend">+0%</span>
+                    </div>
+                    <i class="bi bi-currency-dollar fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Meals Cooked -->
+        <div class="col">
+            <div class="card border-0 bg-primary text-white p-3 shadow-sm h-100 rounded-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <span class="text-uppercase text-white-50 fs-7 fw-bold">Total Meals Cooked</span>
+                        <h3 class="fw-bold mt-1 mb-1" id="kpi-meals">0</h3>
+                        <span class="badge bg-light text-primary" id="kpi-meals-trend">+0%</span>
+                    </div>
+                    <i class="bi bi-egg-fried fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avg Kitchen Prep Speed -->
+        <div class="col">
+            <div class="card border-0 bg-warning text-dark p-3 shadow-sm h-100 rounded-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <span class="text-uppercase text-dark-50 fs-7 fw-bold">Avg Kitchen Prep Speed</span>
+                        <h3 class="fw-bold mt-1 mb-1" id="kpi-prep-speed">0.0m</h3>
+                        <span class="badge bg-dark text-white" id="kpi-prep-trend">0m vs prev</span>
+                    </div>
+                    <i class="bi bi-stopwatch fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practical Kitchen Charts Row -->
+    <div class="row row-cols-1 row-cols-lg-3 g-3 mb-4">
+        <!-- Peak Rush Hours -->
+        <div class="col">
+            <div class="card border-0 shadow-sm h-100 rounded-3">
+                <div class="card-header bg-white py-3 border-0">
+                    <h6 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>Peak Rush Hours</h6>
+                </div>
+                <div class="card-body">
+                    <div id="rushHoursChart" style="min-height: 260px;"></div>
+                </div>
+            </div>
+        </div>  
+
+        <!-- Top Selling Dishes -->
+        <div class="col">
+            <div class="card border-0 shadow-sm h-100 rounded-3">
+                <div class="card-header bg-white py-3 border-0">
+                    <h6 class="fw-bold mb-0"><i class="bi bi-fire me-2 text-danger"></i>Top Selling Dishes</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 260px;">
+                        <canvas id="topDishesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales by Category -->
+        <div class="col">
+            <div class="card border-0 shadow-sm h-100 rounded-3">
+                <div class="card-header bg-white py-3 border-0">
+                    <h6 class="fw-bold mb-0"><i class="bi bi-pie-chart me-2 text-success"></i>Sales by Category</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 260px;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Completed Orders Table -->
+    <div class="card border-0 shadow-sm mb-4 rounded-3">
+        <div class="card-header bg-white py-3 border-0">
+            <h6 class="fw-bold mb-0">Recent Completed Orders</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Order ID</th>
+                            <th>Time</th>
+                            <th>Type / Table</th>
+                            <th>Items</th>
+                            <th>Amount</th>
+                            <th class="pe-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOrdersTable">
+                        <!-- Populated dynamically via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block extra_js %} 
+<!-- Chart.js CDN -->
+
+<!-- Analytics Custom JS -->
+<script src="{{ url_for('static', filename='js/admin_analytics.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+{% endblock %}
