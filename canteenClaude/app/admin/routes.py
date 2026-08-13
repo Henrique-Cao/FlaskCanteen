@@ -42,3 +42,45 @@ def order_management():
     return render_template('admin/orders.html', orders=orders)
 
 
+def calculate_pagination_window(current_page: int, total_pages: int, window_size: int = 5) -> range:
+    """
+    Calculates a sliding range of page numbers centered around the current page.
+    Guarantees exactly `window_size` page numbers when total_pages >= window_size.
+    """
+    if total_pages <= window_size:
+        return range(1, total_pages + 1)
+
+    half_window = window_size // 2
+    start_page = current_page - half_window
+    end_page = current_page + half_window
+
+    # Left boundary check
+    if start_page < 1:
+        start_page = 1
+        end_page = window_size
+
+    # Right boundary check
+    if end_page > total_pages:
+        end_page = total_pages
+        start_page = total_pages - window_size + 1
+
+    return range(start_page, end_page + 1)
+# History Page routing
+@admin_bp.route('/history')
+def order_history():
+    page = request.args.get('page', 1, type=int)
+    per_page = 10  # Number of orders per page
+
+    # Fetch paginated orders from database
+    orders = Order.query.filter_by(status='collected') \
+                        .order_by(Order.created_at.desc()) \
+                        .paginate(page=page, per_page=per_page, error_out=False)
+    order_items = {order.id: order.items for order in orders.items}
+    # Calculate fixed 5-page window range
+    page_range = calculate_pagination_window(
+        current_page=orders.page, 
+        total_pages=orders.pages, 
+        window_size=5
+    )
+    return render_template('admin/history.html', orders=orders, page_range=page_range, order_items=order_items)
+

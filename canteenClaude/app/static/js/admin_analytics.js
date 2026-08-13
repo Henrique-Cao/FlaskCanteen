@@ -1,35 +1,71 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initialize ApexCharts Instances
-    const rushHoursChart = new ApexCharts(document.querySelector("#rushHoursChart"), {
-        chart: { type: 'area', height: 260, toolbar: { show: false } },
-        stroke: { curve: 'smooth', width: 2 },
-        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05 } },
-        colors: ['#0d6efd'],
-        xaxis: { categories: [] },
-        series: []
-    });
-
-    // const topDishesChart = new ApexCharts(document.querySelector("#topDishesChart"), {
-    //     chart: { type: 'bar', height: 260, toolbar: { show: false } },
-    //     plotOptions: { bar: { horizontal: true, borderRadius: 4 } },
-    //     colors: ['#dc3545'],
-    //     dataLabels: { enabled: true },
+    // const rushHoursChart = new ApexCharts(document.querySelector("#rushHoursChart"), {
+    //     chart: { type: 'area', height: 260, toolbar: { show: false } },
+    //     stroke: { curve: 'smooth', width: 2 },
+    //     fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05 } },
+    //     colors: ['#0d6efd'],
     //     xaxis: { categories: [] },
     //     series: []
     // });
 
-    // const categoryChart = new ApexCharts(document.querySelector("#categoryChart"), {
-    //     chart: { type: 'donut', height: 260 },
-    //     colors: ['#0d6efd', '#198754', '#ffc107', '#0dcaf0', '#6c757d'],
-    //     labels: [],
-    //     series: [],
-    //     legend: { position: 'bottom' }
-    // });
+    const noDataConfig = {
+        text: 'No data available for this period',
+        align: 'center',
+        verticalAlign: 'middle',
+        style: {
+            color: '#6c757d',
+            fontSize: '14px',
+            fontFamily: 'inherit'
+        },
+        yaxis: { show: false },
+        grid: { show: false },
+        
+    };
+
+    const rushHoursChart = new ApexCharts(document.querySelector("#rushHoursChart"), {
+        chart: { type: 'area', height: 260, stacked: false, toolbar: { show: false } },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 2 },
+        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05 } },
+        colors: ['#0d6efd'],
+        xaxis: {
+            categories: [],
+            tickAmount: 6, // Limits the x-axis to ~6 visible labels across the span
+            labels: {
+                rotate: 0, // Keeps text horizontal for cleaner reading
+                hideOverlappingLabels: true, // Automatically hides labels if screen resizes smaller
+                style: { fontSize: '11px' }
+            }
+        },
+        yaxis: { min: 0 },
+        series: [],
+        noData: noDataConfig
+    });
+
+    const topDishesChart = new ApexCharts(document.querySelector("#topDishesChart"), {
+        chart: { type: 'bar', height: 260, toolbar: { show: false } },
+        plotOptions: { bar: { horizontal: true, barHeight: '50%' } },
+        dataLabels: { enabled: false },
+        colors: ['#198754'],
+        xaxis: { categories: [] },
+        series: [],
+        noData: noDataConfig
+    });
+
+    const categoryChart = new ApexCharts(document.querySelector("#categoryChart"), {
+        chart: { type: 'donut', height: 260 },
+        colors: ['#0d6efd', '#198754', '#ffc107', '#0dcaf0', '#6c757d'],
+        labels: [],
+        series: [],
+        legend: { position: 'bottom' },
+        noData: noDataConfig
+    });
 
     // Render empty containers initial state
     rushHoursChart.render();
-    // topDishesChart.render();
-    // categoryChart.render();
+    topDishesChart.render();
+    categoryChart.render();
 
     // 2. Fetch and Render Unified Analytics Payload
     async function fetchAnalytics(range = 'today') {
@@ -40,26 +76,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             // A. Update KPI Text Nodes
-            // document.getElementById('kpi-revenue').textContent = `$${data.kpis.total_revenue.toFixed(2)}`;
-            // document.getElementById('kpi-revenue-trend').textContent = data.kpis.revenue_trend;
-
+            document.getElementById('kpi-revenue').textContent = `$${data.kpis.total_revenue.toFixed(2)}`;
+            document.getElementById('kpi-revenue-trend').textContent = data.kpis.revenue_trend;
+            
+            document.getElementById('kpi-orders-completed').textContent = data.kpis.orders_completed;
             // document.getElementById('kpi-meals').textContent = data.kpis.meals_cooked;
-            // document.getElementById('kpi-meals-trend').textContent = data.kpis.meals_trend;
+            document.getElementById('kpi-orders-trend').textContent = data.kpis.orders_trend;
 
-            // document.getElementById('kpi-prep-speed').textContent = data.kpis.prep_speed;
-            // document.getElementById('kpi-prep-trend').textContent = data.kpis.prep_trend;
+            document.getElementById('kpi-prep-speed').textContent = data.kpis.prep_speed;
+            document.getElementById('kpi-prep-trend').textContent = data.kpis.prep_trend;
 
             // B. Update ApexCharts Options and Series
-            console.log("Updating Rush Hours Chart with Categories:", data.rush_hours.categories);
-            console.log("Updating Rush Hours Chart with Series:", data.rush_hours.series);
             rushHoursChart.updateOptions({ xaxis: { categories: data.rush_hours.categories } });
             rushHoursChart.updateSeries(data.rush_hours.series);
 
-            // topDishesChart.updateOptions({ xaxis: { categories: data.top_dishes.categories } });
-            // topDishesChart.updateSeries(data.top_dishes.series);
+            console.log("Updating Top Dishes Chart with Categories:", data.top_dishes.categories);
+            console.log("Updating Top Dishes Chart with Series:", data.top_dishes.series);
+            topDishesChart.updateOptions({ xaxis: { categories: data.top_dishes.categories } });
+            topDishesChart.updateSeries(data.top_dishes.series);
 
-            // categoryChart.updateOptions({ labels: data.categories.labels });
-            // categoryChart.updateSeries(data.categories.series);
+            categoryChart.updateOptions({ labels: data.categories.labels });
+            categoryChart.updateSeries(data.categories.series);
 
             // C. Render Recent Orders Table
             const tbody = document.getElementById('recentOrdersTable');

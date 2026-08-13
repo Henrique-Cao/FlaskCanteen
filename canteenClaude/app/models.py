@@ -83,6 +83,7 @@ class OrderItem(db.Model):
     order_id     = db.Column(db.Integer, db.ForeignKey("orders.id"),      nullable=False)
     menu_item_id = db.Column(db.Integer, db.ForeignKey("menu_items.id"),  nullable=False)
     quantity     = db.Column(db.Integer, nullable=False, default=1)
+    item_name    = db.Column(db.String(100), nullable=False)  # snapshot name at time of order
     unit_price   = db.Column(db.Float,   nullable=False)  # snapshot price at time of order
 
     order     = db.relationship("Order",    back_populates="items")

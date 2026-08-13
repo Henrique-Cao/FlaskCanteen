@@ -1,0 +1,56 @@
+{% block modals %}
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-card p-2 p-sm-3 shadow-lg border-0" style="background-color: var(--bs-body-bg);">
+            
+            <!-- Header -->
+            <div class="modal-header border-0 pb-1">
+                <h2 class="modal-title headline-font h3 mb-0" id="orderDetailsModalLabel">
+                    Order <span id="modalOrderId" class="text-primary-custom">#4205</span>
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body pt-2">
+                
+                <!-- Customer & Metadata Card -->
+                <div class="bg-white p-3 rounded-3 mb-3 border border-1 border-opacity-10 border-dark shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="body-font fs-6">Time: <strong id="modalOrderTime">--:--</strong></span>
+                        <span class="status-pill pill-success" id="modalOrderStatus">✓ STATUS</span>
+                    </div>
+                    <div class="border-top border-dotted pt-2 mt-1 d-flex justify-content-between text-muted fs-7 body-font">
+                        <div>Customer: <strong id="modalCustomerName" class="text-dark">--</strong></div>
+                        <div>Phone: <strong id="modalCustomerPhone" class="text-dark">--</strong></div>
+                    </div>
+                </div>
+
+                <!-- Receipt Card -->
+                <div class="bg-white p-3 rounded-3 mb-4 border border-1 border-opacity-10 border-dark shadow-sm">
+                    <div id="modalOrderItemsList" class="body-font">
+                        <!-- Dynamic Order Items Render Here -->
+                    </div>
+
+                    <!-- Total Price -->
+                    <div class="d-flex justify-content-between align-items-center headline-font fs-4 mt-3 pt-2 border-dashed-top">
+                        <span>Total:</span>
+                        <span class="fw-bold text-primary-custom" id="modalOrderTotal">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex flex-column gap-2">
+                    <button type="button" class="btn btn-sage w-100 py-3 fs-5 label-font text-uppercase tracking-wide" onclick="window.print()">
+                        Print Receipt
+                    </button>
+                    <button type="button" class="btn btn-secondary-custom w-100 py-2 label-font" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

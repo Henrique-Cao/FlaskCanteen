@@ -35,7 +35,7 @@
             <div class="d-none d-md-flex align-items-center mx-auto">
                 <ul class="navbar-nav d-flex flex-row gap-4 text-center">
                     <li class="nav-item">
-                        <a class="nav-stacked-link transition-all {{ 'bg-primary text-white rounded-3 fw-semibold' if request.endpoint == 'home' else 'text-secondary' }} px-3 py-2" href="{{ url_for('main.index') }}">
+                        <a class="nav-stacked-link transition-all {{ 'bg-primary text-white rounded-3 fw-semibold' if request.endpoint == 'home' else 'text-secondary' }} px-3 py-2" href="{{ url_for('admin.index') }}">
                             <i class="fa-solid fa-house fs-5"></i>
                             <span>Admin Dashboard</span>
                         </a>
@@ -53,13 +53,19 @@
                             <span>Order Management</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-stacked-link transition-all {{ 'bg-primary text-white rounded-3 fw-semibold' if request.endpoint == 'ticket' else 'text-secondary' }} px-3 py-2" href="{{ url_for('admin.order_history') }}">
+                            <i class="fa-solid fa-ticket-simple fs-5"></i>
+                            <span>History</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             
             <div class="d-flex align-items-center ms-auto ms-md-0">
-                <a href="{{ url_for('admin.index') }}" class="text-body text-decoration-none d-flex align-items-center gap-2" aria-label="User Profile">
-                    <span class="small fw-medium font-serif d-none d-md-inline">Admin Login</span>
-                    <i class="fa-regular fa-circle-user fs-4"></i>
+                <a href="/" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2" aria-label="Logout">
+                    <span class="small fw-medium d-none d-md-inline">Logout</span>
+                    <i class="bi bi-box-arrow-right"></i>
                 </a>
             </div>
         </div>

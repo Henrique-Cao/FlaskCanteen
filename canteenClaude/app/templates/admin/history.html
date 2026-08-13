@@ -1,0 +1,184 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Club33 - Sales History{% endblock %}
+
+{% block content %}
+<div class="container dashboard-desktop-container my-4">
+    
+    <!-- Page Header & Action Buttons -->
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+        <div>
+            <h1 class="h2 mb-1">Order History</h1>
+            <p class="mb-0 text-opacity-75">Reviewing all completed transactions for today.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outlined btn-sm d-inline-flex align-items-center gap-2 text-uppercase label-font">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+                </svg>
+                Filter
+            </button>
+            <button class="btn btn-outlined btn-sm d-inline-flex align-items-center gap-2 text-uppercase label-font">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                </svg>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="custom-card history-card-panel shadow-sm">
+        <div class="history-card-watermark"></div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="--bs-table-bg: transparent;">
+                <thead>
+                    <tr class="border-dotted">
+                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Order #</th>
+                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Time</th>
+                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Items</th>
+                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Total</th>
+                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0 text-end">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="body-font">
+                    {% if orders and orders.items %}
+                        {% for order in orders.items %}
+                        <tr role="button" 
+                            onclick='openOrderModal({
+                                orderNumber: "{{ order.order_number }}",
+                                time: "{{ order.created_at }}",
+                                customer: "{{ order.customer_name }}",
+                                phone: "{{ order.phone }}",
+                                status: "{{ order.status }}",
+                                total: "{{ order.total_price }}",
+                                items: 
+                                    `{% for item in order.items %}
+                                    { 
+                                        name: "{{ item.name or item.item_name }}", 
+                                        qty: {{ item.quantity if item.quantity is defined else 1 }}, 
+                                        price: {{ item.price or item.unit_price or 0.0 }} 
+                                    }{% if not loop.last %},{% endif %}
+                                    {% endfor %}`
+                                
+                            })'>
+                            
+                            <!-- Order Number -->
+                            <td class="headline-font fw-bold text-nowrap">{{ order.order_number }}</td>
+                            
+                            <!-- Formatted Time (from created_at) -->
+                            <td class="text-nowrap">{{ order.created_at.strftime('%I:%M %p') }}</td>
+                            
+                            <!-- Line Items Summary -->
+                            <td>
+                                {% for item in order.items %}
+                                    {% if item.quantity and item.quantity > 1 %}{{ item.quantity }}x {% endif %}{{ item.name or item.item_name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                            
+                            <!-- Total Price -->
+                            <td class="headline-font fw-bold text-nowrap">${{ "%.2f"|format(order.total_price) }}</td>
+                            
+                            <!-- Status Pill -->
+                            <td class="text-end text-nowrap">
+                                <span class="status-pill {% if order.status|lower in ['completed', 'picked up', 'paid', 'ready'] %}pill-success{% elif 'cancel' in order.status|lower %}pill-danger{% else %}pill-warning{% endif %}">
+                                    ✓ {{ order.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted body-font">No completed orders found.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls Bar -->
+        {% if orders and orders.pages > 1 %}
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3 pt-3 border-dotted gap-2">
+            
+            <!-- Summary Counter -->
+            <span class="body-font text-muted fs-7">
+                Showing page <strong>{{ orders.page }}</strong> of <strong>{{ orders.pages }}</strong> ({{ orders.total }} total items)
+            </span>
+
+            <!-- Fixed 5-Window Navigation -->
+            <nav aria-label="Sales order pagination">
+                <ul class="pagination pagination-sm mb-0 gap-1 align-items-center">
+
+                    <!-- First Page Button (<<) -->
+                    <li class="page-item {% if orders.page == 1 %}disabled{% endif %}">
+                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
+                           href="{{ url_for('admin.order_history', page=1) }}" 
+                           aria-label="First page" 
+                           {% if orders.page == 1 %}tabindex="-1" aria-disabled="true"{% endif %}>
+                            &laquo;&laquo;
+                        </a>
+                    </li>
+
+                    <!-- Previous Page Button (<) -->
+                    <li class="page-item {% if not orders.has_prev %}disabled{% endif %}">
+                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
+                           href="{{ url_for('admin.order_history', page=orders.prev_num) if orders.has_prev else '#' }}" 
+                           aria-label="Previous page" 
+                           {% if not orders.has_prev %}tabindex="-1" aria-disabled="true"{% endif %}>
+                            &laquo;
+                        </a>
+                    </li>
+
+                    <!-- Constant 5 Numerical Page Buttons -->
+                    {% for p in page_range %}
+                        {% if p == orders.page %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link rounded bg-primary-custom border-0 py-1 px-3 fw-bold">{{ p }}</span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link rounded btn-outlined text-dark py-1 px-3" 
+                                   href="{{ url_for('admin.order_history', page=p) }}">{{ p }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Next Page Button (>) -->
+                    <li class="page-item {% if not orders.has_next %}disabled{% endif %}">
+                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
+                           href="{{ url_for('admin.order_history', page=orders.next_num) if orders.has_next else '#' }}" 
+                           aria-label="Next page" 
+                           {% if not orders.has_next %}tabindex="-1" aria-disabled="true"{% endif %}>
+                            &raquo;
+                        </a>
+                    </li>
+
+                    <!-- Last Page Button (>>) -->
+                    <li class="page-item {% if orders.page == orders.pages %}disabled{% endif %}">
+                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
+                           href="{{ url_for('admin.order_history', page=orders.pages) }}" 
+                           aria-label="Last page" 
+                           {% if orders.page == orders.pages %}tabindex="-1" aria-disabled="true"{% endif %}>
+                            &raquo;&raquo;
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+    {% include 'modals/admin_view_order.html' %}
+    
+{% endblock %}
+
+{% block extra_js %} 
+    <script src="{{ url_for('static', filename='js/admin_history.js') }}"></script>
+{% endblock %}
