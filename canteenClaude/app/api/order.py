@@ -105,6 +105,27 @@ def get_orders():
         ]
     } for order in orders]), 200
 
+@order_api.route('/<string:order_number>', methods=['GET'])
+def get_order_details(order_number):
+  
+    order = Order.query.filter_by(order_number=order_number).first_or_404()
+
+    return jsonify({
+        "orderNumber": order.order_number,
+        "time": order.created_at.strftime("%I:%M %p") if order.created_at else "--:--",
+        "customer": order.customer_name or "N/A",
+        "phone": order.phone or "N/A",
+        "status": order.status,
+        "total": order.total_price,
+        "items": [
+            {
+                "name": item.item_name or getattr(item, 'item_name', None) or "Item",
+                "qty": item.quantity or 1,
+                "price": float(item.unit_price or 0.0)
+            } for item in order.items
+        ]
+    })
+
 # modify order status (for admin)
 @order_api.route('/<int:order_id>/status', methods=['PUT'])
 def update_order_status(order_id):

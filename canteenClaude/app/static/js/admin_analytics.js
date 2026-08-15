@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Failed to load analytics payload');
 
             const data = await response.json();
-
+            console.log("Fetched Analytics Data:", data);
             // A. Update KPI Text Nodes
             document.getElementById('kpi-revenue').textContent = `$${data.kpis.total_revenue.toFixed(2)}`;
             document.getElementById('kpi-revenue-trend').textContent = data.kpis.revenue_trend;
@@ -100,21 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // C. Render Recent Orders Table
             const tbody = document.getElementById('recentOrdersTable');
-            if (data.recent_orders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-3 text-muted">No completed orders found for this range.</td></tr>`;
-            } else {
-                tbody.innerHTML = data.recent_orders.map(order => `
-                    <tr>
-                        <td class="ps-3 fw-bold">#${order.id}</td>
-                        <td>${order.time}</td>
-                        <td><span class="badge bg-light text-dark border">${order.type}</span> ${order.table !== '-' ? 'Table ' + order.table : ''}</td>
-                        <td class="small text-muted">${order.items}</td>
-                        <td class="fw-semibold">$${order.amount.toFixed(2)}</td>
-                        <td class="pe-3"><span class="badge bg-success">Completed</span></td>
-                    </tr>
-                `).join('');
-            }
-
+            // if (data.recent_orders.length === 0) {
+            //     tbody.innerHTML = `<tr><td colspan="6" class="text-center py-3 text-muted">No completed orders found for this range.</td></tr>`;
+            // } else {
+            //     tbody.innerHTML = data.recent_orders.map(order => `
+            //         <tr>
+            //             <td class="ps-3 fw-bold">#${order.id}</td>
+            //             <td>${order.time}</td>
+            //             <td><span class="badge bg-light text-dark border">${order.type}</span> ${order.table !== '-' ? 'Table ' + order.table : ''}</td>
+            //             <td class="small text-muted">${order.items}</td>
+            //             <td class="fw-semibold">$${order.amount.toFixed(2)}</td>
+            //             <td class="pe-3"><span class="badge bg-success">Completed</span></td>
+            //         </tr>
+            //     `).join('');
+            // }
         } catch (error) {
             console.error('Analytics Fetch Error:', error);
         }

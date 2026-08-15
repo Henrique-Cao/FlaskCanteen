@@ -1,0 +1,130 @@
+<form method="GET" action="{{ url_for('admin.order_history') }}" id="filterForm">
+    
+    <!-- Top Action Bar -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="headline-font h2 mb-1">Order History</h1>
+            <p class="text-muted body-font mb-0">Reviewing all completed transactions.</p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <!-- Search Input -->
+            <div class="input-group" style="width: 280px;">
+                <span class="input-group-text bg-white border-end-0">🔍</span>
+                <input type="text" 
+                       name="q" 
+                       class="form-control border-start-0 ps-0" 
+                       placeholder="Search #, name, phone..." 
+                       value="{{ q or '' }}">
+                {% if q %}
+                    <a href="{{ url_for('admin.order_history') }}" class="btn btn-outline-secondary border-start-0 bg-white">✕</a>
+                {% endif %}
+            </div>
+
+            <!-- Filter Dropdown Button -->
+            <div class="dropdown">
+                <button type="button" 
+                        class="btn btn-outline-secondary dropdown-toggle position-relative" 
+                        data-bs-toggle="dropdown" 
+                        data-bs-auto-close="outside" 
+                        aria-expanded="false">
+                    ⚙ FILTER
+                    {% if active_filters_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ active_filters_count }}
+                        </span>
+                    {% endif %}
+                </button>
+
+                <!-- Dropdown Popover Content -->
+                <div class="dropdown-menu dropdown-menu-end p-4 shadow-lg border-0" style="width: 340px; border-radius: 12px;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold mb-0 headline-font">Filter Orders</h6>
+                        <a href="{{ url_for('admin.order_history') }}" class="text-decoration-none small text-muted">Reset All</a>
+                    </div>
+                    <hr class="my-2">
+
+                    <!-- 1. Order Status Checkboxes -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-uppercase text-muted">Status</label>
+                        <div class="d-flex flex-column gap-1">
+                            {% for status_opt in ['Collected', 'Ready', 'Paid', 'Cancelled'] %}
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="status" 
+                                       value="{{ status_opt }}" 
+                                       id="status_{{ status_opt }}"
+                                       {% if status_opt in statuses %}checked{% endif %}>
+                                <label class="form-check-label small" for="status_{{ status_opt }}">
+                                    {{ status_opt }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- 2. Quick Date Presets -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-uppercase text-muted">Date Preset</label>
+                        <select name="date_preset" class="form-select form-select-sm" onchange="toggleCustomDates(this.value)">
+                            <option value="">All Time</option>
+                            <option value="today" {% if date_preset == 'today' %}selected{% endif %}>Today</option>
+                            <option value="yesterday" {% if date_preset == 'yesterday' %}selected{% endif %}>Yesterday</option>
+                            <option value="7days" {% if date_preset == '7days' %}selected{% endif %}>Last 7 Days</option>
+                            <option value="custom" {% if start_date or end_date %}selected{% endif %}>Custom Range...</option>
+                        </select>
+                    </div>
+
+                    <!-- Custom Date Inputs (Hidden unless Custom is selected) -->
+                    <div id="customDateContainer" class="row g-2 mb-3 {% if not (start_date or end_date) %}d-none{% endif %}">
+                        <div class="col-6">
+                            <label class="form-label micro-text text-muted">From</label>
+                            <input type="date" name="start_date" class="form-control form-control-sm" value="{{ start_date or '' }}">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label micro-text text-muted">To</label>
+                            <input type="date" name="end_date" class="form-control form-control-sm" value="{{ end_date or '' }}">
+                        </div>
+                    </div>
+
+                    <!-- 3. Price Range -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-uppercase text-muted">Order Total ($)</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="number" step="0.01" min="0" name="min_price" class="form-control form-control-sm" placeholder="Min" value="{{ min_price if min_price is not none else '' }}">
+                            <span class="text-muted">-</span>
+                            <input type="number" step="0.01" min="0" name="max_price" class="form-control form-control-sm" placeholder="Max" value="{{ max_price if max_price is not none else '' }}">
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-dark btn-sm w-100 mt-2 fw-semibold">Apply Filters</button>
+                </div>
+            </div>
+
+            <!-- Export Button -->
+            <button type="button" class="btn btn-outline-secondary">📥 EXPORT</button>
+        </div>
+    </div>
+</form>
+
+<!-- Active Filter Badges Bar -->
+{% if active_filters_count > 0 or q %}
+<div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+    <span class="small text-muted fw-bold">Active Filters:</span>
+    {% if q %}
+        <span class="badge bg-light text-dark border">Search: "{{ q }}"</span>
+    {% endif %}
+    {% for s in statuses %}
+        <span class="badge bg-light text-dark border">Status: {{ s }}</span>
+    {% endfor %}
+    {% if date_preset %}
+        <span class="badge bg-light text-dark border">Date: {{ date_preset|capitalize }}</span>
+    {% endif %}
+    {% if min_price or max_price %}
+        <span class="badge bg-light text-dark border">Total: ${{ min_price or '0' }} - ${{ max_price or '∞' }}</span>
+    {% endif %}
+    <a href="{{ url_for('admin.order_history') }}" class="small text-danger ms-2">Clear All</a>
+</div>
+{% endif %}

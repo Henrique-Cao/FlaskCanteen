@@ -6,12 +6,13 @@
 <div class="container dashboard-desktop-container my-4">
     
     <!-- Page Header & Action Buttons -->
-    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+    <!-- <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
         <div>
             <h1 class="h2 mb-1">Order History</h1>
             <p class="mb-0 text-opacity-75">Reviewing all completed transactions for today.</p>
-        </div>
-        <div class="d-flex align-items-center gap-2">
+        </div> -->
+        {% include 'partials/_filter_dropdown.html' %}
+        <!-- <div class="d-flex align-items-center gap-2">
             <button class="btn btn-outlined btn-sm d-inline-flex align-items-center gap-2 text-uppercase label-font">
                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
@@ -26,7 +27,7 @@
                 Export
             </button>
         </div>
-    </div>
+    </div> -->
 
     <!-- Table Container -->
     <div class="custom-card history-card-panel shadow-sm">
@@ -47,23 +48,7 @@
                     {% if orders and orders.items %}
                         {% for order in orders.items %}
                         <tr role="button" 
-                            onclick='openOrderModal({
-                                orderNumber: "{{ order.order_number }}",
-                                time: "{{ order.created_at }}",
-                                customer: "{{ order.customer_name }}",
-                                phone: "{{ order.phone }}",
-                                status: "{{ order.status }}",
-                                total: "{{ order.total_price }}",
-                                items: 
-                                    `{% for item in order.items %}
-                                    { 
-                                        name: "{{ item.name or item.item_name }}", 
-                                        qty: {{ item.quantity if item.quantity is defined else 1 }}, 
-                                        price: {{ item.price or item.unit_price or 0.0 }} 
-                                    }{% if not loop.last %},{% endif %}
-                                    {% endfor %}`
-                                
-                            })'>
+                            onclick='openOrderModal("{{ order.order_number }}")'>
                             
                             <!-- Order Number -->
                             <td class="headline-font fw-bold text-nowrap">{{ order.order_number }}</td>
@@ -107,63 +92,46 @@
                 Showing page <strong>{{ orders.page }}</strong> of <strong>{{ orders.pages }}</strong> ({{ orders.total }} total items)
             </span>
 
+            {% macro page_url(p) %}
+                {{ url_for('admin.order_history', 
+                    page=p, 
+                    q=request.args.get('q', ''), 
+                    date_preset=request.args.get('date_preset', ''), 
+                    start_date=request.args.get('start_date', ''), 
+                    end_date=request.args.get('end_date', ''), 
+                    min_price=request.args.get('min_price', ''), 
+                    max_price=request.args.get('max_price', ''), 
+                    status=request.args.getlist('status')
+                ) }}
+            {% endmacro %}
             <!-- Fixed 5-Window Navigation -->
-            <nav aria-label="Sales order pagination">
-                <ul class="pagination pagination-sm mb-0 gap-1 align-items-center">
+            <nav aria-label="Order pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    
+                    <!-- Previous Page Link -->
+                    {% if orders.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ page_url(orders.prev_num) }}">«</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">«</span></li>
+                    {% endif %}
 
-                    <!-- First Page Button (<<) -->
-                    <li class="page-item {% if orders.page == 1 %}disabled{% endif %}">
-                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
-                           href="{{ url_for('admin.order_history', page=1) }}" 
-                           aria-label="First page" 
-                           {% if orders.page == 1 %}tabindex="-1" aria-disabled="true"{% endif %}>
-                            &laquo;&laquo;
-                        </a>
-                    </li>
-
-                    <!-- Previous Page Button (<) -->
-                    <li class="page-item {% if not orders.has_prev %}disabled{% endif %}">
-                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
-                           href="{{ url_for('admin.order_history', page=orders.prev_num) if orders.has_prev else '#' }}" 
-                           aria-label="Previous page" 
-                           {% if not orders.has_prev %}tabindex="-1" aria-disabled="true"{% endif %}>
-                            &laquo;
-                        </a>
-                    </li>
-
-                    <!-- Constant 5 Numerical Page Buttons -->
+                    <!-- Page Number Links (1, 2, 3...) -->
                     {% for p in page_range %}
-                        {% if p == orders.page %}
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link rounded bg-primary-custom border-0 py-1 px-3 fw-bold">{{ p }}</span>
-                            </li>
-                        {% else %}
-                            <li class="page-item">
-                                <a class="page-link rounded btn-outlined text-dark py-1 px-3" 
-                                   href="{{ url_for('admin.order_history', page=p) }}">{{ p }}</a>
-                            </li>
-                        {% endif %}
+                        <li class="page-item {% if p == orders.page %}active{% endif %}">
+                            <a class="page-link" href="{{ page_url(p) }}">{{ p }}</a>
+                        </li>
                     {% endfor %}
 
-                    <!-- Next Page Button (>) -->
-                    <li class="page-item {% if not orders.has_next %}disabled{% endif %}">
-                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
-                           href="{{ url_for('admin.order_history', page=orders.next_num) if orders.has_next else '#' }}" 
-                           aria-label="Next page" 
-                           {% if not orders.has_next %}tabindex="-1" aria-disabled="true"{% endif %}>
-                            &raquo;
-                        </a>
-                    </li>
-
-                    <!-- Last Page Button (>>) -->
-                    <li class="page-item {% if orders.page == orders.pages %}disabled{% endif %}">
-                        <a class="page-link rounded btn-outlined text-dark py-1 px-2" 
-                           href="{{ url_for('admin.order_history', page=orders.pages) }}" 
-                           aria-label="Last page" 
-                           {% if orders.page == orders.pages %}tabindex="-1" aria-disabled="true"{% endif %}>
-                            &raquo;&raquo;
-                        </a>
-                    </li>
+                    <!-- Next Page Link -->
+                    {% if orders.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ page_url(orders.next_num) }}">»</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">»</span></li>
+                    {% endif %}
 
                 </ul>
             </nav>
