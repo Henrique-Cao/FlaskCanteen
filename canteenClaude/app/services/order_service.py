@@ -71,3 +71,21 @@ def get_filtered_orders_query(args):
 
     # Always return newest orders first
     return query.order_by(Order.created_at.desc())
+
+
+
+def get_order_by_numeric_input(raw_digits: str):
+    """
+    Combines the visual 'ORD-' prefix with user-submitted digits 
+    and queries the database.
+    """
+    if not raw_digits:
+        return None
+
+    # Strip any extra spaces or accidental 'ORD-' if copy-pasted
+    clean_digits = raw_digits.strip().replace('ORD-', '').replace('ord-', '')
+
+    # Construct full order key (e.g. "ORD-0450")
+    full_order_id = f"ORD-{clean_digits}"
+
+    return full_order_id

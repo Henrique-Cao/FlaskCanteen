@@ -2,7 +2,6 @@
 from flask import Blueprint, jsonify, request, session, url_for
 from app.extensions import db
 from app.models import MenuItem, Order, OrderItem
-import uuid
 from datetime import datetime, timedelta, timezone
 
 
@@ -28,7 +27,17 @@ def create_order():
     if not customer_name or not phone:
         return jsonify({"error": "Missing required fields: 'customer_name' and 'phone' are mandatory."}), 400
 
-    order_number = f"ORD-{uuid.uuid4().hex[:8].upper()}"
+    existing_order_numbers = Order.query.with_entities(Order.order_number).all()
+    highest_order_number = max(
+        (
+            int(order_number.removeprefix('ORD-'))
+            for (order_number,) in existing_order_numbers
+            if order_number.startswith('ORD-')
+            and order_number.removeprefix('ORD-').isdigit()
+        ),
+        default=0
+    )
+    order_number = f"ORD-{highest_order_number + 1:04d}"
     # 3. Create the base Order instance
     new_order = Order(
         order_number=order_number,
@@ -49,7 +58,9 @@ def create_order():
         order_item = OrderItem(
             menu_item_id=menu_item.id,
             quantity=quantity,
-            unit_price=menu_item.price  # Snapshot price at time of order
+            unit_price=menu_item.price,  # Snapshot price at time of order
+            item_name=menu_item.name
+
         )
         new_order.items.append(order_item)
         total_price += quantity * float(menu_item.price)
@@ -71,7 +82,7 @@ def create_order():
         "total_price": float(new_order.total_price),
         "status": new_order.status,
         "created_at": new_order.created_at.isoformat(),
-        "redirect_url": f"/order_confirmation/{new_order.order_number}",
+        "redirect_url": f"/confirmation/{new_order.order_number}",
         "items": [
             {
                 "menu_item_id": item.menu_item_id,
@@ -155,4 +166,5 @@ def update_order_status(order_id):
         "order_number": order.order_number,
         "status": order.status
     }), 200
+
 

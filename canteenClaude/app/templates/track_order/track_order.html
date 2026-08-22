@@ -1,0 +1,48 @@
+<!-- app/templates/track_order.html -->
+{% extends "base.html" %}
+{% block title %}Club 33 – Track Your Order{% endblock %}
+
+
+{% block content %}
+<div class="container py-5" style="max-width: 480px;">
+    <div class="text-center mb-4">
+        <h1 class="headline-font h2">Track Your Order</h1>
+        <p class="text-muted body-font">Enter your order ID to check its current pickup status.</p>
+    </div>
+
+    <!-- Error Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Search Card -->
+    <div class="card border-0 shadow-sm p-4 rounded-4">
+        <form method="POST" action="{{ url_for('main.redirect_tracking') }}">
+            <div class="mb-3">
+                <label for="order_number" class="form-label fw-bold small text-muted text-uppercase">Order ID</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text fw-bold" id="order-prefix">ORD-</span>
+                    <input type="text"
+                           id="order_number"
+                           name="order_number"
+                           class="form-control text-center fw-bold"
+                           placeholder="0000"
+                           aria-describedby="order-prefix"
+                           inputmode="numeric"
+                           pattern="[0-9]+"
+                           required
+                           autofocus>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark btn-lg w-100 fw-semibold">Track Order ➔</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
