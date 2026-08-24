@@ -1,0 +1,108 @@
+// ==========================================
+// Hearthside - Navigation Components
+// (_navbar.scss)
+// ==========================================
+
+// --- Top Desktop Header ---
+.navbar-top {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E6E1DA;
+
+  .navbar-brand {
+    font-family: "Fraunces", serif;
+    font-weight: 700;
+    color: #8D3B24;
+    font-size: 1.5rem;
+
+    &:hover,
+    &:focus {
+      color: lighten(#8D3B24, 10%);
+    }
+  }
+
+  .nav-link-desktop {
+    font-family: "Newsreader", serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: rgba(45, 35, 25, 0.65);
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      color: #2D2319;
+      background-color: rgba(44, 43, 41, 0.04);
+    }
+
+    &.active {
+      color: #8D3B24;
+      font-weight: 700;
+    }
+  }
+
+  .admin-login-link {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: #8D3B24;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+      color: #8D3B24;
+    }
+  }
+}
+
+// --- Mobile Bottom Navigation ---
+.nav-mobile-bar {
+  background-color: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid #E6E1DA;
+}
+
+// Standardized mobile nav pill slots
+.nav-tab-item {
+  flex: 1 1 0;
+  max-width: 96px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  color: rgba(45, 35, 25, 0.6);
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+  i {
+    font-size: 1.2rem;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  span {
+    font-family: "Fraunces", serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    color: #2D2319;
+  }
+
+  // Active pill highlight
+  &.active {
+    background-color: #8D3B24;
+    color: #FFFFFF !important;
+
+    i,
+    span {
+      color: #FFFFFF;
+    }
+  }
+}

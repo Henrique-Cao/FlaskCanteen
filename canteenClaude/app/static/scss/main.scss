@@ -1,0 +1,18 @@
+// main.scss
+
+@import "abstracts/variables";
+
+@import "base/reset";
+@import "base/typography";
+
+@import "components/buttons";
+@import "components/cards";
+@import "components/icons";
+@import "components/badges";
+
+
+@import "layouts/hero";
+@import "layouts/menu";
+@import "layouts/navbar";
+
+@import "utilities/responsive";
