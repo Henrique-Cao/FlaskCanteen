@@ -1,105 +1,126 @@
-// Standardized App Interface Container
-.custom-card {
-    background-color: rgba(#ffffff, 0.45); // Clean translucent glassy backdrop
-    border: 1px solid rgba($brand-neutral, 0.06);
-    border-radius: 24px; // Large smooth panel curvature shown in dashboard
-    padding: 1.5rem;
+// ==========================================================================
+// components/_cards.scss
+// ==========================================================================
+.card {
+  background-color: $card-bg;
+  border: $card-border-width solid $card-border-color;
+  border-radius: $card-border-radius;
+  box-shadow: $card-box-shadow;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-// Capsule Navigation Panel (Middle-Right Module)
-.nav-capsule-panel {
-    background-color: rgba(#ffffff, 0.5);
-    border-radius: 30px;
-    padding: 0.4rem 1.25rem;
-    display: inline-flex;
+// Menu item card
+.card-dish {
+  @extend .card;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba($brand-primary, 0.4);
+    box-shadow: $box-shadow;
+  }
+
+  .card-img-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    position: relative;
+    background-color: $bg-surface-sunken;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  &:hover .card-img-wrap img {
+    transform: scale(1.03);
+  }
+
+
+}
+
+// Kitchen Chit Card (Left queue pane)
+.chit-card {
+  @extend .card;
+  padding: 0.85rem;
+  border-radius: $border-radius;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+
+  &:hover {
+    background-color: rgba($bg-surface-sunken, 0.6);
+    border-color: rgba($brand-primary, 0.5);
+  }
+
+  &.active-chit {
+    border-color: $brand-primary;
+    background-color: $bg-surface-sunken;
+    box-shadow: 0 0 0 1px $brand-primary;
+  }
+
+  .chit-header {
+    display: flex;
     align-items: center;
-    gap: 1.25rem;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+  }
 
-    .nav-link-item {
-        color: $brand-neutral;
-        opacity: 0.6;
-        transition: all 0.2s ease;
-
-        &.active-pill {
-            background-color: $btn-primary-bg;
-            color: #ffffff;
-            padding: 0.5rem;
-            border-radius: 50%;
-            opacity: 1;
-        }
-
-        &:hover {
-            opacity: 1;
-        }
-    }
+  .chit-meta {
+    font-family: $font-family-sans-serif;
+    font-size: 0.75rem;
+    color: $text-secondary;
+  }
 }
 
-// Global Application Search Inputs (Top-Right Module)
-.search-container {
-    position: relative;
-    width: 100%;
+// Interactive Dish Firing Checklist item
+.checklist-item {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid $bg-surface-sunken;
+  cursor: pointer;
+  user-select: none;
 
-    .search-input {
-        width: 100%;
-        background-color: rgba($brand-primary, 0.04);
-        border: 1px solid rgba($brand-primary, 0.18);
-        border-radius: 8px;
-        padding: 0.7rem 1rem 0.7rem 2.5rem;
-        font-family: $font-family-body;
-        color: $brand-neutral;
-        outline: none;
-        transition: all 0.2s ease;
+  &:last-child {
+    border-bottom: none;
+  }
 
-        &::placeholder {
-            color: rgba($brand-neutral, 0.45);
-        }
+  &:hover {
+    background-color: rgba($bg-surface-sunken, 0.7);
+  }
 
-        &:focus {
-            background-color: #ffffff;
-            border-color: $brand-primary;
-            box-shadow: 0 0 0 3px rgba($brand-primary, 0.15);
-        }
+  &.is-fired {
+    background-color: $bg-surface-sunken;
+    opacity: 0.7;
+
+    .dish-title {
+      text-decoration: line-through;
+      color: $text-secondary;
     }
-
-    .search-icon-marker {
-        position: absolute;
-        left: 0.9rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba($brand-neutral, 0.4);
-        pointer-events: none;
-    }
+  }
 }
 
+.order-card {
+  @extend .card;
+  padding: 0.85rem;
+  border-radius: $border-radius;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
 
-// ==========================================================================
-// KITCHEN ADMIN DASHBOARD LAYOUT CONTROLS
-// ==========================================================================
-
-// Bounds the application canvas width on wide desktop viewport grids.
-.dashboard-desktop-container {
-    max-width: 1140px; 
-    width: 100%;
-}
-
-// Special container layout configuration for the recent history ledger card.
-.history-card-panel {
-    position: relative;
-    background-color: rgba(#ffffff, 0.45);
-    
-    // Houses and restricts the faint rustic design accent illustration safely inside the module.
-    .history-card-watermark {
-        position: absolute;
-        bottom: -10px;
-        right: 10px;
-        width: 130px;
-        height: 130px;
-        background-image: url('/static/images/tankard-watermark.png'); 
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: bottom right;
-        opacity: 0.07; // Ensures watermark is highly subtle to protect text readability.
-        pointer-events: none; // Disables interaction behavior so it never blocks text selections
-        z-index: 1;
-    }
+  &:hover {
+    background-color: rgba($bg-surface-sunken, 0.6);
+    border-color: rgba($brand-primary, 0.5);
+  }
+  &.active-order {
+    border-color: $brand-primary;
+    border-width: 2px;
+    background-color: $bg-surface-sunken;
+    box-shadow: 0 0 0 1px $brand-primary;
+  }
 }

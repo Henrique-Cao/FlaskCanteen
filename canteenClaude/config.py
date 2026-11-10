@@ -12,8 +12,9 @@ class Config:
         "sqlite:///" + os.path.join(BASE_DIR, "instance","club33.db")
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
- 
- 
+
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, "app", "static", "uploads")
+    
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_ECHO = False  # Set True to log SQL statements

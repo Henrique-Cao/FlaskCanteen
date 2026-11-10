@@ -1,0 +1,49 @@
+<!-- Positioned bottom-right, floating above everything -->
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-4" style="z-index: 9999;" id="globalToastContainer">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    
+                    <!-- Map categories to Bootstrap colors and Icons -->
+                    {% set bs_color = 'success' %}
+                    {% set icon = 'bi-check-circle-fill' %}
+                    
+                    {% if category == 'error' or category == 'danger' %}
+                        {% set bs_color = 'danger' %}
+                        {% set icon = 'bi-exclamation-octagon-fill' %}
+                    {% elif category == 'warning' %}
+                        {% set bs_color = 'warning' %}
+                        {% set icon = 'bi-exclamation-triangle-fill' %}
+                    {% elif category == 'info' %}
+                        {% set bs_color = 'primary' %} <!-- Uses your Terracotta brand color -->
+                        {% set icon = 'bi-info-circle-fill' %}
+                    {% endif %}
+
+                    <!-- The Custom Hearth Toast -->
+                    <div class="toast hearth-toast border-0 border-start border-4 border-{{ bs_color }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                        <div class="toast-body p-3 d-flex justify-content-between align-items-start">
+                            
+                            <div class="d-flex gap-3">
+                                <!-- Status Icon -->
+                                <i class="bi {{ icon }} fs-5"></i>
+                                
+                                <!-- Message content -->
+                                <div class="d-flex flex-column">
+                                    <span class="text-dark fw-semibold" style="line-height: 1.4;">{{ message }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Close Button -->
+                            <!-- Use the native white close button, and set opacity to 1 or 0.8 so it is crisp -->
+                            <button type="button" class="btn-close btn-close-white ms-2 me-1" style="opacity: 0.8;" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+    </div>
+</div>

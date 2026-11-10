@@ -1,0 +1,11 @@
+.hearth-toast {
+    background-color: #ffffff !important; /* Force pure white */
+    opacity: 1 !important; /* Force completely solid */
+    border-radius: var(--bs-border-radius-lg);
+    
+    /* A massive, dark drop shadow is critical here so it doesn't blend into the dashboard */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2) !important; 
+    
+    width: 350px;
+    animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}

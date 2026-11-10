@@ -4,142 +4,36 @@
 
 {% block content %}
 <div class="container dashboard-desktop-container my-4">
-    
-    <!-- Page Header & Action Buttons -->
-    <!-- <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
-        <div>
-            <h1 class="h2 mb-1">Order History</h1>
-            <p class="mb-0 text-opacity-75">Reviewing all completed transactions for today.</p>
-        </div> -->
-        {% include 'partials/_filter_dropdown.html' %}
-        <!-- <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-outlined btn-sm d-inline-flex align-items-center gap-2 text-uppercase label-font">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
-                </svg>
-                Filter
-            </button>
-            <button class="btn btn-outlined btn-sm d-inline-flex align-items-center gap-2 text-uppercase label-font">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                </svg>
-                Export
-            </button>
-        </div>
-    </div> -->
-
-    <!-- Table Container -->
-    <div class="custom-card history-card-panel shadow-sm">
-        <div class="history-card-watermark"></div>
+    <h2 class="mb-4">Order History</h2>
+    <div class="actions-section d-flex gap-2 mb-3">
         
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" style="--bs-table-bg: transparent;">
-                <thead>
-                    <tr class="border-dotted">
-                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Order #</th>
-                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Time</th>
-                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Items</th>
-                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Total</th>
-                        <th scope="col" class="label-font text-muted fw-normal pb-3 border-0 text-end">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="body-font">
-                    {% if orders and orders.items %}
-                        {% for order in orders.items %}
-                        <tr role="button" 
-                            onclick='openOrderModal("{{ order.order_number }}")'>
-                            
-                            <!-- Order Number -->
-                            <td class="headline-font fw-bold text-nowrap">{{ order.order_number }}</td>
-                            
-                            <!-- Formatted Time (from created_at) -->
-                            <td class="text-nowrap">{{ order.created_at.strftime('%I:%M %p') }}</td>
-                            
-                            <!-- Line Items Summary -->
-                            <td>
-                                {% for item in order.items %}
-                                    {% if item.quantity and item.quantity > 1 %}{{ item.quantity }}x {% endif %}{{ item.name or item.item_name }}{% if not loop.last %}, {% endif %}
-                                {% endfor %}
-                            </td>
-                            
-                            <!-- Total Price -->
-                            <td class="headline-font fw-bold text-nowrap">${{ "%.2f"|format(order.total_price) }}</td>
-                            
-                            <!-- Status Pill -->
-                            <td class="text-end text-nowrap">
-                                <span class="status-pill {% if order.status|lower in ['completed', 'picked up', 'paid', 'ready'] %}pill-success{% elif 'cancel' in order.status|lower %}pill-danger{% else %}pill-warning{% endif %}">
-                                    ✓ {{ order.status }}
-                                </span>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center py-4 text-muted body-font">No completed orders found.</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination Controls Bar -->
-        {% if orders and orders.pages > 1 %}
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3 pt-3 border-dotted gap-2">
+        <form id="filterForm" class="d-flex gap-2 w-100"
+            hx-get="{{ url_for('admin.order_history') }}" 
+            hx-target="#historyResults" 
+            hx-push-url="true"
+            onsubmit="bootstrap.Dropdown.getOrCreateInstance(document.getElementById('filterDropdownBtn')).hide();">
             
-            <!-- Summary Counter -->
-            <span class="body-font text-muted fs-7">
-                Showing page <strong>{{ orders.page }}</strong> of <strong>{{ orders.pages }}</strong> ({{ orders.total }} total items)
-            </span>
-
-            {% macro page_url(p) %}
-                {{ url_for('admin.order_history', 
-                    page=p, 
-                    q=request.args.get('q', ''), 
-                    date_preset=request.args.get('date_preset', ''), 
-                    start_date=request.args.get('start_date', ''), 
-                    end_date=request.args.get('end_date', ''), 
-                    min_price=request.args.get('min_price', ''), 
-                    max_price=request.args.get('max_price', ''), 
-                    status=request.args.getlist('status')
-                ) }}
-            {% endmacro %}
-            <!-- Fixed 5-Window Navigation -->
-            <nav aria-label="Order pagination">
-                <ul class="pagination justify-content-center mb-0">
-                    
-                    <!-- Previous Page Link -->
-                    {% if orders.has_prev %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ page_url(orders.prev_num) }}">«</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">«</span></li>
-                    {% endif %}
-
-                    <!-- Page Number Links (1, 2, 3...) -->
-                    {% for p in page_range %}
-                        <li class="page-item {% if p == orders.page %}active{% endif %}">
-                            <a class="page-link" href="{{ page_url(p) }}">{{ p }}</a>
-                        </li>
-                    {% endfor %}
-
-                    <!-- Next Page Link -->
-                    {% if orders.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ page_url(orders.next_num) }}">»</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">»</span></li>
-                    {% endif %}
-
-                </ul>
-            </nav>
-        </div>
-        {% endif %}
-
+            <div class="search-bar w-100">
+                <input type="text" name="q" value="{{ request.args.get('q', '') }}" 
+                    class="form-control border-secondary h-100 border-opacity-25 bg-white bg-opacity-70" 
+                    placeholder="Search orders..."
+                    hx-get="{{ url_for('admin.order_history') }}"
+                    hx-trigger="input changed delay:300ms"
+                    hx-target="#historyResults"
+                    hx-include="#filterForm"
+                    hx-push-url="true">
+            </div>
+            
+            <!-- 2. Include your separated dropdown file -->
+            {% include 'partials/_filter_dropdown.html' %}
+            
+        </form>
     </div>
-</div>
+
+    <div id="historyResults" class="table-responsive mt-4 card px-3 py-2 d-flex flex-column" style="min-height: 700px;">
+        {% include 'partials/_history_content.html' %}
+    </div>
+    
 {% endblock %}
 
 {% block modals %}

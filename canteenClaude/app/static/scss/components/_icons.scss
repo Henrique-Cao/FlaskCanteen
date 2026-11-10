@@ -8,3 +8,35 @@
   justify-content: center;
   // assume you want an SVG or font icon
 }
+
+.brand-logo {
+  img {
+    width: 10.75rem;       
+    height: 10.75rem;      // Equal height keeps it a true circle
+    object-fit: cover;    // Prevents stretching/distortion
+    border: 1px solid rgba($text-primary, 0.15); // Subtle boundary line
+    padding: 3px;         // Small inset frame
+    background-color: $card-bg;
+  }
+}
+
+.icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: $border-radius-pill;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Warm tavern coin treatment
+  background-color: $bg-surface-sunken;
+  border: 1px solid rgba($brand-primary, 0.28);
+  color: $brand-primary; // Terracotta icon color
+
+  // Constrain SVG/Icon size inside the coin
+  svg, i {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+}

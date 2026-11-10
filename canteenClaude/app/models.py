@@ -13,7 +13,10 @@ and admin features. The main entities are:
   a snapshot of the price at the time of ordering.
 """
 from datetime import datetime, timezone,timedelta
+
+from flask_login import UserMixin
 from app.extensions import db
+
 SG_TZ = timezone(timedelta(hours=8))
 class Category(db.Model):
     """Represents a menu category such as Breakfast, Lunch, or Drinks."""
@@ -26,6 +29,7 @@ class Category(db.Model):
     items = db.relationship("MenuItem", backref="category", lazy=True)
     def __repr__(self):
         return f"<Category {self.name!r}>"
+    
 class MenuItem(db.Model):
     """Represents a single menu item that can be ordered by customers."""
     __tablename__ = "menu_items"
@@ -53,7 +57,8 @@ class Order(db.Model):
     STATUS_PENDING   = "pending"
     STATUS_CONFIRMED = "confirmed"
     STATUS_READY     = "ready"
-    STATUS_COLLECTED = "collected"
+    STATUS_COMPLETED = "completed"
+    STATUS_CANCELLED = "cancelled"
 
     id             = db.Column(db.Integer,    primary_key=True)
     order_number   = db.Column(db.String(16), unique=True, nullable=False, index=True)
@@ -67,6 +72,8 @@ class Order(db.Model):
         nullable=False,
     )
     ready_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    completed_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    cancelled_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
     # Relationship to line items
     items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
@@ -95,3 +102,25 @@ class OrderItem(db.Model):
 
     def __repr__(self):
         return f"<OrderItem {self.menu_item_id} x{self.quantity}>"
+
+from datetime import datetime, timezone
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class User(db.Model, UserMixin):
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False, index=True)
+    email = db.Column(db.String(120), unique=True, nullable=False, index=True)
+    password_hash = db.Column(db.String(256), nullable=False)
+    role = db.Column(db.String(20), default="admin", nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    def set_password(self, password: str) -> None:
+        """Hashes plaintext password with a salt before persistence."""
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password: str) -> bool:
+        """Compares submitted plaintext against stored hash in constant time."""
+        return check_password_hash(self.password_hash, password)
+

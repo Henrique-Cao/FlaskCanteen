@@ -1,20 +1,26 @@
 from flask import Blueprint, render_template,redirect, url_for, request, flash
 from app.services.order_service import get_order_by_numeric_input
 from app.models import Category, MenuItem, Order, OrderItem
- 
+from flask_login import current_user
 main_bp = Blueprint("main", __name__)
  
  
 @main_bp.route("/")
 def index():
-    return render_template("main/index.html")
+    categories = Category.query.all()
+    menu_items = MenuItem.query.all()
+
+    # Logout any existing user when visiting the index page
+    if current_user.is_authenticated:
+        from flask_login import logout_user
+        logout_user()
+    
+    return render_template("main/index.html", categories=categories, menu_items=menu_items)
 
 @main_bp.route("/menu")
 def menu():
-    
     categories = Category.query.all()
     menu_items = MenuItem.query.all()
-    
     return render_template("menu/menu.html", categories=categories, menu_items=menu_items)
 
 @main_bp.route("/confirmation/<order_number>")

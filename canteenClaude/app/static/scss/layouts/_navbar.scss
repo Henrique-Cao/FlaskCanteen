@@ -1,108 +1,167 @@
-// ==========================================
-// Hearthside - Navigation Components
-// (_navbar.scss)
-// ==========================================
+// ==========================================================================
+// layouts/_navbar.scss
+// ==========================================================================
+.app-navbar {
+    top: 0;
+    z-index: 40;
+    background-color: $bg-surface;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid $border-subtle;
+    padding: 0.75rem 1rem;
 
-// --- Top Desktop Header ---
-.navbar-top {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E6E1DA;
 
-  .navbar-brand {
-    font-family: "Fraunces", serif;
-    font-weight: 700;
-    color: #8D3B24;
-    font-size: 1.5rem;
-
-    &:hover,
-    &:focus {
-      color: lighten(#8D3B24, 10%);
-    }
-  }
-
-  .nav-link-desktop {
-    font-family: "Newsreader", serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: rgba(45, 35, 25, 0.65);
-    text-decoration: none;
-    padding: 0.5rem 0.75rem;
-    border-radius: 6px;
-    transition: color 0.2s ease, background-color 0.2s ease;
-
-    &:hover {
-      color: #2D2319;
-      background-color: rgba(44, 43, 41, 0.04);
+    .navbar-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
-    &.active {
-      color: #8D3B24;
-      font-weight: 700;
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        text-decoration: none;
     }
-  }
-
-  .admin-login-link {
-    font-family: "Fraunces", serif;
-    font-weight: 600;
-    color: #8D3B24;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 0.8;
-      color: #8D3B24;
+    .brand-title {
+        font-family: $font-family-headline;
+        color: $brand-primary;
     }
+
+    .brand-tagline {
+        font-family: $font-family-body;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: $text-secondary;
+    }
+
+    .nav-links {
+        display: none;
+        align-items: center;
+        gap: 2.5rem;
+
+        @media (min-width: 992px) {
+            display: flex;
+        }
+
+        .nav-item-link {
+            // 1. CRITICAL: Traps the absolute underline inside the link
+            position: relative; 
+            
+            // (Your existing font, color, display, gap, etc. go here)
+            text-decoration: none;
+            color: $link-color;
+            transition: color 0.15s ease-in-out;
+
+            // 2. THE INVISIBLE UNDERLINE
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: -6px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: $brand-primary; 
+                border-radius: 2px;
+                
+                // THE ANIMATION ENGINE
+                transform: scaleX(0); // Crushes the line to 0 width
+                transform-origin: center; // Anchors it left so it slides to the right
+                transition: transform 0.2s ease-out; // Dictates the speed and smoothness
+            }
+
+            // 3. THE HOVER STATE
+            &:hover {
+                color: $link-hover-color;
+                
+                &::after {
+                    transform: scaleX(1); // Expands the line to full width
+                }
+            }
+
+            // 4. THE ACTIVE (SELECTED) STATE
+            &.active {
+                color: $brand-primary;
+                font-weight: 600;
+                
+                &::after {
+                    transform: scaleX(1); // Locks the line at full width
+                }
+            }
+        }
+    }
+}
+
+// Mobile Bottom Navigation Bar (< 992px)
+.mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background-color: $bg-surface;
+    border-top: 1px solid $border-subtle;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom));
+
+    @media (min-width: 992px) {
+        display: none;
+    }
+
+    .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0.25 rem 0.5rem;
+        color: $neutral-500;
+        text-decoration: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        width: 100%;
+        border-radius: $border-radius;
+        &:hover {
+            color: $brand-primary;
+            background-color: rgba($neutral-500, 0.05);
+        }
+
+        .nav-label {
+            font-family: $font-family-sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        &.active {
+            color: $brand-primary;
+
+            .nav-label {
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.sticky-category-bar {
+  z-index: 1020;
+
+  .filter-toolbar {
+    background-color: rgba($bg-surface-sunken, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba($neutral-500, 0.08);
+    box-shadow: 0 4px 12px rgba($neutral-500, 0.04);
   }
 }
 
-// --- Mobile Bottom Navigation ---
-.nav-mobile-bar {
-  background-color: rgba(255, 255, 255, 0.9);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid #E6E1DA;
-}
-
-// Standardized mobile nav pill slots
-.nav-tab-item {
-  flex: 1 1 0;
-  max-width: 96px;
-  height: 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 24px;
-  color: rgba(45, 35, 25, 0.6);
-  text-decoration: none;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-
-  i {
-    font-size: 1.2rem;
-    line-height: 1;
-    margin-bottom: 2px;
-  }
-
-  span {
-    font-family: "Fraunces", serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    line-height: 1;
-    white-space: nowrap;
-  }
-
-  &:hover {
-    color: #2D2319;
-  }
-
-  // Active pill highlight
-  &.active {
-    background-color: #8D3B24;
-    color: #FFFFFF !important;
-
-    i,
-    span {
-      color: #FFFFFF;
-    }
-  }
+.search-bar{
+    position: relative;
+    border-radius: $border-radius;
+    overflow: hidden; // Ensures child elements respect the border radius
 }

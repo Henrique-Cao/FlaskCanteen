@@ -116,6 +116,28 @@ def get_orders():
         ]
     } for order in orders]), 200
 
+@order_api.route('/active', methods=['GET'])
+def get_active_orders():
+    orders = Order.query.order_by(Order.created_at.desc()).all()
+    print(orders)
+    return jsonify([{
+        "id": order.id,
+        "order_number": order.order_number,
+        "customer_name": order.customer_name,
+        "phone": order.phone,
+        "status": order.status,
+        "total_price": float(order.total_price),
+        "created_at": order.created_at.isoformat(),
+        "items": [
+            {
+                "menu_item_id": item.menu_item_id,
+                "quantity": item.quantity,
+                "price": float(item.unit_price),
+                "name": item.menu_item.name
+            } for item in order.items
+        ]
+    } for order in orders]), 200
+
 @order_api.route('/<string:order_number>', methods=['GET'])
 def get_order_details(order_number):
   
@@ -144,7 +166,7 @@ def update_order_status(order_id):
     data = request.get_json() or {}
     new_status = data.get('status')
 
-    if new_status not in [Order.STATUS_PENDING, Order.STATUS_CONFIRMED, Order.STATUS_READY, Order.STATUS_COLLECTED]:
+    if new_status not in [Order.STATUS_PENDING, Order.STATUS_CONFIRMED, Order.STATUS_READY, Order.STATUS_COMPLETED]:
         return jsonify({"error": "Invalid status value."}), 400
 
     order = Order.query.get(order_id)
@@ -167,4 +189,40 @@ def update_order_status(order_id):
         "status": order.status
     }), 200
 
+# mark order as completed (for admin)
+@order_api.route('/<int:order_id>/complete', methods=['PUT'])
+def complete_order(order_id):
+    print(f"Attempting to mark order ID {order_id} as completed")
+    order = Order.query.get(order_id)
+    print(f"Received request to mark order ID {order_id} as completed")
+    if not order:
+        return jsonify({"error": "Order not found."}), 404
 
+    order.status = Order.STATUS_COMPLETED
+    order.completed_at = datetime.now(SG_TZ)
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "id": order.id,
+        "order_number": order.order_number,
+        "status": order.status
+    }), 200
+
+@order_api.route('/<int:order_id>/cancel', methods=['PUT'])
+def cancel_order(order_id):
+    print(f"Attempting to cancel order ID {order_id}")
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({"error": "Order not found."}), 404
+
+    order.status = Order.STATUS_CANCELLED
+    order.cancelled_at = datetime.now(SG_TZ)
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "id": order.id,
+        "order_number": order.order_number,
+        "status": order.status
+    }), 200

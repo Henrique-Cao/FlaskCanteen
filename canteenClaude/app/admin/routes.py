@@ -1,30 +1,54 @@
-from flask import Blueprint, render_template,request, jsonify, redirect, url_for
+from flask import Blueprint, abort, render_template,request, jsonify, redirect, url_for
+from flask_login import current_user
 from app.models import MenuItem,Category,Order
+from app.utils.decorators import admin_required
 admin_bp = Blueprint("admin", __name__)
 from collections import defaultdict
 from app.services.order_service import get_filtered_orders_query
+
+
+
+@admin_bp.before_request
+def require_admin_for_all_admin_routes():
+    # 1. Allow unauthenticated access ONLY to the login endpoint
+    if request.endpoint == "admin.login":
+        return None
+
+    # 2. Authentication Check (Are they logged in?)
+    if not current_user.is_authenticated:
+        if request.is_json:
+            return jsonify({"success": False, "message": "Authentication required."}), 401
+        return redirect(url_for("main.index"))
+
+    # 3. Authorization Check (Are they an admin?)
+    if getattr(current_user, "role", None) != "admin" and not getattr(current_user, "is_admin", False):
+        if request.is_json:
+            return jsonify({"success": False, "message": "Admin privileges required."}), 403
+        abort(403)
+
+
 @admin_bp.route("/")
+@admin_required
 def index():
-    
-    
     return render_template("admin/analytics.html")
+
 @admin_bp.route('/manage-menu', methods=['GET'])
 def manage_menu():
     search_query = request.args.get('search', '').strip()
     
-    # 1. Select the core lookup dataset from SQLite database
-    query = MenuItem.query
-    if search_query:
-        query = query.filter(MenuItem.name.ilike(f"%{search_query}%"))
+    # # 1. Select the core lookup dataset from SQLite database
+    # query = MenuItem.query
+    # if search_query:
+    #     query = query.filter(MenuItem.name.ilike(f"%{search_query}%"))
     
-    all_items = query.order_by(MenuItem.name.asc()).all()
+    all_items = MenuItem.query.order_by(MenuItem.name.asc()).all()
     
   
     #2. Create a dictionary to hold items by category in the order of the categories
     items_by_category = defaultdict(list)
     categories = Category.query.order_by(Category.display_order.asc()).all()
     for category in categories:
-        items_by_category[category.name] = [item for item in all_items if item.category_id == category.id]
+        items_by_category[category] = [item for item in all_items if item.category_id == category.id]
     
     category_query = Category.query.order_by(Category.display_order.asc()).all()
     for item in all_items:
@@ -34,6 +58,8 @@ def manage_menu():
                            items_by_category=items_by_category, 
                            search_query=search_query,
                            categories=category_query)
+
+
 @admin_bp.route('/orders')
 def order_management():
     """Render the order management page."""
@@ -79,8 +105,9 @@ def order_history():
     per_page = 10  # Number of orders per page
 
     query = get_filtered_orders_query(request.args)
+    
     # Fetch paginated orders from database
-    orders = query.filter_by(status='collected') \
+    orders = query.filter_by(status='completed') \
                         .order_by(Order.created_at.desc()) \
                         .paginate(page=page, per_page=per_page, error_out=False)
 
@@ -88,7 +115,7 @@ def order_history():
     page_range = calculate_pagination_window(
         current_page=orders.page,
         total_pages=orders.pages,
-        window_size=5
+        window_size=7
     )
 
     # 5. Count active filters to display a badge on the filter button
@@ -97,7 +124,20 @@ def order_history():
     min_price = request.args.get('min_price')
     max_price = request.args.get('max_price')
     active_filters_count = len(statuses) + (1 if date_preset else 0) + (1 if min_price or max_price else 0)
-    
 
-    return render_template('admin/history.html', orders=orders, page_range=page_range,active_filters_count=active_filters_count)
 
+    print("orders: ",orders)
+    # --- THE HTMX INTERCEPTOR ---
+    if 'HX-Request' in request.headers:
+        # If HTMX asked for the data, return ONLY the table rows and pagination
+        return render_template('partials/_history_content.html', 
+                               orders=orders, 
+                               page_range=page_range,
+                               active_filters_count=active_filters_count)
+
+    # 6. Standard Page Load
+    # If the admin simply navigated to the page via a standard URL link:
+    return render_template('admin/history.html', 
+                           orders=orders, 
+                           page_range=page_range, 
+                           active_filters_count=active_filters_count)

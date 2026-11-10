@@ -1,98 +1,343 @@
+// ==========================================================================
+// components/_buttons.scss - Hearthside Button Architecture
+// ==========================================================================
+
+// ==========================================================================
+// Base Button Contract (Completely Flat By Default)
+// ==========================================================================
 .btn {
-    font-family: $font-family-label;
-    border-radius: 6px; // Soft rectangular radius matching your card preview
-    padding: 0.55rem 1.4rem;
-    font-size: 0.95rem;
-    transition: all 0.2s ease-in-out;
-}
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: $btn-padding-y $btn-padding-x;
+  border-radius: $btn-border-radius;
+  font-family: $btn-font-family;
+  font-weight: $btn-font-weight;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transform-origin: center center;
 
-// Deep Rust Primary Button
+  // Prepares the button for smooth transitions if modifiers are added
+  transition: 
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.2s ease-in-out,
+    transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+
+  // Accessible keyboard focus halo
+  &:focus-visible {
+    outline: none;
+    box-shadow: $btn-focus-box-shadow !important;
+  }
+
+  // Tactile click press (still applies to all buttons)
+  &:active {
+    transform: scale(0.98) !important;
+  }
+
+  &:disabled,
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+// --------------------------------------------------------------------------
+// 2. Primary Action Button (Terracotta / Deep Brick)
+// --------------------------------------------------------------------------
 .btn-primary {
-    background-color: $btn-primary-bg;
-    color: #ffffff;
-    border: 1px solid transparent;
+  --bs-btn-bg: #{$brand-primary};
+  --bs-btn-border-color: #{$brand-primary};
+  --bs-btn-color: #{$neutral-50};
 
-    &:hover {
-        background-color: darken($btn-primary-bg, 6%);
+  --bs-btn-hover-bg: #{darken($brand-primary, 5%)};
+  --bs-btn-hover-border-color: #{darken($brand-primary, 5%)};
+  --bs-btn-hover-color: #{$neutral-50};
+
+  --bs-btn-active-bg: #{darken($brand-primary, 10%)};
+  --bs-btn-active-border-color: #{darken($brand-primary, 10%)};
+  --bs-btn-active-color: #{$neutral-50};
+
+  --bs-btn-focus-shadow-rgb: #{red($brand-primary)}, #{green($brand-primary)}, #{blue($brand-primary)};
+
+  box-shadow: 0 2px 6px rgba($brand-primary, 0.2);
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      box-shadow: 0 6px 16px rgba($brand-primary, 0.28);
     }
+  }
 }
 
-// Inverted Charcoal Button
-.btn-inverted {
-    background-color: $brand-neutral;
-    color: #ffffff;
-    border: 1px solid transparent;
+// --------------------------------------------------------------------------
+// 3. Neutral Outlines & Filter Chips (Unified Base)
+// --------------------------------------------------------------------------
+.btn-outline-warm,
+.btn-menu-filter,
+.btn-category {
+  background-color: $bg-surface;
+  border: 1px solid $border-subtle;
+  color: $text-primary;
+  font-weight: 500;
 
-    &:hover {
-        background-color: lighten($brand-neutral, 8%);
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: $terracotta-200;
+      border-color: rgba($brand-primary, 0.4);
+      color: $brand-primary-dark;
+      box-shadow: $box-shadow;
     }
-}
+  }
 
-// Soft Translucent Secondary Button
-.btn-secondary-custom {
-    background-color: rgba($brand-neutral, 0.05);
-    color: $brand-neutral;
-    border: 1px solid transparent;
-
-    &:hover {
-        background-color: rgba($brand-neutral, 0.1);
-    }
-}
-
-// Outlined Border Button
-.btn-outlined {
-    background-color: transparent;
-    color: $brand-neutral;
-    border: 1px solid rgba($brand-neutral, 0.35);
-
-    &:hover {
-        background-color: rgba($brand-neutral, 0.03);
-        border-color: $brand-neutral;
-    }
-}
-// ==========================================================================
-// KITCHEN MODULE BUTTON CONTROLS
-// ==========================================================================
-
-// High-contrast, interactive fulfillment controls for the active order lists.
-.btn-sage {
-    background-color: $brand-secondary; // Uses your design tokens color variable.
-    color: #ffffff;
-    font-family: $font-family-label;
-    font-weight: 700;
-    border: none;
-    border-radius: 4px;
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-        background-color: darken($brand-secondary, 10%);
-        color: #ffffff;
-    }
+  &.active,
+  &:active {
     
-    &:active {
-        transform: scale(0.98); // Tiny physical compression cue on fast-paced clicks
-    }
+    border-color: $border-subtle !important;
+    background-color: $brand-primary !important;
+    color: $text-inverse !important;
+    font-weight: 600;
+  }
 }
-// Floating Circular Action Buttons (FABs - Bottom Right Panel)
-.btn-fab {
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    border: none;
-    transition: transform 0.15s ease, filter 0.2s;
 
-    &.fab-rust      { background-color: $btn-primary-bg; }
-    &.fab-sage      { background-color: #4A5B43; } // Darkened tint of your Sage palette
-    &.fab-charcoal  { background-color: $brand-neutral; }
-    &.fab-danger    { background-color: $danger-color; }
-    
-    &:hover {
-        transform: scale(1.05);
-        filter: brightness(1.1);
+// --------------------------------------------------------------------------
+// 4. Menu Card Add Button (+ Add)
+// --------------------------------------------------------------------------
+.btn-item-add {
+  background-color: rgba($brand-primary, 0.08);
+  border: 1px solid rgba($brand-primary, 0.25);
+  color: $brand-primary;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.65rem;
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: $brand-primary;
+      border-color: $brand-primary;
+      color: $neutral-50;
+      box-shadow: 0 4px 10px rgba($brand-primary, 0.25);
     }
+  }
+
+  &:active {
+    background-color: darken($brand-primary, 8%);
+  }
+}
+
+// --------------------------------------------------------------------------
+// 5. Utility & Nav Buttons
+// --------------------------------------------------------------------------
+.btn-navbar {
+  border: 1px solid $border-subtle;
+  color: $text-primary;
+  min-width: 5.25rem;
+  font-weight: 600;
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: darken($bg-surface, 4%);
+      border-color: darken($bg-surface, 8%);
+      color: $text-primary;
+    }
+  }
+
+  &.btn-primary {
+    background-color: $brand-primary;
+    border-color: $brand-primary;
+    color: $neutral-50;
+  }
+
+  &.btn-admin {
+    background-color: $brand-primary-dark;
+    border-color: $brand-primary-dark;
+    color: $neutral-50;
+
+    @media (hover: hover) {
+      &:not(:disabled):hover {
+        background-color: $brand-primary;
+        border-color: $brand-primary;
+        color: $neutral-50;
+      }
+    }
+  }
+}
+
+// Circular/Square Compact Triggers
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  flex-shrink: 0;
+  border: 1px solid transparent; // Keeps alignment identical to bordered buttons
+
+  i {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  // Size variants if needed elsewhere
+  &.btn-icon-sm {
+    width: 30px;
+    height: 30px;
+    i { font-size: 0.85rem; }
+  }
+
+  &.btn-icon-lg {
+    width: 44px;
+    height: 44px;
+    i { font-size: 1.25rem; }
+  }
+}
+
+// KDS Fulfillment Bar
+.btn-bump {
+  background-color: $brand-primary;
+  border-color: $brand-primary;
+  color: $neutral-50;
+  font-size: 0.95rem;
+  font-weight: 700;
+  min-height: 48px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba($brand-primary, 0.25);
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: $brand-primary-dark;
+      border-color: $brand-primary-dark;
+      color: $neutral-50;
+      box-shadow: 0 6px 16px rgba($brand-primary, 0.35);
+    }
+  }
+}
+
+// Destructive Action
+.btn-danger-action {
+  background-color: $crimson-500;
+  border-color: $crimson-500;
+  color: $neutral-50;
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: darken($crimson-500, 8%);
+      border-color: darken($crimson-500, 8%);
+      color: $neutral-50;
+    }
+  }
+}
+
+// ==========================================================================
+// Motion Modifiers (Opt-in hover movement)
+// ==========================================================================
+
+// 1. Upward Lift Only
+.btn-hover-lift {
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// 2. Scale / Grow in Place (No elevation)
+.btn-hover-scale {
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      transform: scale(1.035);
+    }
+  }
+}
+
+// 3. Pop (Combined lift + subtle scale)
+.btn-hover-pop {
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+  }
+}
+
+// ==========================================================================
+// Glow & Shadow Modifiers (Opt-in hover illumination)
+// ==========================================================================
+
+// Standard neutral elevation shadow (no colored glow)
+.btn-hover-shadow {
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      box-shadow: 0 6px 14px rgba($text-primary, 0.12);
+    }
+  }
+}
+
+// Terracotta / Hearth Glow
+.btn-glow-primary {
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      box-shadow: 0 0 18px rgba($brand-primary, 0.42);
+    }
+  }
+}
+
+// Warm Ember Gold Glow
+.btn-glow-gold {
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      box-shadow: 0 0 18px rgba($brand-accent, 0.45) !important;
+    }
+  }
+}
+
+// Sage Green Glow
+.btn-glow-sage {
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      box-shadow: 0 0 16px rgba($brand-secondary, 0.4);
+    }
+  }
+}
+
+// ==========================================================================
+// Surface Modifiers: Ghost Styles (Transparent at rest, tinted on hover)
+// ==========================================================================
+
+// 1. Neutral Ghost (for Edit, Info, Close, etc.)
+.btn-ghost {
+  background-color: transparent;
+  border-color: transparent;
+  color: $text-secondary;
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: rgba($text-primary, 0.08);
+      color: $text-primary;
+    }
+  }
+
+  &:active {
+    background-color: rgba($text-primary, 0.14) !important;
+  }
+}
+
+// 2. Destructive Ghost (for Delete, Trash, Remove)
+.btn-ghost-danger {
+  background-color: transparent;
+  border-color: transparent;
+  color: $text-secondary;
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: rgba($crimson-500, 0.1);
+      color: $crimson-500;
+      border-color: transparent;
+    }
+  }
+
+  &:active {
+    background-color: rgba($crimson-500, 0.2) !important;
+    color: darken($crimson-500, 8%) !important;
+  }
 }

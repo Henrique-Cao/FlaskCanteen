@@ -1,0 +1,170 @@
+// ==========================================================================
+// components/_buttons.scss
+// ==========================================================================
+.btn {
+  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: $border-radius;
+  cursor: pointer;
+  user-select: none;
+
+  
+  &:active {
+    transform: scale(0.985); 
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+  &:not(:disabled) {
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+  transition: transform 0.1s ease-in-out;
+}
+
+// Primary Action Button (Deep Brick tone)
+// In components/_buttons.scss (or your main SCSS file)
+
+.btn-primary {
+  --bs-btn-bg: #{$brand-primary};
+  --bs-btn-border-color: #{$brand-primary};
+  --bs-btn-color: #ffffff;
+
+  // Hover state (slightly deeper terracotta)
+  --bs-btn-hover-bg: #{darken($brand-primary, 6%)};
+  --bs-btn-hover-border-color: #{darken($brand-primary, 6%)};
+  --bs-btn-hover-color: #ffffff;
+
+  // Active / Clicked state (prevents the blue flash!)
+  --bs-btn-active-bg: #{darken($brand-primary, 10%)};
+  --bs-btn-active-border-color: #{darken($brand-primary, 10%)};
+  --bs-btn-active-color: #ffffff;
+
+  // Focus glow ring (turns the blue halo into a warm terracotta halo)
+  --bs-btn-focus-shadow-rgb: 200, 107, 83; // Your terracotta RGB
+}
+
+
+// Bump Order Fulfillment Button (Prominent KDS Action)
+.btn-bump {
+  background-color: $brand-primary;
+  border-color: $brand-primary;
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-weight: 700;
+  min-height: 48px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba($brand-primary, 0.25);
+
+  &:hover {
+    background-color: $brand-primary-dark;
+    border-color: $brand-primary-dark;
+    color: #FFFFFF;
+  }
+}
+
+// Secondary / Ghost Buttons (Warm Sand outline)
+.btn-outline-warm {
+  background-color: $brand-card-bg;
+  border: 1px solid $brand-border;
+  color: $brand-neutral-soft;
+
+  &:hover,
+  &.active {
+    background-color: #FAF6F0;
+    border-color: $brand-primary;
+    color: $brand-primary-dark;
+  }
+}
+
+// Floating Destructive Action Button (Crimson Red)
+.btn-danger-action {
+  background-color: $brand-danger;
+  border-color: $brand-danger;
+  color: #FFFFFF;
+
+  &:hover {
+    background-color: darken($brand-danger, 8%);
+    border-color: darken($brand-danger, 8%);
+    color: #FFFFFF;
+  }
+}
+//Navbar Button
+.btn-navbar {
+  background-color: $brand-card-bg;
+  border: 1px solid $brand-border;
+  color: $brand-neutral-soft;
+  border-radius: $border-radius;
+  min-width: 5.25rem;
+  font-family: $font-family-body;
+  font-weight: 600;
+  &:hover {
+    background-color: darken($brand-card-bg, 6%);
+    border-color: darken($brand-card-bg, 6%); 
+    color: $brand-neutral; 
+  }
+  // Admin button styles
+  &.btn-admin {
+    background-color: $brand-primary-dark;
+    border-color: $brand-primary-dark;
+    color: #FFFFFF;
+    font-weight: 700;
+
+    &:hover,
+    &:focus {
+      background-color: $brand-primary;
+      border-color: $brand-primary;
+      color: #FFFFFF;
+    }
+  }
+  
+}
+
+// Icon Action Button (Circular/Square compact triggers)
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border-radius: $border-radius-sm;
+  background-color: $brand-card-bg;
+  border: 1px solid $brand-border;
+  color: $brand-neutral-soft;
+
+  &:hover {
+    color: $brand-neutral;
+    background-color: #FAF6F0;
+  }
+}
+
+//menu filter buttons
+.btn-menu-filter {
+  background-color: $brand-card-bg;
+  border: 1px solid $brand-border;
+  color: $brand-neutral-soft;
+
+  &:hover,
+  &.active {
+    background-color: #FAF6F0;
+    border-color: $brand-primary;
+    color: $brand-primary-dark;
+  }
+}
+
+.btn-category{
+  background-color: $brand-card-bg;
+  color: $brand-neutral-soft;
+
+  &:hover,
+  &.active {
+    background-color: #FAF6F0;
+    border-color: $brand-primary;
+    color: $brand-primary-dark;
+  }
+
+}

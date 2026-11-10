@@ -1,6 +1,6 @@
 <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form id="editItemForm" class="modal-content border-0 shadow bg-light-custom" style="background-color: #EBE4D8;">
+        <form id="editItemForm" class="modal-content border-0 shadow bg-light-custom" enctype="multipart/form-data" style="background-color: #EBE4D8;">
 
             <div class="modal-header border-bottom border-dark border-opacity-10 px-4">
                 <h5 class="modal-title headline-font text-dark fw-bold" id="editItemModalLabel">Edit Menu Item</h5>
@@ -12,17 +12,17 @@
 
                 <div class="mb-3">
                     <label for="editName" class="form-label label-font small text-muted text-uppercase fw-bold">Item Name</label>
-                    <input type="text" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editName" name="name" required>
+                    <input type="text" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editName" name="editName" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="editPrice" class="form-label label-font small text-muted text-uppercase fw-bold">Price ($)</label>
-                    <input type="number" step="0.01" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editPrice" name="price" required>
+                    <input type="number" step="0.01" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editPrice" name="editPrice" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="editCategory" class="form-label label-font small text-muted text-uppercase fw-bold">Category</label>
-                    <select class="form-select form-select-lg border-0 shadow-sm rounded-3" id="editCategory" name="category" required>
+                    <select class="form-select form-select-lg border-0 shadow-sm rounded-3" id="editCategory" name="editCategory" required>
                         <option value="" disabled>Select a category...</option>
                         {% for category in categories %}
                             <option value="{{ category.id }}">{{ category.name }}</option>
@@ -31,7 +31,17 @@
                 </div>
                 <div class="mb-3">
                     <label for="editDescription" class="form-label label-font small text-muted text-uppercase fw-bold">Description</label>
-                    <textarea class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editDescription" name="description" rows="3"></textarea>
+                    <textarea class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editDescription" name="editDescription" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="editImage" class="form-label label-font small text-muted text-uppercase fw-bold">Image</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="editImage" name="editImage">
+                        <button class="btn btn-outline-secondary" type="button" id="clearEditImageBtn" title="Clear selection">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                        
+                    </div>
                 </div>
                 
                 

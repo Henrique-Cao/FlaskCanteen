@@ -35,3 +35,16 @@
 .fs-7 {
     font-size: 0.85rem;
 }
+
+
+/* Fades out the table while HTMX is fetching data */
+#historyTableBody.htmx-request {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 200ms ease-in;
+}
+
+/* Fades back in immediately when data arrives */
+#historyTableBody {
+    transition: opacity 200ms ease-out;
+}

@@ -1,0 +1,148 @@
+// ==========================================================================
+// _variables.scss — Hearth & Embers Design Tokens & Bootstrap 5 Overrides
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// 1. Core Brand Color Tokens
+// --------------------------------------------------------------------------
+$brand-primary:      #C86B53;  // Terracotta / Rust
+$brand-primary-dark: #8A3E25;  // Deep Brick (Buttons & Active States)
+$brand-secondary:    #8B9D83;  // Sage Green
+$brand-tertiary:     #EBE4D8;  // Light Alabaster (Base Page Canvas)
+$brand-white:      #FFFFFF;  // Pure White Surface for Cards & Chits
+$brand-cream:        #FAF7F2;  // Soft Cream
+$brand-off-white:    #F9F8F6;  // Soft Off-white
+$brand-alabaster:   #F7F4F0;
+$brand-neutral:      #2C2B29;  // Charcoal Ink / Off-black
+$brand-neutral-soft: #7A6E67;  // Muted Warm Charcoal (Timestamps, Subtitles)
+$brand-border:       #E2D9D0;  // Warm Sand Border
+$brand-amber:        #D97706;  // Warm Amber for Paused Line / Warning Notes
+$brand-danger:       #A61C1C;  // Crimson Red (86'd items, Destructive actions)
+$brand-success:       #4CAF50;  // Green for successful actions
+
+// --------------------------------------------------------------------------
+// 2. Typography System
+// --------------------------------------------------------------------------
+// Corrected Code:
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+$font-family-serif:      'Newsreader', Georgia, serif;
+$font-family-headline:   'Fraunces', serif;
+$font-family-label:      'Fraunces', serif;
+
+// Choose your body font (Plus Jakarta Sans is great for UI legibility)
+$font-family-body:       'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+// Bootstrap font mappings
+$font-family-base:       $font-family-serif;
+$headings-font-family:   $font-family-headline;
+$headings-font-weight:   700;
+$headings-color:         $brand-neutral;
+
+// --------------------------------------------------------------------------
+// 3. Bootstrap Body & Theme Colors Mapping
+// --------------------------------------------------------------------------
+$body-bg:                $brand-alabaster;
+$body-color:             $brand-neutral;
+
+$theme-colors: (
+  "primary":    $brand-primary,
+  "secondary":  $brand-secondary,
+  "success":    $brand-secondary,  // Sage Green acts as operational success
+  "info":       #4A6B82,
+  "warning":    $brand-amber,      // Pause warnings & customer note badges
+  "danger":     $brand-danger,     // Destructive / 86'd indicators
+  "light":      $brand-tertiary,
+  "dark":       $brand-neutral
+);
+
+// --------------------------------------------------------------------------
+// 4. Links & Focus Rings
+// --------------------------------------------------------------------------
+$link-color:             $brand-primary;
+$link-hover-color:       $brand-primary-dark;
+$link-decoration:        none;
+$focus-ring-color:       rgba($brand-primary, 0.25);
+$focus-ring-width:       0.2rem;
+
+// --------------------------------------------------------------------------
+// 5. Borders, Radius & Shadows (Modern Rounded Aesthetic)
+// --------------------------------------------------------------------------
+$border-color:           $brand-border;
+$border-radius-sm:       0.5rem;    // 8px
+$border-radius:          0.75rem;   // 12px (Standard card/input radius)
+$border-radius-lg:       1rem;      // 16px (Modals, Panels)
+$border-radius-xl:       1.25rem;   // 20px (Chits, Pill sheets)
+$border-radius-pill:     50rem;
+
+$box-shadow-sm:          0 1px 2px rgba(44, 43, 41, 0.05);
+$box-shadow:             0 4px 6px -1px rgba(44, 43, 41, 0.06), 0 2px 4px -2px rgba(44, 43, 41, 0.04);
+$box-shadow-lg:          0 10px 25px -3px rgba(44, 43, 41, 0.1), 0 4px 6px -4px rgba(44, 43, 41, 0.05);
+
+// --------------------------------------------------------------------------
+// 6. Buttons
+// --------------------------------------------------------------------------
+$btn-padding-y:          0.625rem;  // ~10px
+$btn-padding-x:          1.25rem;   // ~20px
+$btn-font-weight:        600;
+$btn-font-family:        $font-family-sans-serif;
+$btn-border-radius:      $border-radius;
+$btn-focus-box-shadow:   0 0 0 0.2rem rgba($brand-primary, 0.25);
+
+// Custom override for primary button background using your deeper brick tone
+$btn-primary-bg:         $brand-primary;
+$btn-primary-border:     $brand-primary-dark;
+
+// --------------------------------------------------------------------------
+// 7. Cards & Chit Surfaces
+// --------------------------------------------------------------------------
+$card-bg:                $brand-white;
+$card-color:             $brand-neutral;
+$card-border-color:      $brand-border;
+$card-border-width:      1px;
+$card-border-radius:     $border-radius-lg;
+$card-spacer-y:          1rem;
+$card-spacer-x:          1rem;
+$card-box-shadow:        $box-shadow;
+
+// --------------------------------------------------------------------------
+// 8. Forms & Inputs
+// --------------------------------------------------------------------------
+$input-bg:               #FAF6F0;
+$input-color:            $brand-neutral;
+$input-border-color:     $brand-border;
+$input-border-radius:    $border-radius;
+$input-focus-bg:         #FFFFFF;
+$input-focus-border-color: $brand-primary;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($brand-primary, 0.15);
+$input-placeholder-color: $brand-neutral-soft;
+$input-height:           2.75rem;   // ~44px minimum touch target
+
+$form-check-input-checked-bg-color:     $brand-secondary;
+$form-check-input-checked-border-color: $brand-secondary;
+
+// --------------------------------------------------------------------------
+// 9. Modals & Offcanvas (Track Order & Cart Drawer)
+// --------------------------------------------------------------------------
+$modal-content-bg:       $brand-white;
+$modal-content-border-color: $brand-border;
+$modal-content-border-radius: $border-radius-xl;
+$modal-backdrop-bg:      $brand-neutral;
+$modal-backdrop-opacity: 0.55;
+$modal-header-border-color: #FAF6F0;
+$modal-footer-border-color: $brand-border;
+
+$offcanvas-bg-color:     $brand-white;
+$offcanvas-border-color: $brand-border;
+
+// --------------------------------------------------------------------------
+// 10. Badges & Navigation Pills
+// --------------------------------------------------------------------------
+$badge-font-size:        0.75rem;
+$badge-font-weight:      600;
+$badge-padding-y:        0.35em;
+$badge-padding-x:        0.65em;
+$badge-border-radius:    $border-radius-sm;
+
+$nav-pills-border-radius: $border-radius;
+$nav-pills-link-active-color: #FFFFFF;
+$nav-pills-link-active-bg:    $brand-primary;

@@ -1,69 +1,105 @@
-.proposition-item {
-  // Keep your flex layout – I see you had a commented media query for wrap
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+// Standardized App Interface Container
+.custom-card {
+    background-color: rgba(#ffffff, 0.45); // Clean translucent glassy backdrop
+    border: 1px solid rgba($brand-neutral, 0.06);
+    border-radius: 24px; // Large smooth panel curvature shown in dashboard
+    padding: 1.5rem;
+}
+
+// Capsule Navigation Panel (Middle-Right Module)
+.nav-capsule-panel {
+    background-color: rgba(#ffffff, 0.5);
+    border-radius: 30px;
+    padding: 0.4rem 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    .nav-link-item {
+        color: $brand-neutral;
+        opacity: 0.6;
+        transition: all 0.2s ease;
+
+        &.active-pill {
+            background-color: $btn-primary-bg;
+            color: #ffffff;
+            padding: 0.5rem;
+            border-radius: 50%;
+            opacity: 1;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+// Global Application Search Inputs (Top-Right Module)
+.search-container {
+    position: relative;
+    width: 100%;
+
+    .search-input {
+        width: 100%;
+        background-color: rgba($brand-primary, 0.04);
+        border: 1px solid rgba($brand-primary, 0.18);
+        border-radius: 8px;
+        padding: 0.7rem 1rem 0.7rem 2.5rem;
+        font-family: $font-family-body;
+        color: $brand-neutral;
+        outline: none;
+        transition: all 0.2s ease;
+
+        &::placeholder {
+            color: rgba($brand-neutral, 0.45);
+        }
+
+        &:focus {
+            background-color: #ffffff;
+            border-color: $brand-primary;
+            box-shadow: 0 0 0 3px rgba($brand-primary, 0.15);
+        }
+    }
+
+    .search-icon-marker {
+        position: absolute;
+        left: 0.9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba($brand-neutral, 0.4);
+        pointer-events: none;
+    }
 }
 
 
-// Container Max-Width Control
-.menu-container {
-    max-width: 600px; 
+// ==========================================================================
+// KITCHEN ADMIN DASHBOARD LAYOUT CONTROLS
+// ==========================================================================
+
+// Bounds the application canvas width on wide desktop viewport grids.
+.dashboard-desktop-container {
+    max-width: 1140px; 
+    width: 100%;
 }
 
-// Tabs Navigation 
-.menu-tab {
-    font-family: $font-family-serif;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: $tavern-muted-text;
-    padding-bottom: 4px;
-}
-
-.active-tab {
-    color: $tavern-rust !important;
-    border-bottom: 3px solid $tavern-rust !important;
-}
-
-// Menu Item Specifics
-.menu-item-title {
-    font-family: $font-family-serif;
-    color: $tavern-rust;
-    font-weight: bold;
-}
-
-.menu-item-price {
-    font-family: $font-family-serif;
-    font-size: 1.35rem;
-    font-weight: bold;
-    color: $tavern-dark;
-}
-
-.menu-item-description {
-    color: $tavern-muted-text !important;
-    font-size: 0.95rem;
-    line-height: 1.5;
-}
-
-// Badges (GF, V)
-.badge-outline {
-    background-color: transparent;
-    color: #8c8275;
-    border: 1px solid #c8c2b7;
-    border-radius: 4px;
-    padding: 0.35em 0.55em;
-    font-size: 0.75rem;
-    font-weight: normal;
-}
-
-// Image Styling
-.menu-item-img {
-    width: 110px;
-    height: 110px;
-    object-fit: cover;
-}
-
-// Dotted Border Utility
-.border-dotted {
-    border-bottom: 1px dotted #b0a89c !important;
+// Special container layout configuration for the recent history ledger card.
+.history-card-panel {
+    position: relative;
+    background-color: rgba(#ffffff, 0.45);
+    
+    // Houses and restricts the faint rustic design accent illustration safely inside the module.
+    .history-card-watermark {
+        position: absolute;
+        bottom: -10px;
+        right: 10px;
+        width: 130px;
+        height: 130px;
+        background-image: url('/static/images/tankard-watermark.png'); 
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: bottom right;
+        opacity: 0.07; // Ensures watermark is highly subtle to protect text readability.
+        pointer-events: none; // Disables interaction behavior so it never blocks text selections
+        z-index: 1;
+    }
 }

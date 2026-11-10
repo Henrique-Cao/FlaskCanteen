@@ -1,31 +1,98 @@
-// components/_buttons.scss
-@import "../abstracts/variables";
-
-.btn-primary {
-  --bs-btn-bg: #{$tavern-rust};
-  --bs-btn-border-color: #{$tavern-rust};
-  
-  // Hand-picked darker tones for interaction states
-  --bs-btn-hover-bg: #9c4f39; 
-  --bs-btn-hover-border-color: #9c4f39;
-  --bs-btn-active-bg: #854330;
-  --bs-btn-active-border-color: #854330;
-  
-  --bs-btn-color: #fff;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-active-color: #fff;
+.btn {
+    font-family: $font-family-label;
+    border-radius: 6px; // Soft rectangular radius matching your card preview
+    padding: 0.55rem 1.4rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
 }
 
-.btn-add {
-    background-color: #ede7dc;
-    color: $tavern-dark; // Uses variable from abstracts
-    width: 42px;
-    height: 42px;
-    border: 1px solid #d0c8b8;
-    transition: background-color 0.2s ease;
+// Deep Rust Primary Button
+.btn-primary {
+    background-color: $brand-primary;
+    color: #ffffff;
+    border: 1px solid transparent;
 
     &:hover {
-        background-color: #e2dac9;
-        color: $tavern-dark;
+        background-color: darken($brand-primary, 6%);
+    }
+}
+
+// Inverted Charcoal Button
+.btn-inverted {
+    background-color: $brand-neutral;
+    color: #ffffff;
+    border: 1px solid transparent;
+
+    &:hover {
+        background-color: lighten($brand-neutral, 8%);
+    }
+}
+
+// Soft Translucent Secondary Button
+.btn-secondary-custom {
+    background-color: rgba($brand-neutral, 0.05);
+    color: $brand-neutral;
+    border: 1px solid transparent;
+
+    &:hover {
+        background-color: rgba($brand-neutral, 0.1);
+    }
+}
+
+// Outlined Border Button
+.btn-outlined {
+        // background-color: transparent;
+    // color: $brand-neutral;
+    border: 1px solid rgba($brand-neutral, 0.35);
+
+    &:hover {
+        // background-color: rgba($brand-neutral, 0.03);
+        border-color: $brand-neutral;
+    }
+}
+// ==========================================================================
+// KITCHEN MODULE BUTTON CONTROLS
+// ==========================================================================
+
+// High-contrast, interactive fulfillment controls for the active order lists.
+.btn-sage {
+    background-color: $brand-secondary; // Uses your design tokens color variable.
+    color: #ffffff;
+    font-family: $font-family-label;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: darken($brand-secondary, 10%);
+        color: #ffffff;
+    }
+    
+    &:active {
+        transform: scale(0.98); // Tiny physical compression cue on fast-paced clicks
+    }
+}
+// Floating Circular Action Buttons (FABs - Bottom Right Panel)
+.btn-fab {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    border: none;
+    transition: transform 0.15s ease, filter 0.2s;
+
+    &.fab-rust      { background-color: $btn-primary-bg; }
+    &.fab-sage      { background-color: $brand-secondary; } // Darkened tint of your Sage palette
+    &.fab-charcoal  { background-color: $brand-neutral; }
+    &.fab-danger    { background-color: $brand-danger; }
+    
+    &:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
     }
 }

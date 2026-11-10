@@ -1,0 +1,44 @@
+<div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form id="adminLoginForm" action="/admin/login" method="POST" class="modal-content border-0 shadow" style="background-color: #EBE4D8;">
+            
+            <div class="modal-header border-bottom border-dark border-opacity-10 px-4">
+                <h5 class="modal-title headline-font text-dark fw-bold" id="adminLoginModalLabel">Admin Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body p-4 body-font text-dark">
+                <!-- Inline error alert for failed attempts -->
+                <div id="adminLoginAlert" class="alert alert-danger py-2 small d-none" role="alert"></div>
+
+                <div class="mb-3">
+                    <label for="adminUsername" class="form-label label-font small text-muted text-uppercase fw-bold">Username</label>
+                    <input type="text" 
+                           class="form-control form-control-lg border-0 shadow-sm rounded-3" 
+                           id="adminUsername" 
+                           name="adminUsername" 
+                           placeholder="Enter username" 
+                           autocomplete="username" 
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="adminPassword" class="form-label label-font small text-muted text-uppercase fw-bold">Password</label>
+                    <input type="password" 
+                           class="form-control form-control-lg border-0 shadow-sm rounded-3" 
+                           id="adminPassword" 
+                           name="adminPassword" 
+                           placeholder="Enter password" 
+                           autocomplete="current-password" 
+                           required>
+                </div>
+            </div>
+            
+            <div class="modal-footer border-top border-dark border-opacity-10 px-4 py-3 bg-white bg-opacity-20">
+                <button type="button" class="btn btn-outline-secondary label-font text-uppercase px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" id="adminLoginSubmitBtn" class="btn btn-primary label-font text-uppercase px-4 fw-bold">Login</button>
+            </div>
+
+        </form>
+    </div>
+</div>

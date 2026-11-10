@@ -1,6 +1,6 @@
 <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form id="addItemForm" class="modal-content border-0 shadow" style="background-color: #EBE4D8;">
+        <form id="addItemForm" class="modal-content border-0 shadow" enctype="multipart/form-data">
             
             <div class="modal-header border-bottom border-dark border-opacity-10 px-4">
                 <h5 class="modal-title headline-font text-dark fw-bold" id="addItemModalLabel">Add New Menu Item</h5>
@@ -35,7 +35,10 @@
                 </div>
                 <div class="mb-3">  
                     <label for="image_filename" class="form-label label-font small text-muted text-uppercase fw-bold">Image</label>
-                    <input type="file" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="image_filename" name="image">
+                    <input type="file" class="form-control form-control-lg border-0 shadow-sm rounded-3" id="add_image_filename" name="image" accept="image/png, image/jpeg, image/webp">
+                    <button type="button" id="clearAddImageBtn" class="btn btn-outline-secondary d-none">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
                 </div>
                 
 

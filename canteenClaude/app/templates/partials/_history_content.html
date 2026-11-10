@@ -1,0 +1,64 @@
+<!-- templates/partials/_history_content.html -->
+
+<table id="historyTable" class="table table-hover align-middle mb-0 w-100" style="--bs-table-bg: transparent; table-layout: fixed;">
+    
+    <!-- Enforce strict column widths so they never jitter during swaps -->
+    <colgroup>
+        <col style="width: 10%;"> <!-- Order # -->
+        <col style="width: 10%;"> <!-- Time -->
+        <col style="width: 55%;"> <!-- Items (Give this the most space) -->
+        <col style="width: 10%;"> <!-- Total -->
+        <col style="width: 10%;"> <!-- Status -->
+    </colgroup>
+
+    <thead>
+        <tr class="border-dotted">
+            <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Order #</th>
+            <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Time</th>
+            <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Items</th>
+            <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Total</th>
+            <th scope="col" class="label-font text-muted fw-normal pb-3 border-0">Status</th>
+        </tr>
+    </thead>
+    <tbody id="historyTableBody">
+        {% if orders and orders.items %}
+            {% for order in orders.items %}
+                <tr id="order_{{ order.id }}" class="order-row border-dotted" onclick='openOrderModal("{{ order.order_number }}")'>
+                    <td class="label-font text-muted fw-normal pb-3 border-0">{{ order.id }}</td>
+                    <td class="label-font text-muted fw-normal pb-3 border-0">{{ order.created_at.strftime('%I:%M %p') }}</td>
+                    <td class="overflow-hidden text-truncate">
+                        {% for item in order.items %}
+                            {% if item.quantity and item.quantity > 1 %}{{ item.quantity }}x {% endif %}{{ item.name or item.item_name }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td class="label-font text-muted fw-normal pb-3 border-0">${{ "%.2f"|format(order.total_price) }}</td>
+                    
+                    <td class="label-font text-muted fw-normal pb-3 border-0 text">
+                        <span class="status-pill status-{{ order.status }}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center py-4 text-muted">No orders found.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<!-- Pagination sits safely OUTSIDE the table tags -->
+{% if orders and orders.pages > 1 %}
+    <div class="mt-auto w-100">
+        {% include 'partials/_pagination.html' %}
+    </div>
+{% endif %}
+
+<span id="filterBadgeContainer" hx-swap-oob="true">
+    {% if active_filters_count > 0 %}
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ active_filters_count }}
+        </span>
+    {% endif %}
+</span>

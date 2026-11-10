@@ -3,112 +3,120 @@
 {% block title %}Hearthside - Home{% endblock %}
 
 {% block content %}
-<div class="container py-3 py-md-4" style="max-width: 920px;">
-  <!-- Hero Section -->
-  <section class="hero-card p-4 p-md-5 mb-4 rounded-4 shadow-sm" style="background-color: #F3EFEA; border: 1px solid #E6E1DA;">
-    <div class="row align-items-center justify-content-center g-4">
-      <!-- Canteen Logo -->
-      <div class="col-12 col-md-6 text-center">
-        <img src="{{ url_for('static', filename='img/club33-logo.png') }}" 
-             alt="Club XXXIII Logo" 
-             class="img-fluid rounded-circle shadow-sm" 
-             style="max-width: 270px; width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover;">
-      </div>
+<div class="container py-3 d-flex flex-column align-items-center mx-auto" style="max-width: 580px;">
 
-      <!-- Operational Info & CTA -->
-      <div class="col-12 col-md-6 text-center text-md-start d-flex flex-column align-items-center align-ite la passelevens to steal food charding activities you do understand what is still there as well and you're sad about you said that someone claimed their own food someone who clean their own food someone who claim other people so you rather you don't want to claim to not your food yeahms-md-start">
-        <!-- Operating Status Badge -->
-        <div class="mb-3">
-          <span class="badge rounded-pill px-3 py-2 fw-bold d-inline-flex align-items-center gap-2" 
-                style="background-color: #D6E8D6; color: #2E5B36; font-size: 0.75rem; letter-spacing: 0.5px;">
-            <span class="rounded-circle d-inline-block" style="width: 7px; height: 7px; background-color: #2E5B36;"></span>
-            OPEN NOW
-          </span>
-        </div>
-
-        <!-- Operating Hours Banner -->
-        <p class="fw-bold mb-4" style="color: #8D3B24; font-size: 0.95rem;">
-          Stall Operating Hours: 8:00 AM – 4:00 PM
-        </p>
-
-        <!-- Primary CTA Button -->
-        <a href="{{ url_for('main.menu') }}" 
-           class="btn rounded-pill px-4 py-3 fw-semibold text-white d-inline-flex align-items-center justify-content-center gap-2 shadow-sm w-100 w-sm-auto" 
-           style="background-color: #8D3B24; border: none; font-size: 1.25rem; min-width: 170px;">
-          Order Now <i class="bi bi-arrow-right"></i>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section Divider with Centered Label -->
-  <div class="d-flex align-items-center my-4 my-md-5">
-    <div class="flex-grow-1" style="border-top: 1px solid #E2DBCF;"></div>
-    <span class="px-3 text-uppercase fw-bold" style="color: #9C8F7E; font-size: 0.75rem; letter-spacing: 1.5px;">QUICK ACTIONS</span>
-    <div class="flex-grow-1" style="border-top: 1px solid #E2DBCF;"></div>
+  <!-- 1. Live Operating Hours Pill -->
+  <div class="live-hours-pill mb-2">
+    <span class="badge badge-success d-inline-flex align-items-center gap-2 px-3 py-2">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <span>Open Today &middot; 11:00 AM &ndash; 9:30 PM</span>
+    </span>
   </div>
 
-  <!-- Quick Action Grid -->
-  <div class="row g-3 g-md-4 mb-5">
-    <!-- Order Tracking Card -->
-    <div class="col-12 col-md-6">
-      <div class="card border-0 rounded-4 p-4 h-100 shadow-sm" style="background-color: #F5F2EC;">
-        <div class="d-flex align-items-center gap-2 mb-4">
-          <i class="bi bi-search fs-5" style="color: #8D3B24;"></i>
-          <h2 class="h5 mb-0 fw-bold" style="color: #2D2319; font-family: serif;">Track Order</h2>
-        </div>
+  <!-- 2. Brand Logo Emblem -->
+  <div class="brand-logo mb-3">
+    <img src="{{ url_for('static', filename='img/club33-logo.png') }}" 
+         alt="Hearthside Logo" 
+         class="rounded-circle shadow-sm">
+  </div>
 
-        <form action="{{ url_for('main.track_order') }}" method="GET" class="mt-auto">
-          <div class="mb-3">
-            <input type="text" 
-                   name="code" 
-                   class="form-control text-center py-2.5 rounded-3 shadow-none" 
-                   style="background-color: #FFFFFF; border: 1px solid #E5DFD5; font-family: serif; color: #6C5A4C;" 
-                   placeholder="Enter 4-digit code" 
-                   maxlength="4" 
-                   inputmode="numeric" 
-                   pattern="[0-9]*" 
-                   required>
-          </div>
-          <button type="submit" 
-                  class="btn w-100 rounded-pill py-2.5 text-white fw-semibold shadow-sm" 
-                  style="background-color: #4F5E48; border: none;">
-            Track Status
-          </button>
-        </form>
+  <!-- 3. Headline & Editorial Body -->
+  <h1 class="headline display-6 fw-bold text-center mb-2">Hearthside Tavern</h1>
+  <p class="subtext text-center mx-auto mb-3" style="max-width: 460px;">
+    Wood-fired skewers, embers &amp; slow-braised comfort dishes. Cooked fresh to order by our solo chef.
+  </p>
+
+  <!-- 4. Wait Time Badge -->
+  <div class="custom-wait-badge d-inline-flex align-items-center gap-2 px-3 py-2 border rounded-4 mb-3" role="status">
+    <i class="bi bi-clock" aria-hidden="true"></i>
+    <span class="small fw-medium">Current Kitchen Wait: ~21 mins</span>
+  </div>
+
+  <!-- 5. Primary CTA Button -->
+  <div class="w-100 d-flex justify-content-center mb-4">
+    <a href="#menu" class="btn btn-primary rounded-4 px-4 py-3 fw-semibold text-white d-inline-flex align-items-center justify-content-center gap-2 w-100 shadow-sm" style="max-width: 440px;">
+      <span>Explore Menu &amp; Order Now</span>
+      <i class="bi bi-arrow-right" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <!-- 6. Three Value Pillars (Directly beneath the CTA) -->
+  <div class="row row-cols-3 g-2 w-100 text-center hero-pillars mb-4" style="max-width: 440px;">
+    <div class="col d-flex flex-column align-items-center">
+      <div class="icon-circle rounded-circle d-flex align-items-center justify-content-center mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
       </div>
+      <span class="pillar-title fw-bold text-dark d-block">Instant Order</span>
+      <span class="pillar-desc text-muted d-block">Straight to Wok</span>
     </div>
 
-    <!-- Payment & Collection Info Card -->
-    <div class="col-12 col-md-6">
-      <div class="card border-0 rounded-4 p-4 h-100 shadow-sm d-flex flex-column justify-content-center gap-3" style="background-color: #F5F2EC;">
-        <!-- Payment Info -->
-        <div class="d-flex align-items-start gap-3">
-          <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" 
-               style="width: 42px; height: 42px; background-color: #DDF0E2;">
-            <i class="bi bi-cash-stack fs-5" style="color: #2E5B36;"></i>
-          </div>
-          <div>
-            <h3 class="h6 mb-1 fw-bold" style="color: #2D2319; font-family: serif;">Accepted Payment</h3>
-            <p class="small mb-0" style="color: #7A6F62;">PayNow QR & Cash accepted at counter.</p>
-          </div>
-        </div>
-
-        <hr class="my-2" style="border-top: 1px dashed #DDD5C7; opacity: 1;">
-
-        <!-- Collection Point -->
-        <div class="d-flex align-items-start gap-3">
-          <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" 
-               style="width: 42px; height: 42px; background-color: #FBE7E1;">
-            <i class="bi bi-shop fs-5" style="color: #8D3B24;"></i>
-          </div>
-          <div>
-            <h3 class="h6 mb-1 fw-bold" style="color: #2D2319; font-family: serif;">Collection Point</h3>
-            <p class="small mb-0" style="color: #7A6F62;">Proceed to Stall Counter A when ready.</p>
-          </div>
-        </div>
+    <div class="col d-flex flex-column align-items-center">
+      <div class="icon-circle rounded-circle d-flex align-items-center justify-content-center mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
       </div>
+      <span class="pillar-title fw-bold text-dark d-block">Live Tracker</span>
+      <span class="pillar-desc text-muted d-block">Real-time Status</span>
+    </div>
+
+    <div class="col d-flex flex-column align-items-center">
+      <div class="icon-circle rounded-circle d-flex align-items-center justify-content-center mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+      </div>
+      <span class="pillar-title fw-bold text-dark d-block">Fast Pickup</span>
+      <span class="pillar-desc text-muted d-block">Counter Takeaway</span>
     </div>
   </div>
+  <!-- /row CLOSED HERE so it does not trap items below -->
+
+  <!-- Subtle Transition Divider -->
+  <hr class="hero-divider w-100 mb-4 opacity-10" style="max-width: 440px;">
+
+  <!-- 7. Track Order Section (Base Utility Card) -->
+  <div class="card track-order-section w-100 p-3 shadow-sm" style="max-width: 440px;">
+    <!-- Track Order Header -->
+    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+      <span class="text-eyebrow">Already placed an order?</span>
+      <span class="small text-muted">Order Tracker</span>
+    </div>
+
+    <!-- Track Order Inset Bar -->
+    <form action="" method="GET" class="input-pill-group rounded-3 p-1 d-flex align-items-center gap-2">
+      <div class="d-flex align-items-center gap-2 flex-grow-1 ps-2">
+        <i class="bi bi-search text-muted flex-shrink-0" aria-hidden="true"></i>
+        <input type="text" 
+               name="code" 
+               class="form-control border-0 bg-transparent shadow-none p-0" 
+               placeholder="Enter #ORD-XXXX or Phone" 
+               autocomplete="off" 
+               aria-label="Order tracking code or phone number" 
+               required>
+      </div>
+
+      <button class="btn btn-dark rounded-3 px-3 py-1 fw-semibold flex-shrink-0" type="submit">
+        Track
+      </button>
+    </form>
+  </div>
+
 </div>
+<div id="menu" class="mb-5 w-100 mx-auto mt-5" >
+  {% include 'menu/menu.html' %}
+</div>
+
+{% endblock %}
+
+{% block modals %}
+    {% include 'modals/admin_edit_item.html' %} 
+    {% include 'modals/admin_add_item.html' %} 
+    {% include 'modals/admin_add_category.html' %}
+    {% include 'modals/admin_edit_category.html' %}
 {% endblock %}

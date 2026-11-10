@@ -1,0 +1,14 @@
+// components/_forms.scss
+
+// Reusable inset search/input pill
+.input-pill-group {
+  background-color: #F7F3EC;
+  border: 1px solid rgba($neutral-500, 0.1);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+
+  &:focus-within {
+    background-color: #FFFFFF;
+    border-color: $brand-primary;
+    box-shadow: 0 0 0 3px rgba($brand-primary, 0.12);
+  }
+}

@@ -1,3 +1,4 @@
+
 async function openOrderModal(orderNumber) {
     const modalElement = document.getElementById('orderDetailsModal');
     const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);

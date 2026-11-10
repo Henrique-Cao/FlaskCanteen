@@ -1,35 +1,213 @@
 // ==========================================================================
-// 1. Core Palette Tokens (From image_9c3ebe.png)
+// _variables.scss — Hearth & Embers Design Tokens & Bootstrap 5 Overrides
 // ==========================================================================
-$brand-primary:   #C86B53;  // Terracotta / Rust
-$brand-secondary: #8B9D83;  // Sage Green
-$brand-tertiary:  #EBE4D8;  // Light Alabaster (App/Card Background Base)
-$brand-neutral:   #2C2B29;  // Charcoal Ink / Off-black
 
-// ==========================================================================
-// 2. Button Variant Tints & State Modifiers
-// ==========================================================================
-$btn-primary-bg:  #8A3E25;  // Deeper brick tone seen on the actual buttons
-$danger-color:    #A61C1C;  // Crimson Red seen on the floating delete action button
+// --------------------------------------------------------------------------
+// 1. TIER 1: PRIMITIVE COLOR SCALES (HSL 100-900)
+// --------------------------------------------------------------------------
+// Terracotta (Brand Core)
+$terracotta-100: hsl(12, 52%, 94%); 
+$terracotta-200: hsl(12, 52%, 84%); 
+$terracotta-500: hsl(12, 52%, 55%); // Base (#C86B53)
+$terracotta-600: hsl(12, 52%, 45%); 
+$terracotta-700: hsl(12, 52%, 35%); // Deep Brick (#8A3E25)
 
-// ==========================================================================
-// 3. Structural Typography System
-// ==========================================================================
-$font-family-headline: 'Fraunces', serif;
-$font-family-body:     'Newsreader', serif;
-$font-family-label:    'Fraunces', serif;
+// Sage (Support Brand)
+$sage-100:       hsl(102, 12%, 94%);
+$sage-700:       hsl(102, 12%, 36%);
+$sage-500:       hsl(102, 12%, 56%); // Base (#8B9D83)
 
-// ==========================================================================
-// 4. Bootstrap Core Variable Mapping
-// ==========================================================================
-$body-bg:     $brand-tertiary;
-$body-color:  $brand-neutral;
+// Sand & Charcoal (Neutrals: Surfaces, Borders & Ink)
+$neutral-50:     hsl(0, 0%, 100%);   // Pure White
+$neutral-100:    hsl(35, 30%, 96%);  // Soft Parchment (#FAF7F2 - Replaces cream/off-white)
+$neutral-200:    hsl(35, 30%, 88%);  // Light Alabaster Canvas (#EBE4D8)
+$neutral-300:    hsl(35, 25%, 85%);  // Warm Sand Borders (#E2D9D0)
+$neutral-500:    hsl(30, 8%, 45%);   // Muted Charcoal (#7A6E67)
+$neutral-800:    hsl(30, 8%, 20%);   // Body Text
+$neutral-900:    hsl(30, 4%, 17%);   // Headline Ink (#2C2B29)
 
-// Overwrites Bootstrap's native classes (.text-primary, .bg-secondary, etc.)
+// Alerts (Amber & Crimson)
+$amber-100:      hsl(32, 95%, 94%);  
+$amber-500:      hsl(32, 95%, 44%);  // Warning / Accent (#D97706)
+$crimson-100:    hsl(0, 71%, 94%);   
+$crimson-500:    hsl(0, 71%, 38%);   // Destructive (#A61C1C)
+// Success
+$success-100:      hsl(140, 38%, 94%);
+$success-500:      hsl(140, 38%, 45%);
+
+
+// --------------------------------------------------------------------------
+// 1b. TIER 2: SEMANTIC TOKENS (Mapped Roles)
+// --------------------------------------------------------------------------
+$brand-primary:       $terracotta-500;
+$brand-primary-dark:  $terracotta-700;
+$brand-secondary:     $sage-500;
+$brand-accent:        $amber-500;
+
+$bg-canvas:         $neutral-200; // The lowest layer (e.g., the 60% oat background).
+$bg-surface:        $neutral-50;  // The standard raised layer (e.g., pure white cards, navbar).
+$bg-surface-raised: $neutral-50;  // For elements sitting on top of surfaces (e.g., floating modals, dropdown menus).
+$bg-surface-sunken: $neutral-100; // For recessed areas (e.g., the inside of a search bar or an empty drag-and-drop zone).
+$bg-surface-hover: $neutral-100; // Slightly darkens a white card on hover
+
+$text-primary:        $neutral-900;
+$text-secondary:     $neutral-500;
+$text-inverse: $neutral-50; // Pure white text forced inside colored buttons/badges
+
+$border-subtle:      $neutral-300;
+$border-focus:       $terracotta-500;
+
+$action-primary:       $brand-primary;
+$action-primary-hover: $brand-primary-dark;
+$action-secondary:       $brand-secondary;
+$action-secondary-hover: $sage-700;
+$action-disabled:       $neutral-300;
+$action-ghost: transparent;
+$action-ghost-hover: $neutral-200; // Light oat background appears on hover
+$action-ghost-text: $neutral-800;
+
+
+$status-success:    $success-500;    // Green (e.g., "Order Completed" badge).
+$status-danger:     $crimson-500; // Red (e.g., "Delete Item" button, or an error message).
+$status-warning:    $amber-500;   // Yellow/Orange (e.g., "Missing Ingredients" alert).
+$status-info:       hsl(207, 28%, 40%);      // Blue (e.g., "New Update Available" banner).
+// --------------------------------------------------------------------------
+// 2. Typography System
+// --------------------------------------------------------------------------
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+$font-family-serif:      'Newsreader', Georgia, serif;
+$font-family-headline:   'Fraunces', serif;
+$font-family-label:      'Fraunces', serif;
+$font-family-body:       'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+// Bootstrap font mappings
+$font-family-base:       $font-family-body; // Fixed: Now correctly maps to Jakarta Sans
+$headings-font-family:   $font-family-headline;
+$headings-font-weight:   700;
+$headings-color:         $text-primary;
+
+
+// --------------------------------------------------------------------------
+// 3. Bootstrap Body & Theme Colors Mapping
+// --------------------------------------------------------------------------
+$body-bg:                $bg-canvas;
+$body-color:             $neutral-800;
+
 $theme-colors: (
   "primary":    $brand-primary,
   "secondary":  $brand-secondary,
-  "dark":       $brand-neutral,
-  "light":      $brand-tertiary,
-  "danger":     $danger-color
+  "success":    $status-success,     // Sage Green acts as operational success
+  "info":       $status-info,       // Keep your custom slate blue
+  "warning":    $status-warning,    // Pause warnings
+  "danger":     $status-danger,  // Destructive / 86'd indicators
+  "light":      $bg-surface-sunken,
+  "dark":       $text-primary
 );
+
+
+// --------------------------------------------------------------------------
+// 4. Links & Focus Rings
+// --------------------------------------------------------------------------
+$link-color:             $neutral-500;
+$link-hover-color:       $brand-primary-dark;
+$link-decoration:        none;
+$focus-ring-color:       rgba($brand-primary, 0.25);
+$focus-ring-width:       0.2rem;
+
+
+// --------------------------------------------------------------------------
+// 5. Borders, Radius & Shadows
+// --------------------------------------------------------------------------
+$border-color:           $border-subtle;
+$border-radius-sm:       0.5rem;    // 8px
+$border-radius:          0.75rem;   // 12px (Standard card/input radius)
+$border-radius-lg:       1rem;      // 16px (Modals, Panels)
+$border-radius-xl:       1.25rem;   // 20px (Chits, Pill sheets)
+$border-radius-pill:     50rem;
+
+$box-shadow-sm:          0 1px 2px rgba(44, 43, 41, 0.05);
+$box-shadow:             0 4px 6px -1px rgba(44, 43, 41, 0.06), 0 2px 4px -2px rgba(44, 43, 41, 0.04);
+$box-shadow-lg:          0 10px 25px -3px rgba(44, 43, 41, 0.1), 0 4px 6px -4px rgba(44, 43, 41, 0.05);
+
+
+// --------------------------------------------------------------------------
+// 6. Buttons
+// --------------------------------------------------------------------------
+$btn-padding-y:          0.625rem;  // ~10px
+$btn-padding-x:          1.25rem;   // ~20px
+$btn-font-weight:        600;
+$btn-font-family:        $font-family-sans-serif;
+$btn-border-radius:      $border-radius;
+$btn-focus-box-shadow:   0 0 0 0.2rem rgba($brand-primary, 0.25);
+// (Removed dead code: $btn-primary-bg and $btn-primary-border)
+
+
+// --------------------------------------------------------------------------
+// 7. Cards & Chit Surfaces
+// --------------------------------------------------------------------------
+$card-bg:                $bg-surface;
+$card-color:             $text-primary;
+$card-border-color:      $border-subtle;
+$card-border-width:      1px;
+$card-border-radius:     $border-radius-lg;
+$card-spacer-y:          1rem;
+$card-spacer-x:          1rem;
+$card-box-shadow:        $box-shadow;
+
+
+// --------------------------------------------------------------------------
+// 8. Forms & Inputs
+// --------------------------------------------------------------------------
+$input-bg:               $bg-surface-sunken; // Fixed hardcoded hex
+$input-color:            $text-primary;
+$input-border-color:     $border-subtle;
+$input-border-radius:    $border-radius;
+$input-focus-bg:         $bg-surface;
+$input-focus-border-color: $brand-primary;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($brand-primary, 0.15);
+$input-placeholder-color: $text-secondary;
+$input-height:           2.75rem;   // ~44px minimum touch target
+
+$form-check-input-checked-bg-color:     $brand-secondary;
+$form-check-input-checked-border-color: $brand-secondary;
+
+
+// --------------------------------------------------------------------------
+// 9. Modals & Offcanvas
+// --------------------------------------------------------------------------
+$modal-content-bg:             $bg-surface;
+$modal-content-border-color:   $border-subtle;
+$modal-content-border-radius:  $border-radius-xl;
+$modal-backdrop-bg:            $text-primary;
+$modal-backdrop-opacity:       0.55;
+$modal-header-border-color:    $bg-surface-sunken; // Fixed hardcoded hex
+$modal-footer-border-color:    $border-subtle;
+
+$offcanvas-bg-color:           $bg-surface;
+$offcanvas-border-color:       $border-subtle;
+
+
+// --------------------------------------------------------------------------
+// 10. Badges & Navigation Pills
+// --------------------------------------------------------------------------
+$badge-font-size:        0.75rem;
+$badge-font-weight:      600;
+$badge-padding-y:        0.35em;
+$badge-padding-x:        0.65em;
+$badge-border-radius:    $border-radius-sm;
+
+$nav-pills-border-radius: $border-radius;
+$nav-pills-link-active-color: $text-inverse;
+$nav-pills-link-active-bg:    $brand-primary;
+
+
+// --------------------------------------------------------------------------
+// 11. Z-Index Layering (NEW)
+// --------------------------------------------------------------------------
+$zindex-dropdown:           1000;
+$zindex-sticky:             1020; 
+$zindex-fixed:              1030;
+$zindex-modal-backdrop:     1040;
+$zindex-offcanvas-backdrop: 1040;
+$zindex-modal:              1050; 
+$zindex-offcanvas:          1050;

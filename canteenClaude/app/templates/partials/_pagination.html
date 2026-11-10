@@ -1,0 +1,89 @@
+{% if orders and orders.pages > 1 %}
+<div class="pagination-container d-flex flex-column flex-md-row justify-content-between align-items-center mt-3 pt-3 gap-3">
+    
+    <span class="text-muted small fw-medium">
+        Showing page <strong class="text-dark">{{ orders.page }}</strong> of <strong class="text-dark">{{ orders.pages }}</strong> ({{ orders.total }} total items)
+    </span>
+
+    <!-- The Source of Truth: Flask perfectly remembers every active filter -->
+    {% macro page_url(p) %}
+        {{ url_for('admin.order_history', 
+            page=p, 
+            q=request.args.get('q', ''), 
+            date_preset=request.args.get('date_preset', ''), 
+            start_date=request.args.get('start_date', ''), 
+            end_date=request.args.get('end_date', ''), 
+            min_price=request.args.get('min_price', ''), 
+            max_price=request.args.get('max_price', ''), 
+            status=request.args.getlist('status')
+        ) }}
+    {% endmacro %}
+
+    <nav aria-label="Order pagination">
+        <ul class="pagination pagination-sm m-0 hearth-pagination align-items-center gap-1">
+            
+            <!-- Previous Button -->
+
+                <li class="page-item">
+                    <!-- Notice: hx-include is completely gone. We trust the macro. -->
+                    <button type="button" class="page-link border-0 bg-transparent text-dark rounded-circle
+                    {% if not orders.has_prev %} invisible{% endif %}" 
+                            hx-get="{{ page_url(1) }}"
+                            hx-target="#historyResults"
+                            hx-push-url="true">
+                        <i class="bi bi-chevron-double-left small"></i>
+                    </button>
+                </li>
+                <li class="page-item">
+                    <button type="button" class="page-link border-0 bg-transparent text-dark rounded-circle
+                        {% if not orders.has_prev %} invisible{% endif %}" 
+                            hx-get="{{ page_url(orders.prev_num) }}"
+                            hx-target="#historyResults"
+                            hx-push-url="true">
+                        <i class="bi bi-chevron-left small"></i>
+                    </button>
+                </li>
+
+
+            <!-- Page Number Links (1, 2, 3...) -->
+            {% for p in page_range %}
+                <li class="page-item {% if p == orders.page %}active{% endif %}">
+                    <button type="button" class="page-link border-0 rounded-circle fw-medium text-center" 
+                            style="width: 32px; height: 32px; line-height: 20px;" 
+                            hx-get="{{ page_url(p) }}"
+                            hx-target="#historyResults"
+                            hx-push-url="true">
+                        {{ p }}
+                    </button>
+                </li>
+            {% endfor %}
+
+            <!-- Next Button -->
+            
+                <li class="page-item">
+                    <button type="button" class="page-link border-0 bg-transparent text-dark rounded-circle 
+                            {% if not orders.has_next %} invisible{% endif %}" 
+                            hx-get="{{ page_url(orders.next_num) }}"
+                            hx-target="#historyResults"
+                            hx-push-url="true">
+                        <i class="bi bi-chevron-right small"></i>
+                    </button>
+                </li>
+
+
+
+                <li class="page-item">
+                    <button type="button" class="page-link border-0 bg-transparent text-dark rounded-circle
+                            {% if not orders.has_next %} invisible{% endif %}" 
+                            hx-get="{{ page_url(orders.pages) }}"
+                            hx-target="#historyResults"
+                            hx-push-url="true">
+                        <i class="bi bi-chevron-double-right small"></i>
+                    </button>
+                </li>
+            
+
+        </ul>
+    </nav>
+</div>
+{% endif %}

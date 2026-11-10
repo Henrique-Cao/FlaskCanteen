@@ -12,7 +12,10 @@
             href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap"
             rel="stylesheet"
         />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap"
+            rel="stylesheet"
+        />
         <!-- Bootstrap 5 & Icons -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -30,55 +33,99 @@
         />
         {% block extra_css %}{% endblock %}
     </head>
-    <body style="background-color: #faf7f2; color: #2d2319">
+    <body class="vh-100 overflow-hidden d-flex flex-column">
         <!-- Desktop Top Navbar -->
-        <header>
-            <nav class="navbar fixed-top navbar-top px-3 py-2 py-md-3 shadow-sm">
-                <div class="container-fluid d-flex align-items-center justify-content-between max-width-lg">
-                <a class="navbar-brand m-0" href="{{ url_for('main.index') }}">Hearthside</a>
-
-                <div class="d-none d-md-flex align-items-center gap-4">
-                    <a class="nav-link-desktop {{ 'active' if request.endpoint == 'main.index' }}" href="{{ url_for('main.index') }}">Home</a>
-                    <a class="nav-link-desktop {{ 'active' if request.endpoint == 'main.menu' }}" href="{{ url_for('main.menu') }}">Menu</a>
-                    <a class="nav-link-desktop {{ 'active' if request.endpoint == 'main.track_order' }}" href="{{ url_for('main.track_order') }}">Track Order</a>
+        
+        <nav class="app-navbar flex-shrink-0">
+            <div class="navbar-container container-fluid">
+                <div class="brand-container col-6 col-lg-4 d-flex align-items-center gap-2">
+                    <!-- Brand Name -->
+                    <a href="{{ url_for('main.index') }}" class="h4 brand-title fw-bolder  m-0 text-decoration-none">Hearthside</a>
+                    <span class="brand-divider d-none d-md-inline" aria-hidden="true">|</span>
+                    <span class="brand-tagline fw-light fs-7     d-none d-md-inline">Tavern &amp; Canteen</span>
                 </div>
-
-                <div class="d-flex align-items-center ms-auto ms-md-0">
-                    <a href="{{ url_for('admin.index') }}" class="admin-login-link d-flex align-items-center gap-2">
-                    <span class="small d-none d-md-inline">Admin Login</span>
-                    <i class="bi bi-person-circle fs-5"></i>
-                    </a>
+                <div class="nav-links d-none d-lg-flex col-lg-4 d-none d-lg-flex justify-content-center align-items-center gap-4">
+                <!-- Add any action buttons or links for the navbar here -->
+                 <a class="nav-item-link" href="">Home</a>
+                 <a class="nav-item-link" href="#menu">Menu</a>
+                <a class="nav-item-link" href="">Track</a>
                 </div>
+                
+                <div class="nav-actions col-6 col-lg-4 d-flex justify-content-end align-items-center gap-2">
+                    <button class="btn btn-outline-warm d-flex py-1 gap-1 justify-content-center">
+                        <i class="bi bi-cart-fill"></i>
+                        <div class="label">Cart</div>
+                    </button>
+                    <button class="btn btn-primary d-flex py-1 gap-1 justify-content-center" data-bs-toggle="modal"
+                data-bs-target="#adminLoginModal">
+                        <i class="bi bi-person-fill"></i>
+                        <div class="label">Login</div>
+                    </button>
                 </div>
-            </nav>
-        </header>
+                
+                </div>
+            </div>
+            
+        </nav>
+        
+        
 
         <!-- Main Content Wrapper (Adds offset for fixed bars) -->
-        <main class="pt-4 pb-5 mt-4 mb-5">
+        <main class="container-fluid flex-grow-1 d-flex overflow-y-auto p-4 flex-column">
             {% block content %}{% endblock %}
         </main>
-
         <!-- Mobile Bottom Navigation Bar -->
-        <!-- Mobile Bottom Navigation Bar -->
-        
-        <nav class="navbar fixed-bottom nav-mobile-bar px-2 py-1.5 d-md-none shadow-lg">
-            <div class="container-fluid d-flex justify-content-around align-items-center px-0">
-                <a href="{{ url_for('main.index') }}" class="nav-tab-item {{ 'active' if request.endpoint == 'main.index' }}">
-                <i class="bi bi-house-door-fill"></i>
-                <span>Home</span>
-                </a>
-                <a href="{{ url_for('main.menu') }}" class="nav-tab-item {{ 'active' if request.endpoint == 'main.menu' }}">
+         
+        <div class="mobile-bottom-nav d-lg-none px-4">
+            
+            <a class="bottom-nav-item" href="">
                 <i class="bi bi-cup-hot-fill"></i>
-                <span>Menu</span>
-                </a>
-                <a href="{{ url_for('main.track_order') }}" class="nav-tab-item {{ 'active' if request.endpoint == 'main.track_order' }}">
+                <div class="nav-label">Menu</div>
+            </a>
+            <a class="bottom-nav-item" href="">
                 <i class="bi bi-receipt"></i>
-                <span>Track Order</span>
+                <div class="nav-label">Track</div>
+            </a>
+            <a class="bottom-nav-item" href="">
+                <i class="bi bi-cart-fill"></i>
+                <div class="nav-label">Cart</div>
+            </a>
+  
+        </div>
+
+        <!-- <nav
+            class="navbar fixed-bottom nav-mobile-bar px-2 py-1.5 d-md-none shadow-lg"
+        >
+            <div
+                class="container-fluid d-flex justify-content-around align-items-center px-0"
+            >
+                <a
+                    href="{{ url_for('main.index') }}"
+                    class="nav-tab-item {{ 'active' if request.endpoint == 'main.index' }}"
+                >
+                    <i class="bi bi-house-door-fill"></i>
+                    <span>Home</span>
+                </a>
+                <a
+                    href="{{ url_for('main.menu') }}"
+                    class="nav-tab-item {{ 'active' if request.endpoint == 'main.menu' }}"
+                >
+                    <i class="bi bi-cup-hot-fill"></i>
+                    <span>Menu</span>
+                </a>
+                <a
+                    href="{{ url_for('main.track_order') }}"
+                    class="nav-tab-item {{ 'active' if request.endpoint == 'main.track_order' }}"
+                >
+                    <i class="bi bi-receipt"></i>
+                    <span>Track Order</span>
                 </a>
             </div>
-        </nav>
-
+        </nav> -->
+        {% include 'modals/admin_login.html' %}
+        {% block modals %}{% endblock %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
         {% block extra_js %}{% endblock %}
     </body>
 </html>

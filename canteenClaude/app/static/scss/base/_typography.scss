@@ -1,21 +1,82 @@
-// Headline Font Layer (Fraunces)
-h1, h2, h3, h4, h5, .headline-font {
-    font-family: $font-family-headline;
-    font-weight: 700;
-    color: $brand-neutral;
+// ==========================================================================
+// Base: Typography (base/_typography.scss)
+// ==========================================================================
+
+// 1. Root / Body Baseline (Newsreader - Narrative Prose)
+body, .body-font {
+  font-family: $font-family-body;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: $text-primary;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-// Body Text Layer (Newsreader)
-p, body, .body-font {
-    font-family: $font-family-body;
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: mix($brand-neutral, #000, 88%); // Warm off-black shade
+// 2. Editorial Headline Layer (Fraunces - Display & Titles)
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.headline-font {
+  font-family: $font-family-headline;
+  font-weight: 700;
+  line-height: 1.2; // FIX: Tighter line-height prevents multi-line floating
+  color: $text-primary;
+  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
 }
 
-// System Label & Form Component Microcopies
-label, .label-font, .badge {
-    font-family: $font-family-label;
-    font-weight: 500;
-    letter-spacing: 0.01em;
+// 2b. Fluid Display Headers (Automatically scale based on screen size)
+.display-1 { font-size: clamp(3rem, 6vw, 4.5rem); line-height: 1.1; }
+.display-2 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; }
+.display-3 { font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.1; }
+.display-4 { font-size: clamp(1.75rem, 3vw, 3rem); line-height: 1.15; }
+.display-5 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); line-height: 1.15; }
+
+// 3. UI Microcopy, Forms & System Controls (Sans-Serif)
+label,
+.label-font,
+.badge,
+.form-control,
+.form-select,
+.form-text,
+.btn {
+  font-family: $font-family-label;
+  letter-spacing: 0.01em;
+}
+
+// 4. Eyebrow / Overline Microcopy (Tavern Badges, Track Headers, Est. Tags)
+.text-eyebrow,
+.overline {
+  font-family: $font-family-label;
+  font-size: 0.6875rem; // ~11px
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: lighten($text-primary, 25%);
+}
+
+// 5. Secondary Captions & Subtext
+small, .small,
+.subtext, .caption-font {
+  font-size: 0.875rem; // True 14px
+  line-height: 1.45; // FIX: Inverse line-height scaling (tighter than body)
+  color: lighten($text-primary, 25%);
+}
+
+// 6. Currency, Numbers & Order IDs (Tabular Numeric Alignment)
+.price-tag,
+.order-id,
+.numeric-data {
+  font-family: $font-family-label;
+  font-variant-numeric: tabular-nums; // Keeps dollar amounts and digits lined up
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+// 7. Lead Paragraph Hook
+p.lead {
+  font-family: $font-family-body;
+  font-size: 1.15rem; // Slight bump up from base body
+  line-height: 1.5;
+  color: lighten($text-primary, 20%);
 }
