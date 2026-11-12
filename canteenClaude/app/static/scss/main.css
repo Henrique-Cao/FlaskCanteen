@@ -1,8 +1,8 @@
 :root {
   --bs-primary: hsl(12, 52%, 55%);
   --bs-primary-rgb: 181, 93, 68;
-  --bs-body-bg: hsl(35, 30%, 88%);
-  --bs-body-color: hsl(30, 4%, 17%);
+  --bs-body-bg: hsl(12, 12%, 92%);
+  --bs-body-color: hsl(12, 10%, 15%);
 }
 
 body {
@@ -14,7 +14,7 @@ body, .body-font {
   font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   font-size: 1.05rem;
   line-height: 1.6;
-  color: hsl(30, 4%, 17%);
+  color: hsl(12, 10%, 15%);
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6,
   font-family: "Fraunces", serif;
   font-weight: 700;
   line-height: 1.2;
-  color: hsl(30, 4%, 17%);
+  color: hsl(12, 10%, 15%);
   letter-spacing: -0.015em;
   font-optical-sizing: auto;
 }
@@ -74,14 +74,14 @@ label,
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: hsl(30, 4%, 42%);
+  color: hsl(12, 10%, 40%);
 }
 
 small, .small,
 .subtext, .caption-font {
   font-size: 0.875rem;
   line-height: 1.45;
-  color: hsl(30, 4%, 42%);
+  color: hsl(12, 10%, 40%);
 }
 
 .price-tag,
@@ -97,7 +97,7 @@ p.lead {
   font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   font-size: 1.15rem;
   line-height: 1.5;
-  color: hsl(30, 4%, 37%);
+  color: hsl(12, 10%, 35%);
 }
 
 .btn {
@@ -154,8 +154,8 @@ p.lead {
 .btn-menu-filter,
 .btn-category {
   background-color: hsl(0, 0%, 100%);
-  border: 1px solid hsl(35, 25%, 85%);
-  color: hsl(30, 4%, 17%);
+  border: 1px solid hsl(12, 10%, 85%);
+  color: hsl(12, 10%, 15%);
   font-weight: 500;
 }
 @media (hover: hover) {
@@ -173,7 +173,7 @@ p.lead {
 .btn-menu-filter:active,
 .btn-category.active,
 .btn-category:active {
-  border-color: hsl(35, 25%, 85%) !important;
+  border-color: hsl(12, 10%, 85%) !important;
   background-color: hsl(12, 52%, 55%) !important;
   color: hsl(0, 0%, 100%) !important;
   font-weight: 600;
@@ -200,8 +200,8 @@ p.lead {
 }
 
 .btn-navbar {
-  border: 1px solid hsl(35, 25%, 85%);
-  color: hsl(30, 4%, 17%);
+  border: 1px solid hsl(12, 10%, 85%);
+  color: hsl(12, 10%, 15%);
   min-width: 5.25rem;
   font-weight: 600;
 }
@@ -209,7 +209,7 @@ p.lead {
   .btn-navbar:not(:disabled):hover {
     background-color: hsl(0, 0%, 96%);
     border-color: hsl(0, 0%, 92%);
-    color: hsl(30, 4%, 17%);
+    color: hsl(12, 10%, 15%);
   }
 }
 .btn-navbar.btn-primary {
@@ -308,7 +308,7 @@ p.lead {
 
 @media (hover: hover) {
   .btn-hover-shadow:not(:disabled):hover {
-    box-shadow: 0 6px 14px rgba(45.084, 43.35, 41.616, 0.12);
+    box-shadow: 0 6px 14px rgba(42.075, 35.955, 34.425, 0.12);
   }
 }
 
@@ -333,22 +333,22 @@ p.lead {
 .btn-ghost {
   background-color: transparent;
   border-color: transparent;
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
 }
 @media (hover: hover) {
   .btn-ghost:not(:disabled):hover {
-    background-color: rgba(45.084, 43.35, 41.616, 0.08);
-    color: hsl(30, 4%, 17%);
+    background-color: rgba(42.075, 35.955, 34.425, 0.08);
+    color: hsl(12, 10%, 15%);
   }
 }
 .btn-ghost:active {
-  background-color: rgba(45.084, 43.35, 41.616, 0.14) !important;
+  background-color: rgba(42.075, 35.955, 34.425, 0.14) !important;
 }
 
 .btn-ghost-danger {
   background-color: transparent;
   border-color: transparent;
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
 }
 @media (hover: hover) {
   .btn-ghost-danger:not(:disabled):hover {
@@ -364,7 +364,7 @@ p.lead {
 
 .card, .order-card, .chit-card, .card-dish {
   background-color: hsl(0, 0%, 100%);
-  border: 1px solid hsl(35, 25%, 85%);
+  border: 1px solid hsl(12, 10%, 85%);
   border-radius: 1rem;
   box-shadow: 0 4px 6px -1px rgba(44, 43, 41, 0.06), 0 2px 4px -2px rgba(44, 43, 41, 0.04);
   overflow: hidden;
@@ -383,7 +383,7 @@ p.lead {
   aspect-ratio: 16/10;
   overflow: hidden;
   position: relative;
-  background-color: hsl(35, 30%, 96%);
+  background-color: hsl(12, 15%, 96%);
 }
 .card-dish .card-img-wrap img {
   width: 100%;
@@ -406,12 +406,12 @@ p.lead {
   position: relative;
 }
 .chit-card:hover {
-  background-color: rgba(247.86, 245.31, 241.74, 0.6);
+  background-color: rgba(246.33, 243.882, 243.27, 0.6);
   border-color: rgba(199.92, 104.448, 80.58, 0.5);
 }
 .chit-card.active-chit {
   border-color: hsl(12, 52%, 55%);
-  background-color: hsl(35, 30%, 96%);
+  background-color: hsl(12, 15%, 96%);
   box-shadow: 0 0 0 1px hsl(12, 52%, 55%);
 }
 .chit-card .chit-header {
@@ -423,7 +423,7 @@ p.lead {
 .chit-card .chit-meta {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
   font-size: 0.75rem;
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
 }
 
 .checklist-item {
@@ -431,7 +431,7 @@ p.lead {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid hsl(35, 30%, 96%);
+  border-bottom: 1px solid hsl(12, 15%, 96%);
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -441,15 +441,15 @@ p.lead {
   border-bottom: none;
 }
 .checklist-item:hover {
-  background-color: rgba(247.86, 245.31, 241.74, 0.7);
+  background-color: rgba(246.33, 243.882, 243.27, 0.7);
 }
 .checklist-item.is-fired {
-  background-color: hsl(35, 30%, 96%);
+  background-color: hsl(12, 15%, 96%);
   opacity: 0.7;
 }
 .checklist-item.is-fired .dish-title {
   text-decoration: line-through;
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
 }
 
 .order-card {
@@ -462,14 +462,13 @@ p.lead {
   position: relative;
 }
 .order-card:hover {
-  background-color: rgba(247.86, 245.31, 241.74, 0.6);
+  background-color: rgba(246.33, 243.882, 243.27, 0.6);
   border-color: rgba(199.92, 104.448, 80.58, 0.5);
 }
 .order-card.active-order {
-  border-color: hsl(12, 52%, 55%);
-  border-width: 2px;
-  background-color: hsl(35, 30%, 96%);
-  box-shadow: 0 0 0 1px hsl(12, 52%, 55%);
+  border-color: rgba(199.92, 104.448, 80.58, 0.25);
+  border-width: 0.2rem;
+  background-color: hsl(12, 15%, 96%);
 }
 
 .proposition-icon {
@@ -487,7 +486,7 @@ p.lead {
   height: 10.75rem;
   -o-object-fit: cover;
      object-fit: cover;
-  border: 1px solid rgba(45.084, 43.35, 41.616, 0.15);
+  border: 1px solid rgba(42.075, 35.955, 34.425, 0.15);
   padding: 3px;
   background-color: hsl(0, 0%, 100%);
 }
@@ -499,7 +498,7 @@ p.lead {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: hsl(35, 30%, 96%);
+  background-color: hsl(12, 15%, 96%);
   border: 1px solid rgba(199.92, 104.448, 80.58, 0.28);
   color: hsl(12, 52%, 55%);
 }
@@ -537,9 +536,9 @@ p.lead {
   border: 1px solid rgba(218.79, 119.306, 5.61, 0.3);
 }
 .badge.badge-neutral {
-  background-color: hsl(35, 30%, 96%);
-  color: hsl(30, 4%, 17%);
-  border: 1px solid hsl(35, 25%, 85%);
+  background-color: hsl(12, 15%, 96%);
+  color: hsl(12, 10%, 15%);
+  border: 1px solid hsl(12, 10%, 85%);
 }
 .badge.badge-danger {
   background-color: hsl(0, 71%, 94%);
@@ -568,9 +567,9 @@ p.lead {
   font-weight: 500;
   padding: 0.35rem 0.75rem;
   border-radius: 0.5rem;
-  border: 1px solid hsl(35, 25%, 85%);
+  border: 1px solid hsl(12, 10%, 85%);
   background-color: hsl(0, 0%, 100%);
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -642,7 +641,7 @@ p.lead {
 }
 .input-pill-group {
   background-color: #F7F3EC;
-  border: 1px solid rgba(123.93, 114.75, 105.57, 0.1);
+  border: 1px solid rgba(123.93, 109.242, 105.57, 0.1);
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 .input-pill-group:focus-within {
@@ -670,19 +669,19 @@ p.lead {
   /* Default state for inactive numbers */
 }
 .hearth-pagination .page-item .page-link {
-  color: hsl(30, 8%, 20%); /* Dark charcoal */
+  color: hsl(12, 8%, 20%); /* Dark charcoal */
   transition: all 0.2s ease;
 }
 .hearth-pagination .page-item .page-link:hover {
-  background-color: hsl(35, 30%, 88%); /* Soft beige hover */
-  color: hsl(30, 4%, 17%);
+  background-color: hsl(12, 12%, 92%); /* Soft beige hover */
+  color: hsl(12, 10%, 15%);
 }
 .hearth-pagination .page-item .page-link {
   /* Remove the ugly blue focus ring */
 }
 .hearth-pagination .page-item .page-link:focus {
   box-shadow: none;
-  background-color: hsl(35, 30%, 88%);
+  background-color: hsl(12, 12%, 92%);
 }
 .hearth-pagination .page-item {
   /* The Active Page State */
@@ -705,7 +704,7 @@ p.lead {
   font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
-  color: hsl(30, 4%, 17%);
+  color: hsl(12, 10%, 15%);
   padding-bottom: 4px;
 }
 
@@ -725,11 +724,11 @@ p.lead {
   font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   font-size: 1.35rem;
   font-weight: bold;
-  color: hsl(30, 4%, 17%);
+  color: hsl(12, 10%, 15%);
 }
 
 .menu-item-description {
-  color: hsl(30, 4%, 17%) !important;
+  color: hsl(12, 10%, 15%) !important;
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -757,7 +756,7 @@ p.lead {
   z-index: 40;
   background-color: hsl(0, 0%, 100%);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid hsl(35, 25%, 85%);
+  border-bottom: 1px solid hsl(12, 10%, 85%);
   padding: 0.75rem 1rem;
 }
 .app-navbar .navbar-container {
@@ -781,7 +780,7 @@ p.lead {
   font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
 }
 .app-navbar .nav-links {
   display: none;
@@ -796,7 +795,7 @@ p.lead {
 .app-navbar .nav-links .nav-item-link {
   position: relative;
   text-decoration: none;
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
   transition: color 0.15s ease-in-out;
 }
 .app-navbar .nav-links .nav-item-link::after {
@@ -833,7 +832,7 @@ p.lead {
   right: 0;
   z-index: 40;
   background-color: hsl(0, 0%, 100%);
-  border-top: 1px solid hsl(35, 25%, 85%);
+  border-top: 1px solid hsl(12, 10%, 85%);
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -851,7 +850,7 @@ p.lead {
   justify-content: center;
   min-height: 44px;
   padding: 0.25 rem 0.5rem;
-  color: hsl(30, 8%, 45%);
+  color: hsl(12, 8%, 45%);
   text-decoration: none;
   background: none;
   border: none;
@@ -862,7 +861,7 @@ p.lead {
 }
 .mobile-bottom-nav .bottom-nav-item:hover {
   color: hsl(12, 52%, 55%);
-  background-color: rgba(123.93, 114.75, 105.57, 0.05);
+  background-color: rgba(123.93, 109.242, 105.57, 0.05);
 }
 .mobile-bottom-nav .bottom-nav-item .nav-label {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
@@ -881,11 +880,11 @@ p.lead {
   z-index: 1020;
 }
 .sticky-category-bar .filter-toolbar {
-  background-color: rgba(247.86, 245.31, 241.74, 0.94);
+  background-color: rgba(246.33, 243.882, 243.27, 0.94);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(123.93, 114.75, 105.57, 0.08);
-  box-shadow: 0 4px 12px rgba(123.93, 114.75, 105.57, 0.04);
+  border: 1px solid rgba(123.93, 109.242, 105.57, 0.08);
+  box-shadow: 0 4px 12px rgba(123.93, 109.242, 105.57, 0.04);
 }
 
 .search-bar {

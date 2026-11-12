@@ -14,26 +14,33 @@ $terracotta-700: hsl(12, 52%, 35%); // Deep Brick (#8A3E25)
 
 // Sage (Support Brand)
 $sage-100:       hsl(102, 12%, 94%);
-$sage-700:       hsl(102, 12%, 36%);
 $sage-500:       hsl(102, 12%, 56%); // Base (#8B9D83)
+$sage-700:       hsl(102, 12%, 36%);
 
-// Sand & Charcoal (Neutrals: Surfaces, Borders & Ink)
+// Brand-Tinted Charcoals & Alabaster (Neutrals locked to Hue 12)
 $neutral-50:     hsl(0, 0%, 100%);   // Pure White
-$neutral-100:    hsl(35, 30%, 96%);  // Soft Parchment (#FAF7F2 - Replaces cream/off-white)
-$neutral-200:    hsl(35, 30%, 88%);  // Light Alabaster Canvas (#EBE4D8)
-$neutral-300:    hsl(35, 25%, 85%);  // Warm Sand Borders (#E2D9D0)
-$neutral-500:    hsl(30, 8%, 45%);   // Muted Charcoal (#7A6E67)
-$neutral-800:    hsl(30, 8%, 20%);   // Body Text
-$neutral-900:    hsl(30, 4%, 17%);   // Headline Ink (#2C2B29)
+$neutral-100:    hsl(12, 15%, 96%);  // Brand-Tinted Parchment 
+$neutral-200:    hsl(12, 12%, 92%);  // Brand-Tinted Canvas 
+$neutral-300:    hsl(12, 10%, 85%);  // Brand-Tinted Borders 
+$neutral-500:    hsl(12, 8%, 45%);   // Brand-Tinted Charcoal (Secondary text)
+$neutral-800:    hsl(12, 8%, 20%);   // Brand-Tinted Body Text
+$neutral-900:    hsl(12, 10%, 15%);  // Brand-Tinted Headline Ink
 
 // Alerts (Amber & Crimson)
 $amber-100:      hsl(32, 95%, 94%);  
 $amber-500:      hsl(32, 95%, 44%);  // Warning / Accent (#D97706)
 $crimson-100:    hsl(0, 71%, 94%);   
 $crimson-500:    hsl(0, 71%, 38%);   // Destructive (#A61C1C)
+
+
 // Success
-$success-100:      hsl(140, 38%, 94%);
-$success-500:      hsl(140, 38%, 45%);
+$success-100:      hsl(140, 38%, 94%); // (Very light mint)
+$success-500:      hsl(140, 38%, 45%); // (Standard green)
+
+
+$success-700:      hsl(140, 38%, 25%); // Deep forest green
+
+
 
 
 // --------------------------------------------------------------------------
@@ -71,6 +78,10 @@ $status-success:    $success-500;    // Green (e.g., "Order Completed" badge).
 $status-danger:     $crimson-500; // Red (e.g., "Delete Item" button, or an error message).
 $status-warning:    $amber-500;   // Yellow/Orange (e.g., "Missing Ingredients" alert).
 $status-info:       hsl(207, 28%, 40%);      // Blue (e.g., "New Update Available" banner).
+
+$status-success-bg:   $success-100;
+$status-success-text: $success-700;
+
 // --------------------------------------------------------------------------
 // 2. Typography System
 // --------------------------------------------------------------------------

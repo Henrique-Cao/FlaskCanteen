@@ -9,7 +9,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Tuple
 
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, Response, app, jsonify, request
 from app.models import Order  # Adjust model import paths to match your project
 
 analytics_api = Blueprint("analytics_api", __name__)
@@ -28,6 +28,7 @@ def _calculate_sgt_time_windows(time_range: str, now: datetime) -> Tuple[datetim
             A 4-element tuple containing local datetimes:
             (start_date, end_date, prev_start, prev_end)
     """
+  
     if time_range == "today":
         # Midnight today (00:00:00) to right now
         start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -70,15 +71,17 @@ def get_analytics_data() -> Tuple[Response, int]:
         now: datetime = datetime.now(SG_TZ)  # Current local Singapore Time
 
         start_date, end_date, prev_start, prev_end = _calculate_sgt_time_windows(time_range, now)
-                
+
+
+        print(f"Start Date: {start_date}, End Date: {end_date}, Prev Start: {prev_start}, Prev End: {prev_end}")
         current_orders: List[Order] = Order.query.filter(
-            Order.status.in_(["collected", "ready"]),
+            Order.status.in_(["completed", "ready"]),
             Order.ready_at >= start_date,
             Order.ready_at <= end_date,
         ).all()
         
         prev_orders: List[Order] = Order.query.filter(
-            Order.status.in_(["collected", "ready"]),
+            Order.status.in_(["completed", "ready"]),
             Order.created_at >= prev_start,
             Order.created_at < prev_end,
         ).all()
@@ -89,11 +92,12 @@ def get_analytics_data() -> Tuple[Response, int]:
         # ----------------------------------------------------------------------
         # Check if previous period actually has valid order records
         has_prev_data: bool = len(prev_orders) > 0
-        
         # --- KPI Calculations ---
         revenue: float = round(sum(o.total_price for o in current_orders if o.total_price), 2)
-        prev_revenue: float = sum(o.total_price for o in prev_orders if o.total_price)
+        prev_revenue: float = round(sum(o.total_price for o in prev_orders if o.total_price), 2)
         revenue_trend: str = f"{((revenue - prev_revenue) / prev_revenue * 100):+.1f}%" if prev_revenue else "+0.0%"
+
+
         
         orders_completed: int = len(current_orders)
         prev_orders_completed: int = len(prev_orders)
@@ -101,8 +105,8 @@ def get_analytics_data() -> Tuple[Response, int]:
 
 
         dishes_completed: int = sum(item.quantity for o in current_orders for item in o.items)
-        meals_cooked: int = sum(item.quantity for o in current_orders for item in o.items)            
-        prev_meals: int = sum(item.quantity for o in prev_orders for item in o.items)
+        meals_cooked: int = round(sum(item.quantity for o in current_orders for item in o.items), 2)            
+        prev_meals: int = round(sum(item.quantity for o in prev_orders for item in o.items), 2)
 
         # Order Prep Time Calculation (in minutes)
         prep_times: List[float] = [
@@ -247,3 +251,39 @@ def get_analytics_data() -> Tuple[Response, int]:
 
     except Exception as err:
         return jsonify({"error": "Internal server error processing analytics", "details": str(err)}), 500
+
+
+@analytics_api.route("/revenue", methods=["GET"])
+def update_revenue():
+    try:
+        time_range = request.args.get("range", "7d")
+        now = datetime.now(SG_TZ)
+        start_date, end_date, prev_start, prev_end = _calculate_sgt_time_windows(time_range, now)
+
+        current_orders = Order.query.filter(
+            Order.status.in_(["completed", "ready"]),
+            Order.ready_at >= start_date,
+            Order.ready_at <= end_date,
+        ).all()
+        previous_orders = Order.query.filter(
+            Order.status.in_(["completed", "ready"]),
+            Order.ready_at >= prev_start,
+            Order.ready_at < prev_end,
+        ).all()
+
+        revenue = round(sum(float(order.total_price or 0) for order in current_orders), 2)
+        previous_revenue = sum(float(order.total_price or 0) for order in previous_orders)
+        revenue_trend = (
+            f"{((revenue - previous_revenue) / previous_revenue * 100):+.1f}%"
+            if previous_revenue else "+0.0%"
+        )
+        
+        print(f"Revenue: {revenue}, Revenue Trend: {revenue_trend}")
+
+        return f"""
+            <div id="revenue-kpi" hx-swap-oob="true">${revenue}</div>
+            <div id="revenue-trend-kpi" hx-swap-oob="true">{revenue_trend}</div>
+        """
+
+    except Exception as err:
+        return jsonify({"error": "Internal server error processing revenue", "details": str(err)}), 500

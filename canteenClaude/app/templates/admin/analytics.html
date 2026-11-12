@@ -21,121 +21,109 @@
         </div>
     </div>
 
-    <!-- Canteen KPI Cards (3 Cards) -->
-    <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+    <!-- Canteen KPI Cards (4 Cards) -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
         <!-- Total Revenue -->
         <div class="col">
-            <div class="card border-0 bg-dark text-white p-3 shadow-sm h-100 rounded-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <span class="text-uppercase text-white-50 fs-7 fw-bold">Total Revenue</span>
-                        <h3 class="fw-bold mt-1 mb-1 text-light" id="kpi-revenue">$0.00</h3>
-                        <span class="badge bg-success text-white" id="kpi-revenue-trend">+0%</span>
-                    </div>
-                    <i class="bi bi-currency-dollar fs-1 opacity-50"></i>
-                </div>
+            <div class="card h-100 p-3" 
+                hx-get="/api/analytics/revenue?range=${range}" 
+                hx-trigger="every 3s" 
+                hx-swap="none">
+
+                <!-- Flask initially renders the baseline data here, 
+                    then HTMX swaps this interior HTML every 30s -->
+                <h6 class="text-muted">Total Revenue</h6>
+                <div class="card"><h2 id="revenue-kpi">$333.18</h2></div>
+                <div class="card"><h2 id="revenue-trend-kpi">+0.0%</h2></div>
             </div>
         </div>
 
         <!-- Total Meals Cooked -->
         <div class="col">
-            <div class="card border-0 bg-primary text-white p-3 shadow-sm h-100 rounded-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <span class="text-uppercase text-white-50 fs-7 fw-bold">Total Orders Completed</span>
-                        <h3 class="fw-bold mt-1 mb-1" id="kpi-orders-completed">0</h3>
-                        <span class="badge bg-light text-primary" id="kpi-orders-trend">+0%</span>
-                    </div>
-                    <i class="bi bi-egg-fried fs-1 opacity-50"></i>
-                </div>
+            <div class="card h-100">
+                
             </div>
         </div>
 
         <!-- Avg Kitchen Prep Speed -->
         <div class="col">
-            <div class="card border-0 bg-warning text-dark p-3 shadow-sm h-100 rounded-3">
-                <div class="d-flex justify-content-between align-items-start">
+            <div class="card h-100">
+                
+            </div>
+        </div>
+        <!-- Highest Traffic Time -->
+        <div class="col">
+            <div class="card h-100">
+                
+            </div>
+        </div>
+    </div>
+    <!-- Row 2: Charts and Distribution -->
+    <div class="row g-4 mb-4">
+        
+        <!-- Left Side: Wide Chart (Takes up 8 of 12 columns on desktop) -->
+        <div class="col-12 col-lg-8">
+            <div class="card h-100 p-4">
+                <h5>Today's Hourly Revenue Trend</h5>
+                <!-- Bar chart canvas goes here -->
+            </div>
+        </div>
+        
+        <!-- Right Side: Narrow List (Takes up 4 of 12 columns on desktop) -->
+        <div class="col-12 col-lg-4">
+            <div class="card h-100 p-4">
+                <h5>Item Sales Distribution</h5>
+                
+                <!-- Using Flexbox inside the card for the list items -->
+                <div class="d-flex flex-column gap-3 mt-3">
+                    <!-- Progress Bar Item -->
                     <div>
-                        <span class="text-uppercase text-dark-50 fs-7 fw-bold">Avg Kitchen Prep Speed</span>
-                        <h3 class="fw-bold mt-1 mb-1" id="kpi-prep-speed">0.0m</h3>
-                        <span class="badge bg-dark text-white" id="kpi-prep-trend">0m vs prev</span>
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>Beef Burger</span>
+                            <span class="text-muted">8 items (38%)</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-primary" style="width: 38%"></div>
+                        </div>
                     </div>
-                    <i class="bi bi-stopwatch fs-1 opacity-50"></i>
+                    <!-- ... additional progress bars ... -->
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Practical Kitchen Charts Row -->
-    <div class="row row-cols-1 row-cols-lg-3 g-3 mb-4">
-        <!-- Peak Rush Hours -->
-        <div class="col">
-            <div class="card border-0 shadow-sm h-100 rounded-3">
-                <div class="card-header bg-white py-3 border-0">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>Peak Rush Hours</h6>
-                </div>
-                <div class="card-body">
-                    <div id="rushHoursChart" style="min-height: 260px;"></div>
-                </div>
+    <div class="row g-4 mb-4">
+        
+        <!-- Left Side: Wide Chart (Takes up 8 of 12 columns on desktop) -->
+        <div class="col-12 col-lg-8">
+            <div class="card h-100 p-4">
+                <h5>Today's Hourly Traffic Trend</h5>
+                <!-- line chart canvas goes here -->
             </div>
-        </div>  
-
-        <!-- Top Selling Dishes -->
-        <div class="col">
-            <div class="card border-0 shadow-sm h-100 rounded-3">
-                <div class="card-header bg-white py-3 border-0">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-fire me-2 text-danger"></i>Top Selling Dishes</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container" style="position: relative; height: 260px;">
-                        <div id="topDishesChart" style="min-height: 260px;"></div>
+        </div>
+        
+        <!-- Right Side: Narrow List (Takes up 4 of 12 columns on desktop) -->
+        <div class="col-12 col-lg-4">
+            <div class="card h-100 p-4">
+                <h5>Category Sales Distribution</h5>
+                
+                <!-- Using Flexbox inside the card for the list items -->
+                <div class="d-flex flex-column gap-3 mt-3">
+                    <!-- Progress Bar Item -->
+                    <div>
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>Hearth Mains</span>
+                            <span class="text-muted">8 items (38%)</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-primary" style="width: 38%"></div>
+                        </div>
                     </div>
+                    <!-- ... additional progress bars ... -->
                 </div>
-            </div>
-        </div>
-
-        <!-- Sales by Category -->
-        <div class="col">
-            <div class="card border-0 shadow-sm h-100 rounded-3">
-                <div class="card-header bg-white py-3 border-0">
-                    <h6 class="fw-bold mb-0"><i class="bi bi-pie-chart me-2 text-success"></i>Sales by Category</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container" style="position: relative; height: 260px;">
-                        <div id="categoryChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Completed Orders Table -->
-    <div class="card border-0 shadow-sm mb-4 rounded-3">
-        <div class="card-header bg-white py-3 border-0">
-            <h6 class="fw-bold mb-0">Recent Completed Orders</h6>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="ps-3">Order ID</th>
-                            <th>Time</th>
-                            <th>Type / Table</th>
-                            <th>Items</th>
-                            <th>Amount</th>
-                            <th class="pe-3">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recentOrdersTable">
-                        <!-- Populated dynamically via JavaScript -->
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
     
-</div>
 {% endblock %}
 
 {% block extra_js %} 
