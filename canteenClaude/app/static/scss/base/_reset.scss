@@ -8,6 +8,9 @@
   --bs-primary-rgb: 181, 93, 68; // Required for transparent background utilities
   --bs-body-bg: #{$bg-canvas};
   --bs-body-color: #{map-get($theme-colors, "dark")};
+  --chart-primary: #{$terracotta-500};
+  --chart-grid: #{$neutral-300};
+  --chart-text: #{$neutral-500};
 }
 
 body {
@@ -17,3 +20,11 @@ body {
 
 }
 
+.container {
+  width: 100%;
+  max-width: 1280px; /* Or your preferred max width */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;  /* Provides a safe edge on smaller screens */
+  padding-right: 24px;
+}

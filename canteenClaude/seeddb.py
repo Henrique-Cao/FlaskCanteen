@@ -16,6 +16,7 @@ app = create_app()
 today = datetime.now()
 
 # Number of orders to seed for yesterday and today respectively.
+NUM_ORDERS_PREVIOUS_DAY = 200
 NUM_ORDERS_YESTERDAY = 200
 NUM_ORDERS_TODAY = 250
 
@@ -83,9 +84,10 @@ def seed_database():
             # background traffic, so charts have visible highs and lows.
             orders = []
             order_number = 1
-            # Seed a realistic traffic pattern for each day, using the configured
-            # order counts while keeping most orders in the meal-period peaks.
+            # Seed a realistic traffic pattern for the previous day, yesterday,
+            # and today, keeping most orders in the meal-period peaks.
             for day_offset, order_count in (
+                (2, NUM_ORDERS_PREVIOUS_DAY),
                 (1, NUM_ORDERS_YESTERDAY),
                 (0, NUM_ORDERS_TODAY),
             ):

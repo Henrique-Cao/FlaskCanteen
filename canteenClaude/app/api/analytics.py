@@ -29,14 +29,15 @@ def _calculate_sgt_time_windows(time_range: str, now: datetime) -> Tuple[datetim
             (start_date, end_date, prev_start, prev_end)
     """
   
-    if time_range == "today":
+    if time_range == "7d":
         # Midnight today (00:00:00) to right now
-        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        end_date = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+        start_date = now - timedelta(days=7)
+        end_date = now
         
-        # Mirror exact same timeframe yesterday (00:00:00 yesterday to yesterday same time)
-        prev_start = start_date - timedelta(days=1)
-        prev_end = end_date - timedelta(days=1)
+        # Prior 7-day window
+        prev_start = now - timedelta(days=14)
+        prev_end = start_date
+        
     elif time_range == "30d":
         start_date = now - timedelta(days=30)
         end_date = now
@@ -44,13 +45,14 @@ def _calculate_sgt_time_windows(time_range: str, now: datetime) -> Tuple[datetim
         # Prior 30-day window
         prev_start = now - timedelta(days=60)
         prev_end = start_date
-    else:  # Default to '7d'
-        start_date = now - timedelta(days=7)
-        end_date = now
+    else:  # Default to 'today'
+        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = now.replace(hour=23, minute=59, second=59, microsecond=999999)
         
-        # Prior 7-day window
-        prev_start = now - timedelta(days=14)
-        prev_end = start_date
+        # Mirror exact same timeframe yesterday (00:00:00 yesterday to yesterday same time)
+        prev_start = start_date - timedelta(days=1)
+        prev_end = end_date - timedelta(days=1)
+
 
     return start_date, end_date, prev_start, prev_end
 
@@ -252,38 +254,3 @@ def get_analytics_data() -> Tuple[Response, int]:
     except Exception as err:
         return jsonify({"error": "Internal server error processing analytics", "details": str(err)}), 500
 
-
-@analytics_api.route("/revenue", methods=["GET"])
-def update_revenue():
-    try:
-        time_range = request.args.get("range", "7d")
-        now = datetime.now(SG_TZ)
-        start_date, end_date, prev_start, prev_end = _calculate_sgt_time_windows(time_range, now)
-
-        current_orders = Order.query.filter(
-            Order.status.in_(["completed", "ready"]),
-            Order.ready_at >= start_date,
-            Order.ready_at <= end_date,
-        ).all()
-        previous_orders = Order.query.filter(
-            Order.status.in_(["completed", "ready"]),
-            Order.ready_at >= prev_start,
-            Order.ready_at < prev_end,
-        ).all()
-
-        revenue = round(sum(float(order.total_price or 0) for order in current_orders), 2)
-        previous_revenue = sum(float(order.total_price or 0) for order in previous_orders)
-        revenue_trend = (
-            f"{((revenue - previous_revenue) / previous_revenue * 100):+.1f}%"
-            if previous_revenue else "+0.0%"
-        )
-        
-        print(f"Revenue: {revenue}, Revenue Trend: {revenue_trend}")
-
-        return f"""
-            <div id="revenue-kpi" hx-swap-oob="true">${revenue}</div>
-            <div id="revenue-trend-kpi" hx-swap-oob="true">{revenue_trend}</div>
-        """
-
-    except Exception as err:
-        return jsonify({"error": "Internal server error processing revenue", "details": str(err)}), 500

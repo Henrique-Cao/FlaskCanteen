@@ -5,6 +5,7 @@ from app.utils.decorators import admin_required
 admin_bp = Blueprint("admin", __name__)
 from collections import defaultdict
 from app.services.order_service import get_filtered_orders_query
+from app.services.analytics_service import get_dashboard_metrics
 
 
 
@@ -30,7 +31,35 @@ def require_admin_for_all_admin_routes():
 @admin_bp.route("/")
 @admin_required
 def index():
+    
     return render_template("admin/analytics.html")
+
+
+
+@admin_bp.route('/analytics/content')
+def analytics_content():
+    """
+    Returns the HTMX partial for the analytics dashboard containing 
+    updated KPIs and Chart data arrays.
+    """
+    # 1. Get the date range from the HTMX select dropdown
+    date_range = request.args.get('range', 'today')
+    
+    # 2. Hand off all calculations to the Service Layer
+    metrics = get_dashboard_metrics(date_range)
+   
+    # 3. Pass the clean dictionary into the HTMX partial template
+    return render_template(
+        'partials/_analytics_content.html', 
+        kpi=metrics['kpi'],
+        labels=metrics['chart_labels'],
+        revenue=metrics['chart_revenue'],
+        traffic=metrics['chart_traffic'], # Optional: Pass this if you add the Area chart
+        item_sales_distribution=metrics['item_sales_distribution']
+    )
+
+
+
 
 @admin_bp.route('/manage-menu', methods=['GET'])
 def manage_menu():
@@ -99,6 +128,8 @@ def calculate_pagination_window(current_page: int, total_pages: int, window_size
 
     return range(start_page, end_page + 1)
 # History Page routing
+
+
 @admin_bp.route('/history')
 def order_history():
     page = request.args.get('page', 1, type=int)

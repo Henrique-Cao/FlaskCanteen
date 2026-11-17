@@ -1,5 +1,6 @@
 python -m venv env
 ls
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 env\Scripts\activate
 pip list
 deactivate

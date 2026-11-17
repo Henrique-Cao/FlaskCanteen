@@ -80,3 +80,28 @@ p.lead {
   line-height: 1.5;
   color: lighten($text-primary, 20%);
 }
+
+
+.kpi-label{
+  font-family: $font-family-label;
+  font-size: 0.875rem; // True 14px
+  font-weight: 600;
+  color: $text-primary;
+  letter-spacing: 0.02em;
+}
+
+.kpi-value{
+  font-family: $font-family-label;
+  font-size: 2.55rem; // Slightly larger for emphasis
+  font-weight: 700;
+  color: $brand-primary;
+  letter-spacing: 0.02em;
+}
+
+.kpi-subtext{
+  font-family: $font-family-label;
+  font-size: 0.875rem; // True 14px
+  font-weight: 400;
+  color: lighten($text-primary, 25%);
+  letter-spacing: 0.02em;
+}

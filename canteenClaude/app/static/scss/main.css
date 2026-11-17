@@ -3,11 +3,23 @@
   --bs-primary-rgb: 181, 93, 68;
   --bs-body-bg: hsl(12, 12%, 92%);
   --bs-body-color: hsl(12, 10%, 15%);
+  --chart-primary: hsl(12, 52%, 55%);
+  --chart-grid: hsl(12, 10%, 85%);
+  --chart-text: hsl(12, 8%, 45%);
 }
 
 body {
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px; /* Or your preferred max width */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px; /* Provides a safe edge on smaller screens */
+  padding-right: 24px;
 }
 
 body, .body-font {
@@ -98,6 +110,30 @@ p.lead {
   font-size: 1.15rem;
   line-height: 1.5;
   color: hsl(12, 10%, 35%);
+}
+
+.kpi-label {
+  font-family: "Fraunces", serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(12, 10%, 15%);
+  letter-spacing: 0.02em;
+}
+
+.kpi-value {
+  font-family: "Fraunces", serif;
+  font-size: 2.55rem;
+  font-weight: 700;
+  color: hsl(12, 52%, 55%);
+  letter-spacing: 0.02em;
+}
+
+.kpi-subtext {
+  font-family: "Fraunces", serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: hsl(12, 10%, 40%);
+  letter-spacing: 0.02em;
 }
 
 .btn {

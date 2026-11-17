@@ -24,7 +24,7 @@
 </head>
 <body class="vh-100 overflow-hidden d-flex flex-column">
     <nav class="app-navbar flex-shrink-0 ">
-        <div class="navbar-container container-fluid">
+        <div class="container justify-content-between d-flex container-fluid">
             <div class="brand-container col-6 col-lg-4 d-flex align-items-center gap-2">
                 <!-- Brand Name -->
                 <a href="{{ url_for('main.index') }}" class="h4 brand-title fw-bolder  m-0 text-decoration-none">Hearthside</a>
@@ -50,7 +50,7 @@
     </nav>
 
     {% include 'partials/_toast_container.html' %}
-    <main class="container-fluid flex-grow-1 d-flex flex-column overflow-hidden">
+    <main class="container container-fluid flex-grow-1 d-flex flex-column overflow-hidden">
             {% block content %}{% endblock %}
     </main>
   
