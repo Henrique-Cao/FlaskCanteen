@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from sqlalchemy import func, desc
-from app.models import db, Order, OrderItem, MenuItem
+from app.models import db, Order, OrderItem, MenuItem, Category
 
 def calculate_trend(current, previous):
     """Helper to calculate percentage changes safely."""
@@ -45,13 +45,16 @@ def get_top_selling_items(start_date, end_date, limit=5):
 def get_top_category(start_date, end_date, limit=5):
     # Query your top categories ordered by total_sold descending
     top_categories = db.session.query(
-        MenuItem.category,
+        MenuItem.category_id,
+        Category.name.label('category_name'),
         func.sum(OrderItem.quantity).label('total_sold')
     ).select_from(OrderItem).join(Order).join(MenuItem).filter(
         Order.created_at >= start_date,
         Order.created_at < end_date,
         Order.status == 'completed'
-    ).group_by(MenuItem.category).order_by(
+    ).join(Category, MenuItem.category_id == Category.id).group_by(
+        MenuItem.category_id, Category.name
+    ).order_by(
         desc('total_sold')
     ).limit(limit).all()
 
@@ -64,7 +67,8 @@ def get_top_category(start_date, end_date, limit=5):
     for item in top_categories:
         relative_width = (float(item.total_sold) / max_sales) * 100 if max_sales > 0 else 0
         distribution_list.append({
-            'category': item.category,
+            'category': item.category_id,
+            'name': item.category_name,
             'sold': item.total_sold,
             'width_percent': round(relative_width)
         })
@@ -231,6 +235,12 @@ def get_dashboard_metrics(date_range='today'):
 
 
     # ---------------------------------------------------------
+    # 7. Calculate Category Sales Distribution
+    # ---------------------------------------------------------
+    category_sales_distribution = get_top_category(start_date, end_date)
+
+    print("category_sales_distribution: ", category_sales_distribution)
+    # ---------------------------------------------------------
     # 5. Extract Final Arrays and Top KPIs
     # ---------------------------------------------------------
     chart_labels = [b['label'] for b in buckets.values()]
@@ -258,6 +268,7 @@ def get_dashboard_metrics(date_range='today'):
         'chart_labels': chart_labels,
         'chart_revenue': chart_revenue,
         'chart_traffic': chart_traffic,
-        'item_sales_distribution': top_selling_items
+        'item_sales_distribution': top_selling_items,
+        'category_sales_distribution': category_sales_distribution
         
     }

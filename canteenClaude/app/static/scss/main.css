@@ -971,4 +971,12 @@ p.lead {
 /* Fades back in immediately when data arrives */
 #historyTableBody {
   transition: opacity 200ms ease-out;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }/*# sourceMappingURL=main.css.map */

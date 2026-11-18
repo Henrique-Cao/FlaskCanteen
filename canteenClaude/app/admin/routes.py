@@ -55,7 +55,9 @@ def analytics_content():
         labels=metrics['chart_labels'],
         revenue=metrics['chart_revenue'],
         traffic=metrics['chart_traffic'], # Optional: Pass this if you add the Area chart
-        item_sales_distribution=metrics['item_sales_distribution']
+        item_sales_distribution=metrics['item_sales_distribution'],
+        category_sales_distribution=metrics['category_sales_distribution']
+        
     )
 
 

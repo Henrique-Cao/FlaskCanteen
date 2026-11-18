@@ -48,3 +48,11 @@
 #historyTableBody {
     transition: opacity 200ms ease-out;
 }
+.no-scrollbar {
+  scrollbar-width: none;          // Modern standard (Chrome, Firefox, Edge, Safari)
+  -ms-overflow-style: none;       // Legacy Edge / IE fallback
+
+  &::-webkit-scrollbar {
+    display: none;                // Older Chrome / Safari fallback
+  }
+}
