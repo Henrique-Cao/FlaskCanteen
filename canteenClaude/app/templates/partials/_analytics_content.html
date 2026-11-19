@@ -5,7 +5,7 @@
         <div class="card h-100 p-3 bg-surface border-subtle">
             <h6 class="kpi-label">Total Revenue</h6>
             <div class="kpi-value text-primary">{{ kpi.revenue }}</div>
-            <div class="kpi-subtext">{{ kpi.revenue_trend }}</div>
+            <div class="kpi-subtext">{{ kpi.revenue_trend }} {{ meta.trend_suffix }}</div>
         </div>
     </div>
     <!-- Total Meals -->
@@ -13,7 +13,7 @@
         <div class="card h-100 p-3 bg-surface border-subtle">
             <h6 class="kpi-label">Total Meals</h6>
             <div class="kpi-value text-primary">{{ kpi.meals }}</div>
-            <div class="kpi-subtext">{{ kpi.meals_trend }}</div>
+            <div class="kpi-subtext">{{ kpi.meals_trend }} {{ meta.trend_suffix }}</div>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
     <div class="col">
         <div class="card h-100 p-3 bg-surface border-subtle">
             <h6 class="kpi-label">Average Prep Speed</h6>
-            <div class="kpi-value text-primary">{{ kpi.prep }}</div>
+            <div class="kpi-value text-primary">{{ kpi.prep }} mins</div>
             <div class="kpi-subtext">{{ kpi.prep_trend }}</div>
         </div>
     </div>
@@ -29,7 +29,7 @@
     <!-- Highest Traffic Time -->
     <div class="col">
         <div class="card h-100 p-3 bg-surface border-subtle">
-            <h6 class="kpi-label">Highest Traffic Time</h6>
+            <h6 class="kpi-label">{{ meta.peak_label }}</h6>
             <div class="kpi-value text-primary">{{ kpi.traffic }}</div>
         </div>
     </div>
@@ -39,7 +39,7 @@
 <div class="row g-4 mb-4">
     <div class="col-12 col-lg-8">
         <div class="card h-100 p-4 bg-surface border-subtle shadow-sm">
-            <h5 class="mb-4">Today's Hourly Revenue Trend</h5>
+            <h5 class="mb-4">{{ meta.revenue_title }}</h5>
             <div id="revenueChart" 
                  style="min-height: 250px;"
                  data-labels='{{ labels | tojson | safe }}'
@@ -76,7 +76,7 @@
 <div class="row g-4 mb-4">
     <div class="col-12 col-lg-8">
         <div class="card h-100 p-4 bg-surface border-subtle shadow-sm">
-            <h5 class="mb-4">Today's Hourly Traffic Trend</h5>
+            <h5 class="mb-4">{{ meta.traffic_title }}</h5>
             <div id="trafficChart" 
                  style="min-height: 250px;"
                  data-labels='{{ labels | tojson | safe }}'

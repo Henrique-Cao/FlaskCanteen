@@ -6,6 +6,8 @@ admin_bp = Blueprint("admin", __name__)
 from collections import defaultdict
 from app.services.order_service import get_filtered_orders_query
 from app.services.analytics_service import get_dashboard_metrics
+from app.services.analytics_service2 import get_dashboard_metrics2
+
 
 
 
@@ -44,20 +46,32 @@ def analytics_content():
     """
     # 1. Get the date range from the HTMX select dropdown
     date_range = request.args.get('range', 'today')
-    
+
     # 2. Hand off all calculations to the Service Layer
-    metrics = get_dashboard_metrics(date_range)
-   
+    metrics2 = get_dashboard_metrics2(date_range)
+    #metrics = get_dashboard_metrics(date_range)
+    
     # 3. Pass the clean dictionary into the HTMX partial template
+    # return render_template(
+    #     'partials/_analytics_content.html', 
+    #     kpi=metrics['kpi'],
+    #     labels=metrics['chart_labels'],
+    #     revenue=metrics['chart_revenue'],
+    #     traffic=metrics['chart_traffic'], # Optional: Pass this if you add the Area chart
+    #     item_sales_distribution=metrics['item_sales_distribution'],
+    #     category_sales_distribution=metrics['category_sales_distribution']
+        
+    # )
+
     return render_template(
         'partials/_analytics_content.html', 
-        kpi=metrics['kpi'],
-        labels=metrics['chart_labels'],
-        revenue=metrics['chart_revenue'],
-        traffic=metrics['chart_traffic'], # Optional: Pass this if you add the Area chart
-        item_sales_distribution=metrics['item_sales_distribution'],
-        category_sales_distribution=metrics['category_sales_distribution']
-        
+        kpi=metrics2['kpi'],
+        labels=metrics2['chart_labels'],
+        revenue=metrics2['chart_revenue'],
+        traffic=metrics2['chart_traffic'], # Optional: Pass this if you add the Area chart
+        item_sales_distribution=metrics2['top_items'],
+        category_sales_distribution=metrics2['top_categories'],
+        meta=metrics2['meta']
     )
 
 

@@ -101,6 +101,7 @@ def get_dashboard_metrics(date_range='today'):
         start_date = (now - timedelta(days=6)).replace(hour=0, minute=0, second=0, microsecond=0)
         prev_start = start_date - timedelta(days=7)
         prev_end = start_date
+        end_date = now
 
         for i in range(7):
             day = start_date + timedelta(days=i)
@@ -116,7 +117,7 @@ def get_dashboard_metrics(date_range='today'):
         start_date = datetime.min
         prev_start = None
         prev_end = None
-
+        
         sql_date_format = '%Y-%m-%d'
         # Initialize buckets for all time by day
         # We'll fill them dynamically as we encounter orders
@@ -129,6 +130,7 @@ def get_dashboard_metrics(date_range='today'):
         func.count(Order.id).label('total_traffic')
     ).filter(
         Order.created_at >= start_date,
+        Order.created_at < end_date,
         Order.status == 'completed'
     ).group_by('time_bucket').all()
     
@@ -231,15 +233,13 @@ def get_dashboard_metrics(date_range='today'):
         for item_name, quantity_sold in item_sales
     }
     top_selling_items = get_top_selling_items(start_date, end_date)
-    print("top_selling_items: ", top_selling_items)
-
+  
 
     # ---------------------------------------------------------
     # 7. Calculate Category Sales Distribution
     # ---------------------------------------------------------
     category_sales_distribution = get_top_category(start_date, end_date)
 
-    print("category_sales_distribution: ", category_sales_distribution)
     # ---------------------------------------------------------
     # 5. Extract Final Arrays and Top KPIs
     # ---------------------------------------------------------
@@ -272,3 +272,4 @@ def get_dashboard_metrics(date_range='today'):
         'category_sales_distribution': category_sales_distribution
         
     }
+

@@ -75,7 +75,6 @@ def get_analytics_data() -> Tuple[Response, int]:
         start_date, end_date, prev_start, prev_end = _calculate_sgt_time_windows(time_range, now)
 
 
-        print(f"Start Date: {start_date}, End Date: {end_date}, Prev Start: {prev_start}, Prev End: {prev_end}")
         current_orders: List[Order] = Order.query.filter(
             Order.status.in_(["completed", "ready"]),
             Order.ready_at >= start_date,
