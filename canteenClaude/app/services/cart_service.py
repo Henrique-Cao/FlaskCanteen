@@ -25,6 +25,7 @@ def get_total_items() -> int:
     return sum(int(qty) for qty in cart.values())
 
 
+
 def get_cart_summary() -> dict:
     """Fetches current DB prices and calculates subtotals and cart total."""
     cart = session.get("cart", {})

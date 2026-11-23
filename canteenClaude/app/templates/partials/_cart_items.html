@@ -1,19 +1,80 @@
+<!-- 1. Renders inside #cart-items-list -->
 {% if cart_items %}
+    <h3 class="text-uppercase text-muted fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+        Ordered Items
+    </h3>
+
     <ul class="list-group list-group-flush">
         {% for item in cart_items %}
-            <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+            <li class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center">
                 <div>
-                    <span class="fw-semibold">{{ item.name }}</span>
-                    <small class="d-block text-muted">Qty: {{ item.quantity }}</small>
+                    <span class="fw-semibold d-block">{{ item.name }}</span>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-secondary py-0 px-2"
+                                hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
+                                hx-vals='{"delta": -1}'
+                                hx-swap="none"
+                                hx-disabled-elt="this">−</button>
+
+                        <small class="fw-semibold" style="min-width: 1.25rem; text-align: center;">
+                            {{ item.quantity }}
+                        </small>
+
+                        <button type="button"
+                                class="btn btn-sm btn-outline-secondary py-0 px-2"
+                                hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
+                                hx-vals='{"delta": 1}'
+                                hx-swap="none"
+                                hx-disabled-elt="this">+</button>
+                    </div>
                 </div>
-                <span>{{ item.subtotal }}</span>
+
+                <span class="fw-semibold">${{ "%.2f"|format(item.subtotal) }}</span>
             </li>
         {% endfor %}
     </ul>
-    <div class="d-flex justify-content-between border-top mt-3 pt-3">
-        <span class="fw-semibold">Total</span>
-        <span class="fw-semibold">{{ total }}</span>
-    </div>
 {% else %}
-    <p class="text-center text-muted mb-0">Your cart is empty.</p>
+    <div class="cart-empty-state text-center text-muted py-5">
+        <p class="mb-0">Your cart is empty.</p>
+    </div>
 {% endif %}
+
+<!-- 2. OOB swap: updates the fixed #cart-modal-footer at the bottom of cart.html -->
+<div id="cart-modal-footer" hx-swap-oob="innerHTML">
+    {% if cart_items %}
+        <!-- Total Price Row -->
+        <div class="d-flex justify-content-between align-items-center w-100 m-0">
+            <span class="text-muted fw-medium">
+                Total ({{ total_items }} {{ 'item' if total_items == 1 else 'items' }})
+            </span>
+            <span class="fs-5 fw-bold text-dark">${{ "%.2f"|format(total) }}</span>
+        </div>
+
+        <!-- Action Buttons Row -->
+        <div class="d-flex align-items-center gap-2 w-100 m-0">
+            <button type="button"
+                    class="btn btn-link text-danger text-decoration-none btn-sm me-auto px-0"
+                    hx-post="{{ url_for('cart.clear_cart') }}"
+                    hx-swap="none"
+                    hx-disabled-elt="this">
+                Clear cart
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                Continue
+            </button>
+
+            <!-- form="checkoutForm" submits the form inside .modal-body -->
+            <button type="submit" form="checkoutForm" class="btn btn-primary px-4 fw-semibold">
+                Place Order
+            </button>
+        </div>
+    {% else %}
+        <div class="d-flex justify-content-end w-100 m-0">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                Continue shopping
+            </button>
+        </div>
+    {% endif %}
+</div>

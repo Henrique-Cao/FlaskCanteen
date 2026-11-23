@@ -1,128 +1,164 @@
-
-
 {% block content %}
 <div class="container py-4 menu-page" style="max-width: 960px">
-    <!-- 1. Editorial Header -->
-    <header class="text-center mb-4 pb-2">
-        
-        <h1 class="headline display-5 fw-bold mb-2">The Order Menu</h1>
-        <p class="subtext mx-auto" style="max-width: 480px">
-            Wood-fired skewers, slow-simmered broths, and rustic provisions.
-            Prepared fresh to order.
-        </p>
-    </header>
-    
-    <!-- Ditch class="card menu-filter-card" in favor of semantic naming -->
-    <div class="sticky-category-bar sticky-top mb-4">
-        <div class="filter-toolbar rounded-4 p-2 d-flex justify-content-between align-items-center gap-2">
-            <!-- Categories & Search -->
-            <div class="category-filter d-none d-md-flex gap-2">
-                    <!-- Category pills will go here -->
-                    {% for category in categories %}
-                        <button class="btn btn-menu-filter rounded-3 flex-shrink-0 text-nowrap" >{{ category.name }}</button>
-                    {% endfor %}
-            </div>
+  <!-- 1. Editorial Header -->
+  <header class="text-center mb-4 pb-2">
+    <h1 class="headline display-5 fw-bold mb-2">The Order Menu</h1>
+    <p class="subtext mx-auto" style="max-width: 480px">
+      Wood-fired skewers, slow-simmered broths, and rustic provisions. Prepared
+      fresh to order.
+    </p>
+  </header>
 
-            <!-- Mobile dropdown for categories -->
-            <div class="category-filter d-md-none mb-2">
-                <select class="form-select form-select-sm">
-                    <option value="">Select</option>
-                    {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Search Input -->
-            <div class="inset-search d-flex gap-2">
-                <!-- Inset search input will go here -->
-                <input type="text" class="form-control form-control-sm m-0" placeholder="Search menu...">
-                <button class="btn btn-sm btn-menu-filter rounded-3">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    
-    <!-- 3. menu section -->
-    <section class="menu-category-section mb-5">
-        <!-- Category Header -->
+  <!-- Ditch class="card menu-filter-card" in favor of semantic naming -->
+  <div class="sticky-category-bar sticky-top mb-4">
+    <div
+      class="filter-toolbar rounded-4 p-2 d-flex justify-content-between align-items-center gap-2"
+    >
+      <!-- Categories & Search -->
+      <div class="category-filter d-none d-md-flex gap-2">
+        <!-- Category pills will go here -->
         {% for category in categories %}
-        <div class="d-flex align-items-baseline justify-content-between border-bottom pb-1 pt-4 mb-3">
-            <h2 class="h4 headline fw-bold m-0">{{ category.name }}</h2>
-            <span class="text-eyebrow text-muted">Available Now</span>
-        </div>
-        <!-- Menu items for this category will go here -->
-        <div class="row g-3">
-  {% for item in category.items %}
-  <div class="col-12 col-md-6">
-    <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white">
-      <div class="d-flex gap-3 h-100">
-        
-        <!-- Food / Category Icon -->
-        <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-3" 
-             style="width: 84px; height: 84px; background-color: #EBF0F5;">
-          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#A8B4C0" stroke-width="1.5">
-            <path d="M4 11h16a1 1 0 0 1 1 1c0 5-4 8-9 8s-9-3-9-8a1 1 0 0 1 1-1z" />
-            <path d="M2 19h20" />
-            <path d="M9 4v3m3-4v3m3-4v3" />
-          </svg>
-        </div>
+        <button class="btn btn-menu-filter rounded-3 flex-shrink-0 text-nowrap">
+          {{ category.name }}
+        </button>
+        {% endfor %}
+      </div>
 
-        <!-- Content Area (Uses Flex Column to push button down) -->
-        <div class="d-flex flex-column flex-grow-1 justify-content-between">
-          
-          <div>
-            <!-- Title & Price Bar -->
-            <div class="d-flex justify-content-between align-items-baseline gap-2 mb-1">
-              <h6 class="fw-bold mb-0 text-dark font-sans" style="font-size: 1.05rem;">
-                {{ item.name }}
-              </h6>
-              <span class="fw-bold text-nowrap font-serif" style="color: #C86B53; font-size: 1.15rem;">
-                ${{ "%.2f"|format(item.price) }}
-              </span>
-            </div>
+      <!-- Mobile dropdown for categories -->
+      <div class="category-filter d-md-none mb-2">
+        <select class="form-select form-select-sm">
+          <option value="">Select</option>
+          {% for category in categories %}
+          <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-            <!-- Description -->
-            <p class="text-muted small mb-2 lh-sm" style="font-size: 0.85rem;">
-              {{ item.description }}
-            </p>
-          </div>
-
-          <!-- Add Button (Aligned to bottom-right naturally) -->
-          <div class="d-flex justify-content-end">
-            <button type="button" 
-                    class="btn btn-sm text-white fw-semibold px-3 py-1 rounded-3 shadow-none" 
-                    style="background-color: #C86B53; border: none; font-size: 0.875rem;"
-                    hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
-                    hx-vals='{"delta": 1}'
-                    hx-swap="none"
-                    hx-disabled-elt="this">
-              Add +
-            </button>
-          </div>
-
-        </div>
-
+      <!-- Search Input -->
+      <div class="inset-search d-flex gap-2">
+        <!-- Inset search input will go here -->
+        <input
+          type="text"
+          class="form-control form-control-sm m-0"
+          placeholder="Search menu..."
+        />
+        <button class="btn btn-sm btn-menu-filter rounded-3">
+          <i class="bi bi-search"></i>
+        </button>
       </div>
     </div>
   </div>
-  {% endfor %}
+
+  <!-- 3. menu section -->
+  <section class="menu-category-section mb-5">
+    <!-- Category Header -->
+    {% for category in categories %}
+    <div
+      class="d-flex align-items-baseline justify-content-between border-bottom pb-1 pt-4 mb-3"
+    >
+      <h2 class="h4 headline fw-bold m-0">{{ category.name }}</h2>
+      <span class="text-eyebrow text-muted">Available Now</span>
+    </div>
+    <!-- Menu items for this category will go here -->
+    <div class="row g-3">
+      {% for item in category.items %}
+      <div class="col-12 col-md-6">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white">
+          <div class="d-flex gap-3 h-100">
+            <!-- Food / Category Icon -->
+            <div
+              class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-3"
+              style="width: 84px; height: 84px; background-color: #ebf0f5"
+            >
+              <svg
+                width="46"
+                height="46"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#A8B4C0"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M4 11h16a1 1 0 0 1 1 1c0 5-4 8-9 8s-9-3-9-8a1 1 0 0 1 1-1z"
+                />
+                <path d="M2 19h20" />
+                <path d="M9 4v3m3-4v3m3-4v3" />
+              </svg>
+            </div>
+
+            <!-- Content Area (Uses Flex Column to push button down) -->
+            <div class="d-flex flex-column flex-grow-1 justify-content-between">
+              <div>
+                <!-- Title & Price Bar -->
+                <div
+                  class="d-flex justify-content-between align-items-baseline gap-2 mb-1"
+                >
+                  <h6
+                    class="fw-bold mb-0 text-dark font-sans"
+                    style="font-size: 1.05rem"
+                  >
+                    {{ item.name }}
+                  </h6>
+                  <span
+                    class="fw-bold text-nowrap font-serif"
+                    style="color: #c86b53; font-size: 1.15rem"
+                  >
+                    ${{ "%.2f"|format(item.price) }}
+                  </span>
+                </div>
+
+                <!-- Description -->
+                <p
+                  class="text-muted small mb-2 lh-sm"
+                  style="font-size: 0.85rem"
+                >
+                  {{ item.description }}
+                </p>
+              </div>
+
+              <!-- Add Button (Aligned to bottom-right naturally) -->
+              <div class="d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-sm text-white fw-semibold px-3 py-1 rounded-3 shadow-none"
+                  style="
+                    background-color: #c86b53;
+                    border: none;
+                    font-size: 0.875rem;
+                  "
+                  hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
+                  hx-vals='{"delta": 1}'
+                  hx-swap="none"
+                  hx-disabled-elt="this"
+                >
+                  Add +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </section>
 </div>
-        {% endfor %}    
-                
-    </section>
 
-    
-</div>
-{% endblock %}
+<button type="button"
+        class="btn btn-primary position-fixed bottom-0 end-0 m-4 floating-cart-btn shadow-lg rounded-pill px-4 py-3"
+        data-bs-toggle="modal"
+        data-bs-target="#cartModal">
+    <span id="floating-cart-count"
+          class="badge rounded-pill bg-white text-primary fw-bold px-2 py-1"
+          hx-get="{{ url_for('cart.cart_count') }}"
+          hx-trigger="load, cartUpdated from:body"></span>
+    <span class="fw-semibold">Review Cart</span>
+</button>
 
-{% block modals %}
-    {% include 'modals/cart.html' %}
-{% endblock %}
 
- {% block extra_js %}
+
+{% endblock %} {% block modals %} {% include 'modals/cart.html' %} {% endblock
+%} {% block extra_js %}
 <script src="{{ url_for('static', filename='js/order_menu.js') }}"></script>
 <script src="{{ url_for('static', filename='js/order.js') }}"></script>
 {% endblock %}

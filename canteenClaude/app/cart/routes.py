@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, session
 from app.models import MenuItem
 from app.services import cart_service
 
@@ -13,6 +13,11 @@ def update_cart(item_id):
     # 204 returns no HTML; HX-Trigger tells the badge and modal to refresh themselves
     return "", 204, {"HX-Trigger": "cartUpdated"}
 
+@cart_bp.route("/clear", methods=["POST"])
+def clear_cart():
+    session.pop("cart", None)
+    session.modified = True
+    return "", 204, {"HX-Trigger": "cartUpdated"}
 
 @cart_bp.route("/count", methods=["GET"])
 def cart_count():
