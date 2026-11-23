@@ -55,14 +55,15 @@ def create_app(config_name: str | None = None) -> Flask:
     from app.main.routes   import main_bp
     from app.admin.routes  import admin_bp
     from app.api.authentication import auth_api
-
+    from app.cart.routes import cart_bp
 
     from app.api import api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
     app.register_blueprint(main_bp)
     app.register_blueprint(admin_bp,  url_prefix="/admin")
     app.register_blueprint(auth_api, url_prefix='/api/auth')
-
+    
+    app.register_blueprint(cart_bp) 
     
     # ── Shell context ─────────────────────────────────────────────────
     @app.shell_context_processor

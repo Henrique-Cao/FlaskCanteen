@@ -94,7 +94,11 @@
           <div class="d-flex justify-content-end">
             <button type="button" 
                     class="btn btn-sm text-white fw-semibold px-3 py-1 rounded-3 shadow-none" 
-                    style="background-color: #C86B53; border: none; font-size: 0.875rem;">
+                    style="background-color: #C86B53; border: none; font-size: 0.875rem;"
+                    hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
+                    hx-vals='{"delta": 1}'
+                    hx-swap="none"
+                    hx-disabled-elt="this">
               Add +
             </button>
           </div>
@@ -112,6 +116,10 @@
 
     
 </div>
+{% endblock %}
+
+{% block modals %}
+    {% include 'modals/cart.html' %}
 {% endblock %}
 
  {% block extra_js %}

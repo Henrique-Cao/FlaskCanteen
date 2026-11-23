@@ -1,0 +1,19 @@
+{% if cart_items %}
+    <ul class="list-group list-group-flush">
+        {% for item in cart_items %}
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="fw-semibold">{{ item.name }}</span>
+                    <small class="d-block text-muted">Qty: {{ item.quantity }}</small>
+                </div>
+                <span>{{ item.subtotal }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="d-flex justify-content-between border-top mt-3 pt-3">
+        <span class="fw-semibold">Total</span>
+        <span class="fw-semibold">{{ total }}</span>
+    </div>
+{% else %}
+    <p class="text-center text-muted mb-0">Your cart is empty.</p>
+{% endif %}

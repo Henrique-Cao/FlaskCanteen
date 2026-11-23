@@ -12,11 +12,14 @@ cart_api = Blueprint('cart_api', __name__)
 # 2. Update the route to match the JS endpoint '/add_to_cart'
 @cart_api.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    data = request.get_json()
+  
+    data = request.form.get("item_id")
+   
     if not data:
         return jsonify({'success': False, 'message': 'Invalid JSON body.'}), 400
 
-    item_id = data.get('item_id')
+    # item_id = data.get('item_id')
+    item_id = data
     quantity = 1 
     
     if not item_id:
@@ -46,7 +49,9 @@ def clear_cart():
     return jsonify({'success': True, 'total_items': 0, 'total_price': 0.0, 'items': []}), 200
 @cart_api.route('/get_cart', methods=['GET'])
 def get_cart():
-    summary = get_cart_summary() # Call helper internally
+   
+    summary = get_cart_summary()
+
     return jsonify(summary)
 
 def get_cart_summary():
@@ -78,6 +83,7 @@ def get_cart_summary():
         'total_price': grand_total,
         'total_items': total_items_count
     }
+
 
 
 @cart_api.route('/update_quantity', methods=['POST'])
