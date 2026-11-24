@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask import Blueprint, redirect, render_template, request, url_for
 from sqlalchemy import or_
@@ -82,7 +82,8 @@ def index(order_number):
     order_items = []
     items_with_details = []
     total_amount = 0
-
+    now = datetime.now(order.created_at.tzinfo) if order and order.created_at.tzinfo else datetime.now()
+    print("order", order)
     if order:
         # Single JOIN query instead of querying MenuItem inside a loop
         results = (
@@ -102,13 +103,15 @@ def index(order_number):
             })
 
     total_amount = sum(item["total_price"] for item in items_with_details)
+    elapsed_time_mins = (now - order.created_at).total_seconds() / 60 if order else None
     return render_template(
         "order_confirmation/order_confirmation.html",
         order=order,
         order_items=order_items,
         order_number=order.order_number if order else clean_number,
         items_with_details=items_with_details,
-        total_amount=total_amount
+        total_amount=total_amount,
+        elapsed_time_mins=elapsed_time_mins
     )
 
 @order_confirmation_bp.route("/<int:order_id>/status", methods=["GET"])

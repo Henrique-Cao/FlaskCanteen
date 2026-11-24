@@ -24,11 +24,11 @@
 
                 <!-- 2. Permanent Form (Never overwritten when +/- is clicked) -->
                 <!-- Replace action="" with your POST checkout route, e.g. url_for('orders.checkout') -->
-                <form id="checkoutForm" action="" method="POST" class="mt-4 pt-3 border-top">
+                <form id="checkoutForm" method="POST" class="mt-4 pt-3 border-top">
                     {% if csrf_token is defined %}
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     {% endif %}
-
+                    <div id="checkout-error"></div>
                     <!-- Customer Details -->
                     <h3 class="text-uppercase text-muted fw-semibold mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em;">
                         Customer Details
@@ -85,3 +85,5 @@
         </div>
     </div>
 </div>
+
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>

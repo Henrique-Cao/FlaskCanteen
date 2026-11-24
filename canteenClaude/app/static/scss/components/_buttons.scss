@@ -103,6 +103,22 @@
   }
 }
 
+.btn-plain {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-color: $border-subtle;
+  color: $text-primary;
+  font-weight: 500;
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: $bg-surface;
+      border-color: $border-subtle;
+      color: $text-primary;
+      box-shadow: $box-shadow;
+    }
+  }
+}
 // --------------------------------------------------------------------------
 // 4. Menu Card Add Button (+ Add)
 // --------------------------------------------------------------------------

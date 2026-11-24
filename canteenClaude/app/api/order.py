@@ -1,5 +1,5 @@
 # app/routes/order.py
-from flask import Blueprint, jsonify, request, session, url_for
+from flask import Blueprint, jsonify, request, session, url_for, sessions
 from app.extensions import db
 from app.models import MenuItem, Order, OrderItem
 from datetime import datetime, timedelta, timezone
@@ -13,19 +13,22 @@ order_api = Blueprint('order_api', __name__)
 # Create a new order from the session cart and customer details
 @order_api.route('/', methods=['POST'])
 def create_order():
+    print("create order called")
     data = request.get_json() or {}
     cart = session.get('cart', {})
 
+    print("cart contents:", cart)
+    print("customer data:", data)
     # 1. Ensure the session cart is not empty
     if not cart:
         return jsonify({"error": "Your cart is empty."}), 400
 
     # 2. Extract customer details (fall back to verified_phone from session if present)
     customer_name = data.get('customer_name')
-    phone = data.get('phone') or session.get('verified_phone')
+    phone = data.get('customer_phone') or session.get('verified_phone')
 
     if not customer_name or not phone:
-        return jsonify({"error": "Missing required fields: 'customer_name' and 'phone' are mandatory."}), 400
+        return jsonify({"error": "Missing required fields: 'customer_name' and 'customer_phone' are mandatory."}), 400
 
     existing_order_numbers = Order.query.with_entities(Order.order_number).all()
     highest_order_number = max(
@@ -89,9 +92,29 @@ def create_order():
                 "quantity": item.quantity,
                 "price": float(item.unit_price),
                 "name": item.menu_item.name,
-                "order_number": order_number
+                "order_number": new_order.order_number
             } for item in new_order.items
         ]
+    }), 201
+
+
+#create order using session cart
+@order_api.route('/create', methods=['POST'])
+def create_order2():
+    from app.services.order_service import create_order_from_cart
+    order = create_order_from_cart(
+        customer_name=request.form.get("customer_name"),
+        customer_phone=request.form.get("customer_phone"),
+        kitchen_notes=request.form.get("kitchen_notes", "")
+    )
+    return jsonify({
+        "success": True,
+        "id": order.id,
+        "customer_name": order.customer_name,
+        "total_price": float(order.total_amount),
+        "status": order.status,
+        "created_at": order.created_at.isoformat(),
+        "redirect_url": f"/confirmation/{order.order_number}"
     }), 201
 
 # Get all orders (for admin view)

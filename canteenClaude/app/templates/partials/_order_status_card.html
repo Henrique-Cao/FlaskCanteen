@@ -1,76 +1,80 @@
 {% set status = (order.status or 'received') | lower %}
-{% set step = 3 if status in ['ready', 'completed'] else (2 if status in ['cooking', 'preparing', 'pending'] else 1) %}
-{% set fill_width = '100%' if step == 3 else ('58%' if step == 2 else '0%') %}
+{% set current_step = 3 if status in ['ready', 'completed'] else (2 if status in ['cooking', 'preparing', 'pending'] else 1) %}
+
+{# Toggle gap here: 'gap-0' (flush), 'gap-2' (8px gap), or 'gap-3' (16px gap) #}
+{% set bar_gap = 'gap-2' %}
+{% set is_gapped = bar_gap != 'gap-0' %}
+
+{% set steps = [
+  {'num': 1, 'title': 'Received', 'sub': 'Chit logged',      'icon': 'bi-file-earmark-text'},
+  {'num': 2, 'title': 'Cooking',  'sub': 'Preparing food',   'icon': 'bi-fire'},
+  {'num': 3, 'title': 'Ready',    'sub': 'Ready for pickup', 'icon': 'bi-check-circle'}
+] %}
 
 <div id="order-status-widget"
-     {% if step < 3 %}
+     {% if current_step < 3 %}
        hx-get="{{ url_for('order_confirmation.order_status_partial', order_id=order.id) }}"
        hx-trigger="every 10m"
        hx-swap="outerHTML"
      {% endif %}>
 
-  <h6 class="text-uppercase text-muted fw-semibold small mb-4">
+  {# <h6 class="text-uppercase text-muted fw-semibold small mb-4">
     Preparation Status
-  </h6>
+  </h6> #}
 
-  <div class="order-stepper d-flex text-center mb-4">
+  {# Single-bar Bootstrap 5 stepper — toggle gap with gap-0, gap-2, or gap-3 #}
+  <div class="d-flex align-items-center gap-2 px-5 mx-3 pb-5 my-2">
 
-    <!-- Step 1: Received -->
-    <div class="stepper-item flex-fill position-relative">
-      <div class="stepper-circle rounded-circle d-inline-flex align-items-center justify-content-center fs-5 mb-2 position-relative z-2
-                  {{ 'bg-primary text-white' if step >= 1 else 'bg-white border border-2 text-muted' }}">
+    <!-- Step 1 -->
+    <div class="position-relative flex-shrink-0">
+      <div class="stepper-circle rounded-circle d-inline-flex align-items-center justify-content-center fs-5 lh-1 bg-primary text-white">
         <i class="bi bi-file-earmark-text"></i>
       </div>
-
-      <!-- Connector 1 -> 2 (Stops cleanly at circle edges) -->
-      <div class="stepper-connector position-absolute translate-middle-y z-1">
-        <div class="progress h-100 rounded-pill">
-          <div class="progress-bar bg-primary" style="width: {{ seg1_fill }};"></div>
-        </div>
+      <div class="position-absolute top-100 start-50 translate-middle-x text-center text-nowrap mt-2">
+        <div class="order-status-label label-font mt-2 d-none d-sm-block">Order Received</div>
       </div>
-
-      <div class="fw-bold text-dark small">Received</div>
-      <div class="text-muted small">Chit logged</div>
     </div>
 
-    <!-- Step 2: Cooking -->
-    <div class="stepper-item flex-fill position-relative">
-      <div class="stepper-circle rounded-circle d-inline-flex align-items-center justify-content-center fs-5 mb-2 position-relative z-2
-                  {{ 'bg-primary text-white' if step > 2 else ('stepper-active text-white' if step == 2 else 'bg-white border border-2 text-muted') }}">
+    <!-- Single Bar 1 (Animates smoothly 0% -> 100%, zero seam) -->
+    <div class="progress flex-grow-1" style="height: 4px;">
+      <div id="bar-1" class="progress-bar bg-primary" style="width: {{ '100%' if current_step >= 2 else '0%' }};"></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="position-relative flex-shrink-0">
+      <div class="stepper-circle rounded-circle d-inline-flex align-items-center justify-content-center fs-5 lh-1
+                  {{ 'bg-primary text-white' if current_step > 2 else ('stepper-active text-white' if current_step == 2 else 'bg-white border border-2 text-muted') }}">
         <i class="bi bi-fire"></i>
       </div>
-
-      <!-- Connector 2 -> 3 (Stops cleanly at circle edges) -->
-      <div class="stepper-connector position-absolute translate-middle-y z-1">
-        <div class="progress h-100 rounded-pill">
-          <div class="progress-bar bg-primary" style="width: {{ seg2_fill }};"></div>
-        </div>
+      <div class="position-absolute top-100 start-50 translate-middle-x text-center text-wrap-balanced mt-2">
+        <div class="order-status-label label-font mt-2 d-none d-sm-block">Preparing</div>
       </div>
-
-      <div class="fw-bold text-dark small">Cooking</div>
-      <div class="text-muted small">Preparing food</div>
     </div>
 
-    <!-- Step 3: Ready (Last item needs no connector) -->
-    <div class="stepper-item flex-fill position-relative">
-      <div class="stepper-circle rounded-circle d-inline-flex align-items-center justify-content-center fs-5 mb-2 position-relative z-2
-                  {{ 'bg-primary text-white' if step == 3 else 'bg-white border border-2 text-muted' }}">
+    <!-- Single Bar 2 -->
+    <div class="progress flex-grow-1" style="height: 4px;">
+      <div id="bar-2" class="progress-bar bg-primary" style="width: {{ '100%' if current_step >= 3  }};"></div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="position-relative flex-shrink-0">
+      <div class="stepper-circle rounded-circle d-inline-flex align-items-center justify-content-center fs-5 lh-1
+                  {{ 'bg-primary text-white' if current_step == 3 else 'bg-white border border-2 text-muted' }}">
         <i class="bi bi-check-circle"></i>
       </div>
-
-      <div class="fw-bold text-dark small">Ready</div>
-      <div class="text-muted small">Ready for pickup</div>
+      <div class="position-absolute top-100 start-50 translate-middle-x text-center text-nowrap mt-2">
+        <div class="order-status-label label-font mt-2 d-none d-sm-block">Ready for Pickup</div>
+      </div>
     </div>
 
   </div>
-
-  <!-- Native Bootstrap Alert Banner (Automatically uses your Terracotta, Amber, and Sage tokens) -->
-  {# {% if step == 1 %}
+  <!-- Native Bootstrap Alert Banner -->
+  {% if current_step == 1 %}
     <div class="alert alert-primary d-flex align-items-center gap-2 rounded-4 py-3 mb-0" role="status">
       <i class="bi bi-receipt fs-5 flex-shrink-0"></i>
       <span class="fw-medium small">Order received — waiting for kitchen line assignment.</span>
     </div>
-  {% elif step == 2 %}
+  {% elif current_step == 2 %}
     <div class="alert alert-warning d-flex align-items-center gap-2 rounded-4 py-3 mb-0" role="status">
       <i class="bi bi-fire fs-5 flex-shrink-0"></i>
       <span class="fw-medium small">Chef is cooking and packing your takeaway order now.</span>
@@ -80,6 +84,6 @@
       <i class="bi bi-bag-check fs-5 flex-shrink-0"></i>
       <span class="fw-medium small">Your order is packed and ready at the pickup counter!</span>
     </div>
-  {% endif %} #}
+  {% endif %}
 
 </div>
