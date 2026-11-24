@@ -64,4 +64,4 @@ def redirect_tracking():
         
         flash("No order found with that ID. Please check your receipt and try again.", "danger")
 
-    return render_template('main/confirmation.html', order_number=submitted_digits)
+    return render_template('main.confirmation.html', order_number=submitted_digits)

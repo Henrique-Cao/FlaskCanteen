@@ -89,11 +89,11 @@
     </div>
 
     <!-- Track Order Inset Bar -->
-    <form action="" method="GET" class="input-pill-group rounded-3 p-1 d-flex align-items-center gap-2">
+    <form action="{{ url_for('order_confirmation.track') }}" method="GET" class="input-pill-group rounded-3 p-1 d-flex align-items-center gap-2">
       <div class="d-flex align-items-center gap-2 flex-grow-1 ps-2">
         <i class="bi bi-search text-muted flex-shrink-0" aria-hidden="true"></i>
         <input type="text" 
-               name="code" 
+               name="order_number" 
                class="form-control border-0 bg-transparent shadow-none p-0" 
                placeholder="Enter #ORD-XXXX or Phone" 
                autocomplete="off" 

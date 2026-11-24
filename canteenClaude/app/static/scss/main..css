@@ -543,6 +543,47 @@ p.lead {
   height: 16px;
   font-size: 16px;
 }
+.icon-circle.stepper-filled {
+  width: 64px;
+  height: 64px;
+  border-radius: 50rem;
+}
+.icon-circle.stepper-filled svg, .icon-circle.stepper-filled i {
+  width: 32px;
+  height: 32px;
+}
+.icon-circle.stepper-empty {
+  width: 64px;
+  height: 64px;
+  border-radius: 50rem;
+  background-color: hsl(12, 15%, 96%);
+}
+.icon-circle.stepper-empty svg, .icon-circle.stepper-empty i {
+  width: 32px;
+  height: 32px;
+}
+
+.order-stepper {
+  --circle-size: 3rem;
+  --connector-gap: 0px;
+}
+.order-stepper .stepper-item {
+  flex: 1 1 0;
+}
+.order-stepper .stepper-circle {
+  width: var(--circle-size);
+  height: var(--circle-size);
+}
+.order-stepper .stepper-connector {
+  top: calc(var(--circle-size) / 2);
+  left: calc(50% + var(--circle-size) / 2 + var(--connector-gap));
+  right: calc(-50% + var(--circle-size) / 2 + var(--connector-gap));
+  height: 3px;
+}
+.order-stepper .stepper-active {
+  background-color: hsl(12, 42%, 68%);
+  box-shadow: 0 0 0 6px hsl(12, 52%, 94%);
+}
 
 .badge {
   font-family: "Inter", system-ui, -apple-system, sans-serif;

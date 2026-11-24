@@ -37,7 +37,7 @@
         <!-- Desktop Top Navbar -->
         
         <nav class="app-navbar flex-shrink-0">
-            <div class="navbar-container container-fluid">
+            <div class="container navbar-container container-fluid">
                 <div class="brand-container col-6 col-lg-4 d-flex align-items-center gap-2">
                     <!-- Brand Name -->
                     <a href="{{ url_for('main.index') }}" class="h4 brand-title fw-bolder  m-0 text-decoration-none">Hearthside</a>
@@ -74,7 +74,7 @@
         
 
         <!-- Main Content Wrapper (Adds offset for fixed bars) -->
-        <main class="container-fluid flex-grow-1 d-flex overflow-y-auto p-4 flex-column">
+        <main class="container container-fluid flex-grow-1 d-flex overflow-y-auto p-4 flex-column no-scrollbar">
             {% block content %}{% endblock %}
         </main>
         <!-- Mobile Bottom Navigation Bar -->

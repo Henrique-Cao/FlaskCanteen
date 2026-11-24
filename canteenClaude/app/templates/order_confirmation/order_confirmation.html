@@ -1,56 +1,65 @@
-
-{% extends "base.html" %} {% block title %}Order Confirmation{% endblock
-%} 
-
+{% extends "base.html" %}
 
 {% block content %}
-<main class="container my-5 menu-container">
-    <div class="d-flex flex-column gap-4">
-        <div class="custom-card pb-4 border-bottom border-dotted">
-            <div class="col g-3 match-height">
-
-                <div class="row">
-                    <h2 class="menu-category-title h4 mb-3">Order Confirmation</h2>
-                    <p class="text-muted mb-3">Thank you for your order! Your order has been successfully placed.</p>
-                    <p class="text-muted mb-3">Order Number: {{ order_number }}</p> 
-                    <p class="text-muted mb-3">Status: {{order.status}}</p>
+<div class="container py-4 py-md-5">
+    <div class="card ticket-card mx-auto bg-white rounded-4 p-4 p-md-5">
+        {% if order %}
+        <div class="ticket-card-header pb-4">
+            <div class="card-header-top d-flex justify-content-between">
+                <p class="card-title">Order Confirmation</p>
+                <div class="subtext">
+                1 min ago
                 </div>
+            </div>
+            <h2 class="card-OrderNumber"># {{ order.order_number }}</h2>
+            <div class="card-header-bottom">
+                <p class="customer-details">
+                    Name: {{ order.customer_name }} · Phone: {{ order.phone }}
+                </p>
+            </div>
+        </div>
+        <div class="ticket-card-body">
+            <div class="ticket-status mb-4">
+                {% include "partials/_order_status_card.html" %}
+            </div>
+            <div class="ticket-order-details">
+                <h6 class="text-uppercase text-muted fw-semibold small tracking-wide mb-2">
+                    Ticket Items ({{ items_with_details | length }})
+                </h6>
+                <!-- Item List -->
+                <div class="d-flex flex-column">
+                    {% for item in items_with_details %}
+                    <div class="d-flex justify-content-between align-items-center py-1 {% if not loop.last %}border-bottom border-ticket{% endif %}">
+                        
+                        <!-- Left: Quantity Badge + Dish Title & Modifier -->
+                        <div class="d-flex align-items-center gap-3">
+                        <span class="qty-badge bg-dark text-white rounded-2 fw-bold flex-shrink-0 py-1 px-2">
+                            {{ item.quantity }}x
+                        </span>
+                        <div>
+                            <div class="fw-bold text-dark lh-sm">
+                            {{ item.name }}
+                            </div>
+                            {% if item.notes %}
+                            <div class="text-primary small fw-medium mt-1">
+                                {{ item.notes }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        </div>
 
-                <div class="row-auto d-flex justify-content-end">
-                    <a href="{{ url_for('main.menu') }}" class="btn btn-primary">Back to Menu</a>
+                        <!-- Right: Line Item Price -->
+                        <div class="fw-bold text-dark tabular-nums ms-3">
+                        ${{ "%.2f"|format(item.total_price) }}
+                        </div>
+
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        <div class="custom-card pb-4 border-bottom border-dotted">
-            <div class="col g-3 match-height">
-
-                <div class="row">
-                    <h2 class="menu-category-title h4 mb-3">Order Details</h2>
-                    <p class="text-muted mb-3">Here are the details of your order:</p>
-                    <ul class="list-group">
-                        {% for item in items_with_details %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ item.name }} (x{{ item.quantity }})
-                            <span>${{ "%.2f"|format(item.total_price) }}</span>
-                        </li>
-                        {% endfor %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
-                            Total:
-                            <span> ${{ "%.2f"|format(order.total_price)}}</span>
-                        </li>
-                    </ul>
-                    
-                </div>
-            </div>
-        </div>
-
+        
+        {% endif %}
     </div>
-</main>
-
-
-{% endblock %}
-
-
-{% block extra_js %}
-
+</div>
 {% endblock %}

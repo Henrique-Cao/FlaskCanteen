@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+    <div class="ticket-card mx-auto bg-white rounded-4 p-4 p-md-5">
+
+        <!-- Eyebrow & Order Number -->
+        <div class="text-center pb-4 mb-4 border-bottom">
+            <span class="ticket-eyebrow text-uppercase fw-semibold d-block mb-1">
+                Order Confirmed
+            </span>
+            <h1 class="ticket-order-number fw-bold mb-1">
+                Order #{{ order.order_number if order.order_number is defined and order.order_number else "%04d"|format(order.id) }}
+            </h1>
+            <p class="text-muted small mb-0">
+                Please keep this screen handy when collecting your order.
+            </p>
+        </div>
+
+        <!-- Live Preparation Status + Time Elapsed -->
+        {% include "partials/_order_status_card.html" %}
+
+        <!-- Customer Details -->
+        <div class="mb-4">
+            <h2 class="ticket-section-label text-uppercase text-muted fw-semibold mb-2">
+                Customer Details
+            </h2>
+            <div class="customer-box rounded-3 p-3">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <span class="text-muted small d-block">Name</span>
+                        <span class="fw-semibold text-dark">{{ order.customer_name }}</span>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted small d-block">Phone Number</span>
+                        <span class="fw-semibold text-dark">{{ order.customer_phone }}</span>
+                    </div>
+                </div>
+
+                {% if order.kitchen_notes %}
+                    <div class="mt-3 pt-2 border-top">
+                        <span class="text-muted small d-block">Kitchen Notes</span>
+                        <span class="small text-dark fst-italic">"{{ order.kitchen_notes }}"</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Full Summary of Ticket Items -->
+        <div class="mb-4">
+            <h2 class="ticket-section-label text-uppercase text-muted fw-semibold mb-2">
+                Ticket Summary
+            </h2>
+
+            <ul class="list-group list-group-flush">
+                {% for item in order.items %}
+                    {% set unit_price = item.unit_price if item.unit_price is defined else item.price %}
+                    {% set line_total = unit_price * item.quantity %}
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="qty-pill badge rounded-pill fw-semibold">
+                                {{ item.quantity }}×
+                            </span>
+                            <div>
+                                <span class="fw-semibold text-dark d-block">
+                                    {{ item.menu_item.name if item.menu_item is defined else item.name }}
+                                </span>
+                                <small class="text-muted">
+                                    ${{ "%.2f"|format(unit_price) }} each
+                                </small>
+                            </div>
+                        </div>
+                        <span class="fw-semibold text-dark">
+                            ${{ "%.2f"|format(line_total) }}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Total Row -->
+            <div class="ticket-total-row d-flex justify-content-between align-items-center pt-3 mt-2">
+                <span class="fw-semibold text-dark">Total</span>
+                <span class="fs-4 fw-bold text-primary">
+                    ${{ "%.2f"|format(total_amount) }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Footer Action -->
+        <div class="pt-2">
+            <a href="{{ url_for('main.menu') }}" class="btn btn-outline-secondary w-100 py-2 fw-medium">
+                Back to Menu
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

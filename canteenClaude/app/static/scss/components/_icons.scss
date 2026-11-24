@@ -39,4 +39,50 @@
     height: 16px;
     font-size: 16px;
   }
+  &.stepper-filled {
+    width: 64px;
+    height: 64px;
+    border-radius: $border-radius-pill;
+
+    svg, i {
+      width: 32px;
+      height: 32px;
+    }
+  }
+  &.stepper-empty {
+    width: 64px;
+    height: 64px;
+    border-radius: $border-radius-pill;
+    background-color: $bg-surface-sunken;
+    svg, i {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+}
+.order-stepper {
+  --circle-size: 3rem;      // Single source of truth for circle & bar geometry
+  --connector-gap: 0px;     // Optional gap (e.g. 6px) if you want space around the halo ring
+
+  .stepper-item {
+    flex: 1 1 0;            // Guarantees equal column widths even when label lengths differ
+  }
+
+  .stepper-circle {
+    width: var(--circle-size);
+    height: var(--circle-size);
+  }
+
+  .stepper-connector {
+    top: calc(var(--circle-size) / 2); // Always locks to the exact vertical center of the circle
+    left: calc(50% + (var(--circle-size) / 2) + var(--connector-gap));
+    right: calc(-50% + (var(--circle-size) / 2) + var(--connector-gap));
+    height: 3px;
+  }
+
+  .stepper-active {
+    background-color: hsl(12, 42%, 68%);
+    box-shadow: 0 0 0 6px $terracotta-100;
+  }
 }
