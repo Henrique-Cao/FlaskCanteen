@@ -72,6 +72,7 @@ function renderOrderDetails(order) {
         const itemElement = itemTemplate.content.cloneNode(true);
         itemElement.querySelector('.item-qty').textContent = `${item.quantity}x`;
         itemElement.querySelector('.item-name').textContent = item.name ?? item.item_name ?? '';
+        itemElement.querySelector('.item-price').textContent = `$${item.price ?? '0.00'}`;
         detailItemsList.appendChild(itemElement);
     }
     const detailTotalPrice = document.querySelector('.detail-total-price');

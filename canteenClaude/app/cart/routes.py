@@ -1,9 +1,14 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, make_response, render_template, request, session,url_for
 from app.models import MenuItem
 from app.services import cart_service
+from app.api.order import create_order
+
 
 cart_bp = Blueprint("cart", __name__, url_prefix="/cart")
 
+@cart_bp.route("/", methods=["GET"])
+def get_cart():
+    return render_template("partials/_cart.html", **cart_service.get_cart_summary())
 
 @cart_bp.route("/update/<int:item_id>", methods=["POST"])
 def update_cart(item_id):
@@ -29,3 +34,25 @@ def cart_count():
 def cart_modal():
     print("loading items")
     return render_template("partials/_cart_items.html", **cart_service.get_cart_summary())
+
+@cart_bp.route("/checkout", methods=["GET"])
+def checkout():
+    try:
+        order = create_order(
+            customer_name=request.form.get("customer_name", "").strip(),
+            phone=request.form.get("phone", "").strip(),
+            cart_items=cart_service.get_cart_items(),
+        )
+    except ValueError as err:
+        # Stays on the same page and swaps the error into #checkout-error
+        return f'<div class="alert alert-danger py-2 small">{err}</div>'
+
+    cart_service.clear_cart()
+
+    # Route handles directing the browser to the confirmation page
+    response = make_response("", 200)
+    response.headers["HX-Redirect"] = url_for(
+        "order_confirmation.index",
+        order_number=order.order_number,
+    )
+    return response

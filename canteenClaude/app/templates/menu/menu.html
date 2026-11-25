@@ -18,18 +18,18 @@
       <div class="category-filter d-none d-md-flex gap-2">
         <!-- Category pills will go here -->
         {% for category in categories %}
-        <button class="btn btn-menu-filter rounded-3 flex-shrink-0 text-nowrap">
+        <a href="#category-{{ category.id }}" class="btn btn-menu-filter rounded-3 flex-shrink-0 text-nowrap">
           {{ category.name }}
-        </button>
+        </a>
         {% endfor %}
       </div>
 
       <!-- Mobile dropdown for categories -->
       <div class="category-filter d-md-none mb-2">
-        <select class="form-select form-select-sm">
+        <select class="form-select form-select-sm" onchange="if (this.value) window.location.hash = this.value">
           <option value="">Select</option>
           {% for category in categories %}
-          <option value="{{ category.id }}">{{ category.name }}</option>
+          <option value="#category-{{ category.id }}">{{ category.name }}</option>
           {% endfor %}
         </select>
       </div>
@@ -54,6 +54,7 @@
     <!-- Category Header -->
     {% for category in categories %}
     <div
+      id="category-{{ category.id }}"
       class="d-flex align-items-baseline justify-content-between border-bottom pb-1 pt-4 mb-3"
     >
       <h2 class="h4 headline fw-bold m-0">{{ category.name }}</h2>
@@ -116,8 +117,48 @@
                 </p>
               </div>
 
+
+              {% set quantity = session.get('cart', {}).get(item.id|string, 0)|int %}
+
+              <div class="menu-item-controls d-flex justify-content-end" data-item-id="{{ item.id }}">
+              
+                <button
+                  type="button"
+                  class="btn btn-primary menu-add-btn btn-sm  {% if quantity > 0 %}d-none{% endif %}"
+                  hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
+                  hx-vals='{"delta": 1}'
+                  hx-swap="none"
+                >
+                  Add +
+                </button>
+
+                <div class="menu-stepper d-flex align-items-center gap-2 {% if quantity == 0 %}d-none{% endif %}">
+                  <button
+                    type="button"
+                    class="btn-item-add btn"
+                    aria-label="Remove one {{ item.name }}"
+                    hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
+                    hx-vals='{"delta": -1}'
+                    hx-swap="none"
+                  >−</button>
+
+                  <span class="menu-quantity fw-semibold text-center">{{ quantity }}</span>
+
+                  <button
+                    type="button"
+                    class="btn-item-add btn btn-sm"
+                    aria-label="Add one {{ item.name }}"
+                    hx-post="{{ url_for('cart.update_cart', item_id=item.id) }}"
+                    hx-vals='{"delta": 1}'
+                    hx-swap="none"
+                  >
+                  +
+                  </button>
+                </div>
+              </div>
+
               <!-- Add Button (Aligned to bottom-right naturally) -->
-              <div class="d-flex justify-content-end">
+              {# <div class="d-flex justify-content-end">
                 <button
                   type="button"
                   class="btn btn-sm text-white fw-semibold px-3 py-1 rounded-3 shadow-none"
@@ -133,7 +174,7 @@
                 >
                   Add +
                 </button>
-              </div>
+              </div> #}
             </div>
           </div>
         </div>
@@ -158,9 +199,8 @@
 </button>
 
 
-
 {% endblock %} {% block modals %} {% include 'modals/cart.html' %} {% endblock
 %} {% block extra_js %}
-<script src="{{ url_for('static', filename='js/order_menu.js') }}"></script>
+{# <script src="{{ url_for('static', filename='js/order_menu.js') }}"></script> #}
 <script src="{{ url_for('static', filename='js/order.js') }}"></script>
 {% endblock %}

@@ -24,7 +24,11 @@
 
                 <!-- 2. Permanent Form (Never overwritten when +/- is clicked) -->
                 <!-- Replace action="" with your POST checkout route, e.g. url_for('orders.checkout') -->
-                <form id="checkoutForm" method="POST" class="mt-4 pt-3 border-top">
+                <form id="checkoutForm" class="mt-4 pt-3 border-top"
+                    hx-post="{{ url_for('cart.checkout') }}"
+                    hx-target="#checkout-error"
+                    hx-swap="innerHTML"
+                    hx-disabled-elt="#checkout-btn">
                     {% if csrf_token is defined %}
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     {% endif %}

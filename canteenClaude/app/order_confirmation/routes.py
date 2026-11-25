@@ -79,6 +79,7 @@ def index(order_number):
     clean_number = order_number.strip().lstrip("#")
 
     order = Order.query.filter(Order.order_number.ilike(clean_number)).first()
+    print(order)
     order_items = []
     items_with_details = []
     total_amount = 0

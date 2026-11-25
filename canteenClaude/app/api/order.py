@@ -13,12 +13,10 @@ order_api = Blueprint('order_api', __name__)
 # Create a new order from the session cart and customer details
 @order_api.route('/', methods=['POST'])
 def create_order():
-    print("create order called")
+
     data = request.get_json() or {}
     cart = session.get('cart', {})
 
-    print("cart contents:", cart)
-    print("customer data:", data)
     # 1. Ensure the session cart is not empty
     if not cart:
         return jsonify({"error": "Your cart is empty."}), 400
@@ -142,7 +140,7 @@ def get_orders():
 @order_api.route('/active', methods=['GET'])
 def get_active_orders():
     orders = Order.query.order_by(Order.created_at.desc()).all()
-    print(orders)
+
     return jsonify([{
         "id": order.id,
         "order_number": order.order_number,
@@ -185,7 +183,7 @@ def get_order_details(order_number):
 # modify order status (for admin)
 @order_api.route('/<int:order_id>/status', methods=['PUT'])
 def update_order_status(order_id):
-    print(f"Received request to update status for order ID: {order_id}")
+
     data = request.get_json() or {}
     new_status = data.get('status')
 
@@ -215,9 +213,9 @@ def update_order_status(order_id):
 # mark order as completed (for admin)
 @order_api.route('/<int:order_id>/complete', methods=['PUT'])
 def complete_order(order_id):
-    print(f"Attempting to mark order ID {order_id} as completed")
+
     order = Order.query.get(order_id)
-    print(f"Received request to mark order ID {order_id} as completed")
+
     if not order:
         return jsonify({"error": "Order not found."}), 404
 
@@ -234,7 +232,7 @@ def complete_order(order_id):
 
 @order_api.route('/<int:order_id>/cancel', methods=['PUT'])
 def cancel_order(order_id):
-    print(f"Attempting to cancel order ID {order_id}")
+
     order = Order.query.get(order_id)
     if not order:
         return jsonify({"error": "Order not found."}), 404
