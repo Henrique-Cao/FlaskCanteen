@@ -36,7 +36,6 @@ def add_to_cart():
         session['cart'][item_id] = quantity
 
     session.modified = True
-    print(f"Current cart contents: {session['cart']}")  # Debugging statement
     return jsonify({
         'success': True,
         'message': f'Item {item_id} added to cart.',

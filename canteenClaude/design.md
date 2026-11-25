@@ -12,12 +12,14 @@ The active Sass entry point is [`app/static/scss/main.scss`](app/static/scss/mai
 
 ### Competing and legacy assets
 
+Archived legacy assets and templates described below have been moved to `backup-unused/`, preserving their original paths beneath that folder. Paths in this document refer to their original locations; archived assets are not served from those locations. The active assets and `app/static/css/main.css` remain in place.
+
 | Asset | Observed role |
 |---|---|
 | `app/static/scss/abstracts/_variables.scss` | Variables imported by the active Sass entry point; primary source for the active token palette. |
 | `app/static/scss/main.css` | Compiled CSS linked by the active customer and admin base templates. |
-| `app/static/scss/main..css` | Alternate stylesheet linked by `base2.html` and `admin_base2.html`; based on a different palette and typography variant. |
-| `app/static/css/custom.css` | Separate Bootstrap-variable override; the link is commented out in the base template and it is not the active theme source. |
+| `app/static/scss/main..css` | Alternate stylesheet formerly linked by `base2.html` and `admin_base2.html`; based on a different palette and typography variant. |
+| `app/static/css/custom.css` | Archived Bootstrap-variable override; not linked by the active base templates or used as the active theme source. |
 | `app/static/css/main.css` and `app/static/css/main..css` | Additional generated/alternate CSS artifacts. They contain palette values that differ from the active SCSS output. |
 | `app/static/scss/abstracts/_variables1.scss`, `_variables3.scss` | Alternate token sets; not imported by the active `main.scss`. |
 | `app/static/scss/components/_badges2.scss` | Alternate status-pill rules; not imported by active `main.scss`. |
@@ -111,7 +113,7 @@ The active mappings are defined in [`app/static/scss/abstracts/_variables.scss`]
 
 The active `base.html` and `admin_base.html` load Google Fonts for Fraunces, Bebas Neue, and Barlow. They do not explicitly load Inter, Newsreader, or Plus Jakarta Sans, despite those families being named in the active SCSS stacks. Those fonts therefore depend on local availability or fallback behavior unless loaded elsewhere.
 
-`custom.css` defines `.font-serif { font-family: var(--bs-font-serif); }` with `--bs-font-serif: 'Georgia', 'Playfair Display', serif`; however, its stylesheet link is commented out in the base template. The `.font-serif` class is used in templates, but no `.font-serif` or `.font-sans` utility is defined in the active SCSS entry point. Inline/template style and alternate CSS may consequently determine their appearance on those views.
+The archived `custom.css` defines `.font-serif { font-family: var(--bs-font-serif); }` with `--bs-font-serif: 'Georgia', 'Playfair Display', serif`; however, it is not linked by the active base templates. The `.font-serif` class is used in templates, but no `.font-serif` or `.font-sans` utility is defined in the active SCSS entry point. Inline/template style and alternate CSS may consequently determine their appearance on those views.
 
 The alternate `_variables1.scss` uses `$font-family-base: $font-family-serif` (Newsreader), while the active `_variables.scss` maps `$font-family-base` to Plus Jakarta Sans. These are different typography variants.
 

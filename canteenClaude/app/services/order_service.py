@@ -73,10 +73,9 @@ def get_filtered_orders_query(args):
 
 
 
-def get_order_by_numeric_input(raw_digits: str):
+def format_order_number(raw_digits: str):
     """
-    Combines the visual 'ORD-' prefix with user-submitted digits 
-    and queries the database.
+    Combine the visual 'ORD-' prefix with user-submitted digits.
     """
     if not raw_digits:
         return None
@@ -89,8 +88,5 @@ def get_order_by_numeric_input(raw_digits: str):
 
     return full_order_id
 
-from app import db
-from app.models import Order, OrderItem
-from app.services import cart_service
 
 

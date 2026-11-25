@@ -16,7 +16,6 @@ export function bindFormSubmit({ formId, onSubmit }) {
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
             }
             const formData = new FormData(form);
-            console.log(formData);
             await onSubmit(formData, form);
         } catch (error) {
             console.error(`Form submission error on #${formId}:`, error);

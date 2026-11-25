@@ -103,7 +103,6 @@ class OrderItem(db.Model):
     def __repr__(self):
         return f"<OrderItem {self.menu_item_id} x{self.quantity}>"
 
-from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model, UserMixin):

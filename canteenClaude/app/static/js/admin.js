@@ -4,7 +4,6 @@ const logoutBtn = document.getElementById('adminLogoutBtn');
 if (logoutBtn) {
     logoutBtn.addEventListener('click', async function (e) {
         e.preventDefault();
-        console.log('Logging out...');
         logoutBtn.disabled = true;
 
         try {
@@ -34,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const toastElList = document.querySelectorAll('.toast');
             const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl));
             toastList.forEach(toast => toast.show());
-            console.log('Toasts initialized');
         });
 
 

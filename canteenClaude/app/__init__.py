@@ -8,7 +8,7 @@ from flask import Flask
 from config import config_map
 from app.extensions import db, migrate
  
-from flask_login import LoginManager, UserMixin
+from flask_login import LoginManager
 from app.models import User
 
 login_manager = LoginManager()

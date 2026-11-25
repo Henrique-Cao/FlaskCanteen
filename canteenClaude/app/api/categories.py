@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify, request, redirect, url_for,flash
+from flask import Blueprint, jsonify, request, flash
 from app.extensions import db
-from app.models import Category, MenuItem
+from app.models import Category
 
 categories_api = Blueprint('categories_api', __name__)
 
@@ -20,7 +20,6 @@ def get_all_categories():
 def add_category():
     data = request.get_json()
     category_name = data.get('name')
-    print(f"Received request to add category with name: {category_name}")  # Debugging line
     if not category_name:
         return jsonify({'success': False, 'message': 'Category name is required.'}), 400
 
@@ -46,7 +45,6 @@ def add_category():
 
 @categories_api.route('/delete/<int:category_id>', methods=['POST'])
 def delete_category(category_id):
-    print(f"Attempting to delete category with ID: {category_id}")  # Debugging line
     category = Category.query.get_or_404(category_id)
     db.session.delete(category)
     db.session.commit()

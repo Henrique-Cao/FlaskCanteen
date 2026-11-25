@@ -32,7 +32,6 @@ def cart_count():
 
 @cart_bp.route("/modal", methods=["GET"])
 def cart_modal():
-    print("loading items")
     return render_template("partials/_cart_items.html", **cart_service.get_cart_summary())
 
 @cart_bp.route("/checkout", methods=["GET"])

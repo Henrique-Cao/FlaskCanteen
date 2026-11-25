@@ -96,35 +96,6 @@
   
         </div>
 
-        <!-- <nav
-            class="navbar fixed-bottom nav-mobile-bar px-2 py-1.5 d-md-none shadow-lg"
-        >
-            <div
-                class="container-fluid d-flex justify-content-around align-items-center px-0"
-            >
-                <a
-                    href="{{ url_for('main.index') }}"
-                    class="nav-tab-item {{ 'active' if request.endpoint == 'main.index' }}"
-                >
-                    <i class="bi bi-house-door-fill"></i>
-                    <span>Home</span>
-                </a>
-                <a
-                    href="{{ url_for('main.menu') }}"
-                    class="nav-tab-item {{ 'active' if request.endpoint == 'main.menu' }}"
-                >
-                    <i class="bi bi-cup-hot-fill"></i>
-                    <span>Menu</span>
-                </a>
-                <a
-                    href="{{ url_for('main.track_order') }}"
-                    class="nav-tab-item {{ 'active' if request.endpoint == 'main.track_order' }}"
-                >
-                    <i class="bi bi-receipt"></i>
-                    <span>Track Order</span>
-                </a>
-            </div>
-        </nav> -->
         {% include 'modals/admin_login.html' %}
         {% block modals %}
 

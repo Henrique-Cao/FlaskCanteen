@@ -31,7 +31,6 @@ loginForm.addEventListener('submit', async function (e) {
         const data = await response.json();
        
         if (response.ok && data.success) {
-            console.log('Login successful, redirecting to:', data.redirect_url || '/admin/');
             window.location.href = data.redirect_url || '/admin/';
         } else {
             alertBox.textContent = data.message || 'Invalid username or password.';

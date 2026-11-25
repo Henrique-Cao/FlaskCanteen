@@ -10,14 +10,6 @@
                     <div class="d-flex justify-content-between align-items-center mb-3 ">
                         <h2 class="d-flex flex-row justify-content-between align-items-center w-100 category-header h5 mb-0 headline-font text-dark fw-bold">
                             <div class="label-font">Categories</div>
-                            <!-- <button
-                                type="button"
-                                class="btn btn-icon btn-sm p-1"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editCategoryModal"
-                            >
-                                <i class="bi bi-pencil-fill"></i>
-                            </button> -->
                             <button
                                 type="button"
                                 class="btn btn-icon btn-sm p-1"
@@ -43,7 +35,7 @@
                                 data-category-id="{{ category.id }}"
                                 data-id="{{category.id}}">
                                 <div class="category-label d-flex align-items-center">
-                                    <i class="bi bi-grip-vertical text-muted dragHandle pointer" style="cursor: grab;"></i>
+                                    <i class="bi bi-grip-vertical text-muted drag-handle pointer" style="cursor: grab;"></i>
                                     <span class="label-font text-dark">{{ category.name }}</span>
                                 </div>
                                 <div class="category-actions">
@@ -171,101 +163,6 @@
         
 
 
-            <!-- <div
-                id="menu-container tab-content"
-                class="d-flex flex-column gap-3"
-            >
-                {% if not items_by_category %}
-                <div
-                    class="alert alert-info d-flex align-items-center gap-3"
-                    role="alert"
-                >
-                    <i class="bi bi-info-circle-fill fs-4"></i>
-                    <div class="body-font">
-                        No menu items found. Try adding new items or adjusting
-                        your search.
-                    </div>
-                </div>
-                {% endif %} {% for category, menu_items in
-                items_by_category.items() %}
-                <div class="menu-category-section">
-                    <div
-                        class="d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25 pb-2 mb-3"
-                    >
-                        <h2 class="h4 headline-font text-dark mb-0 fw-bold">
-                            {{ category }}
-                        </h2>
-                        <span class="text-muted label-font small text-uppercase"
-                            >{{ menu_items|length }} Items</span
-                        >
-                    </div>
-
-                    <div
-                        class="custom-card p-0 overflow-hidden bg-transparent border-0 shadow-none"
-                    >
-                        <div class="d-flex flex-column gap-3">
-                            {% if not menu_items %}
-                            <div
-                                class="alert alert-info d-flex align-items-center gap-3"
-                                role="alert"
-                            >
-                                <i class="bi bi-info-circle-fill fs-4"></i>
-                                <div class="body-font">
-                                    No menu items found in this category.
-                                </div>
-                            </div>
-                            {% endif %} {% for item in menu_items %}
-                            <div
-                                class="custom-card-item d-flex justify-content-between align-items-center p-3 rounded-3 bg-white shadow-sm"
-                            >
-                                <div class="d-flex align-items-center gap-3">
-                                    {% if item.image_filename %}
-                                    <img
-                                        src="{{ url_for('static', filename='uploads/' ~ item.image_filename) }}"
-                                        alt="{{ item.name }}"
-                                        width="60"
-                                        height="60"
-                                        class="rounded-circle object-fit-cover shadow-sm"
-                                    />
-                                    {% else %}
-                                    <div
-                                        class="rounded-circle bg-secondary d-flex justify-content-center align-items-center shadow-sm"
-                                        style="width: 60px; height: 60px"
-                                    >
-                                        <i
-                                            class="bi bi-image fs-4 text-white"
-                                        ></i>
-                                    </div>
-                                    {% endif %}
-                                    <div class="d-flex flex-column">
-                                        <span
-                                            class="body-font fw-semibold text-dark"
-                                            >{{ item.name }}</span
-                                        >
-                                    </div>
-                                    <button
-                                        class="btn btn-link p-0 text-muted transition-color hover-dark"
-                                        data-action="edit"
-                                        data-item-id="{{ item.id }}"
-                                        title="Edit Item"
-                                    >
-                                        <i class="bi bi-pencil-fill small"></i>
-                                    </button>
-                                    <button
-                                        onclick="deleteMenuItem('{{item.id}}', '{{item.name}}')"
-                                        class="btn btn-link p-0 text-danger transition-color hover-dark"
-                                        title="Delete Item"
-                                    >
-                                        <i class="bi bi-trash-fill small"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div> -->
         </div>
     </div>
 

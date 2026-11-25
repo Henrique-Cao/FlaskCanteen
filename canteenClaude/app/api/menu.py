@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from flask import Blueprint, app, current_app, jsonify, request, url_for, flash, redirect
+from flask import Blueprint, current_app, jsonify, request, url_for, flash, redirect
 from app.extensions import db
 from app.models import MenuItem
 from PIL import Image, ImageOps
@@ -41,13 +41,6 @@ def get_menu_item_details(item_id):
 @menu_api.route('/', methods=['POST'])
 def add_menu_item():
     
-    # # 1. Extract the raw JSON data sent from the frontend
-    # data = request.get_json() or {}
-    # print(data)
-    # # 2. Simple validation: Ensure required fields are present
-    # if 'name' not in data or 'price' not in data:
-    #     return jsonify({"error": "Missing required fields: 'name' and 'price' are mandatory."}), 400
-
     # Because we used FormData in JS, we read text like this:
     name = request.form.get('addName')
     category_id = request.form.get('addCategory')
@@ -89,7 +82,6 @@ def add_menu_item():
                     saved_filename = secure_name
                     
                 except Exception as e:
-                    print("image processing failed")
                     flash(f"Image processing failed: {str(e)}")
                     return redirect(url_for('admin.manage_menu'))
         
@@ -131,7 +123,6 @@ def update_menu_item(item_id):
     try:
         if 'editImage' in request.files:
             file = request.files['editImage']
-            print(file)
             if file and file.filename != '':
                 
                 # 1. Generate a completely secure, random filename
@@ -159,12 +150,9 @@ def update_menu_item(item_id):
                     
                     # 7. Set the variable to save to SQLite
                     saved_filename = secure_name
-                    print(saved_filename    )
                 except Exception as e:
-                    print("image processing failed")
                     flash(f"Image processing failed: {str(e)}")
                     return redirect(url_for('admin.manage_menu'))
-        print("here")
         
         item.image_filename = saved_filename
         db.session.commit()
@@ -211,44 +199,8 @@ def delete_menu_item(item_id):
         return jsonify({"error": f"Internal database error: {str(e)}"}), 500
 
 
-
-
-
-# @menu_api.route('/update/<int:item_id>', methods=['POST'])
-# def update_menu_item(item_id):
-#     # 1. Locate the target item row or return an error clean log if missing
-
-#     item = MenuItem.query.get_or_404(item_id)
-    
-#     # 2. Extract the incoming JSON payload bundle sent from your script
-#     data = request.get_json()
-#     if not data:
-#         return jsonify({'status': 'error', 'message': 'No data payload received'}), 400
-
-#     try:
-#         # 3. Map values from the payload into your database model instance attributes
-#         item.name = data.get('name', item.name)
-#         item.category_id = data.get('category', item.category_id)
-#         item.description = data.get('description', item.description)
-        
-#         # Explicit type conversion prevents string comparison crashes in SQL engine
-#         if 'price' in data:
-#             item.price = float(data['price'])   
-
-        
-
-#         # 4. Commit updates directly down to your SQLite file records
-#         db.session.commit()
-#         return jsonify({'status': 'success', 'message': f'Item #{item_id} synchronized successfully.'})
-
-#     except Exception as e:
-#         db.session.rollback()
-#         print(f"Database update execution tracking failed: {str(e)}")
-#         return jsonify({'status': 'error', 'message': 'Internal database exception encountered'}), 500
-
 @menu_api.route('/toggle/<int:item_id>/<checked>', methods=['POST'])
 def toggle_menu_item_visibility(item_id, checked):
-    print(f"Toggling visibility for item_id={item_id} to checked={checked}")
     try:
         item = MenuItem.query.get_or_404(item_id)
         item.is_available = checked.lower() == 'true'

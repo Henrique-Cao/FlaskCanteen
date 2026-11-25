@@ -1,8 +1,6 @@
-from flask import Blueprint, jsonify, request, session,abort, redirect, url_for
-from app.extensions import db
+from flask import Blueprint, jsonify, request, session
 from app.models import User
-from flask_login import current_user, login_user, login_required,LoginManager,logout_user,UserMixin
-from functools import wraps
+from flask_login import login_user, logout_user
 
 from app.utils.decorators import admin_required
 
@@ -37,5 +35,4 @@ def login():
 def logout():
     logout_user()
     session.clear()
-    print("User logged out")
     return jsonify({"success": True, "redirect_url": "/"})

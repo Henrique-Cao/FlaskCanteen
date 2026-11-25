@@ -74,7 +74,6 @@ async function handleDeleteItem(btn) {
     if (!confirm(`Permanently delete "${itemName}"?`)) return;
 
     try {
-        console.log("deleting", itemId, itemName);
         await fetchJSON(`/api/menu/${itemId}`, { method: 'DELETE' });
         animateRowRemoval(document.getElementById(`menuItemCard-${itemId}`));
     } catch (err) {
@@ -107,7 +106,6 @@ function initActionTriggers() {
     document.body.addEventListener("click", (event) => {
         
         const btn = event.target.closest('[data-action]');
-        console.log(btn);
         if (!btn) return;
         const handler = actions[btn.dataset.action];
         if (handler) handler(btn);
@@ -137,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Initialize Drag & Drop
     initDragAndDrop({
         containerId: 'sortableCategoryList',
-        handleClass: '.dragHandle',
+        handleClass: '.drag-handle',
         onReorder: async (orderedIds) => {
             // Controller handles the API call, not the feature file
             try {
@@ -176,7 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
         formId: 'addCategoryForm',
         onSubmit: async (formData) => {
             const data = Object.fromEntries(formData.entries());
-            console.log(data);
             await fetchJSON('/api/categories/add', { method: 'POST', body: JSON.stringify(data) });
             window.location.reload();
         }
@@ -187,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
         onSubmit: async (formData) => {
             const id = formData.get("editCategoryId");
             const name = formData.get("editCategoryName");
-            console.log(id, name);
             await fetchJSON(`/api/categories/update/${id}`, { method: 'POST', body: JSON.stringify({ name }) });
             window.location.reload();
         }

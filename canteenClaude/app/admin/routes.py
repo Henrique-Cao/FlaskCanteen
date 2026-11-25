@@ -6,7 +6,6 @@ admin_bp = Blueprint("admin", __name__)
 from collections import defaultdict
 from app.services.order_service import get_filtered_orders_query
 from app.services.analytics_service import get_dashboard_metrics
-from app.services.analytics_service2 import get_dashboard_metrics2
 
 
 
@@ -48,30 +47,18 @@ def analytics_content():
     date_range = request.args.get('range', 'today')
 
     # 2. Hand off all calculations to the Service Layer
-    metrics2 = get_dashboard_metrics2(date_range)
-    #metrics = get_dashboard_metrics(date_range)
+    metrics = get_dashboard_metrics(date_range)
     
     # 3. Pass the clean dictionary into the HTMX partial template
-    # return render_template(
-    #     'partials/_analytics_content.html', 
-    #     kpi=metrics['kpi'],
-    #     labels=metrics['chart_labels'],
-    #     revenue=metrics['chart_revenue'],
-    #     traffic=metrics['chart_traffic'], # Optional: Pass this if you add the Area chart
-    #     item_sales_distribution=metrics['item_sales_distribution'],
-    #     category_sales_distribution=metrics['category_sales_distribution']
-        
-    # )
-
     return render_template(
         'partials/_analytics_content.html', 
-        kpi=metrics2['kpi'],
-        labels=metrics2['chart_labels'],
-        revenue=metrics2['chart_revenue'],
-        traffic=metrics2['chart_traffic'], # Optional: Pass this if you add the Area chart
-        item_sales_distribution=metrics2['top_items'],
-        category_sales_distribution=metrics2['top_categories'],
-        meta=metrics2['meta']
+        kpi=metrics['kpi'],
+        labels=metrics['chart_labels'],
+        revenue=metrics['chart_revenue'],
+        traffic=metrics['chart_traffic'], # Optional: Pass this if you add the Area chart
+        item_sales_distribution=metrics['top_items'],
+        category_sales_distribution=metrics['top_categories'],
+        meta=metrics['meta']
     )
 
 
@@ -141,8 +128,6 @@ def calculate_pagination_window(current_page: int, total_pages: int, window_size
         start_page = total_pages - window_size + 1
 
     return range(start_page, end_page + 1)
-
-    return range(start_page, end_page + 1)
 # History Page routing
 
 
@@ -173,7 +158,6 @@ def order_history():
     active_filters_count = len(statuses) + (1 if date_preset else 0) + (1 if min_price or max_price else 0)
 
 
-    print("orders: ",orders)
     # --- THE HTMX INTERCEPTOR ---
     if 'HX-Request' in request.headers:
         # If HTMX asked for the data, return ONLY the table rows and pagination

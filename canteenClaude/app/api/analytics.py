@@ -9,7 +9,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Tuple
 
-from flask import Blueprint, Response, app, jsonify, request
+from flask import Blueprint, Response, jsonify, request
 from app.models import Order  # Adjust model import paths to match your project
 
 analytics_api = Blueprint("analytics_api", __name__)
@@ -91,8 +91,6 @@ def get_analytics_data() -> Tuple[Response, int]:
         # ----------------------------------------------------------------------
         # 1. KPI Aggregation & Trend Calculations
         # ----------------------------------------------------------------------
-        # Check if previous period actually has valid order records
-        has_prev_data: bool = len(prev_orders) > 0
         # --- KPI Calculations ---
         revenue: float = round(sum(o.total_price for o in current_orders if o.total_price), 2)
         prev_revenue: float = round(sum(o.total_price for o in prev_orders if o.total_price), 2)
@@ -104,10 +102,6 @@ def get_analytics_data() -> Tuple[Response, int]:
         prev_orders_completed: int = len(prev_orders)
         orders_trend: str = f"{((orders_completed - prev_orders_completed) / prev_orders_completed * 100):+.1f}%" if prev_orders_completed else "+0.0%"
 
-
-        dishes_completed: int = sum(item.quantity for o in current_orders for item in o.items)
-        meals_cooked: int = round(sum(item.quantity for o in current_orders for item in o.items), 2)            
-        prev_meals: int = round(sum(item.quantity for o in prev_orders for item in o.items), 2)
 
         # Order Prep Time Calculation (in minutes)
         prep_times: List[float] = [
@@ -139,7 +133,6 @@ def get_analytics_data() -> Tuple[Response, int]:
         rush_data: List[int] = []
 
         if hourly_counts:
-            min_h, max_h = min(hourly_counts.keys()), max(hourly_counts.keys())
             for h in sorted(hourly_counts.keys()):
                 label: str = (
                     "12 AM" if h == 0 else f"{h} AM" if h < 12 else "12 PM" if h == 12 else f"{h - 12} PM"
@@ -175,28 +168,7 @@ def get_analytics_data() -> Tuple[Response, int]:
                 cat_counts[cat_name] += item.quantity
         
         # ----------------------------------------------------------------------
-        # 5. Recent Completed Orders List
-        # ----------------------------------------------------------------------
-        # recent_orders_payload: List[Dict[str, Any]] = []
-        # sorted_recent: List[Order] = sorted(current_orders, key=lambda x: x.created_at, reverse=True)[:5]
-
-        # for order in sorted_recent:
-        #     items_str: str = ", ".join(
-        #         [f"{i.menu_item.name} (x{i.quantity})" for i in order.order_items if i.menu_item]
-        #     )
-        #     recent_orders_payload.append(
-        #         {
-        #             "id": str(order.id),
-        #             "time": order.created_at.strftime("%H:%M"),
-        #             "type": getattr(order, "order_type", "Dine-in"),
-        #             "table": getattr(order, "table_number", "-"),
-        #             "items": items_str,
-        #             "amount": float(order.total_price or 0.0),
-        #         }
-        #     )
-
-        # ----------------------------------------------------------------------
-        # 6. Final Response Payload
+        # 5. Final Response Payload
         # ----------------------------------------------------------------------
         
         payload: Dict[str, Any] = {
@@ -224,30 +196,6 @@ def get_analytics_data() -> Tuple[Response, int]:
                 },
         }
         
-        # payload: Dict[str, Any] = {
-        #     "kpis": {
-        #         "total_revenue": float(revenue),
-        #         "revenue_trend": revenue_trend_str,       # Output: "+100%" or "+12.5%"
-        #         "meals_cooked": meals_cooked,
-        #         "meals_trend": meals_trend_str,           # Output: "+100%" or "-5.0%"
-        #         "prep_speed": f"{avg_prep:.1f}m",
-        #         "prep_trend": prep_trend_str,
-        #     },
-        #     "rush_hours": {
-        #         "categories": rush_categories,
-        #         "series": [{"name": "Orders", "data": rush_data}],
-        #     },
-        #     "top_dishes": {
-        #         "categories": [d[0] for d in sorted_dishes],
-        #         "series": [{"name": "Portions Sold", "data": [d[1] for d in sorted_dishes]}],
-        #     },
-        #     "categories": {
-        #         "labels": list(cat_counts.keys()),
-        #         "series": list(cat_counts.values()),
-        #     },
-        #     "recent_orders": recent_orders_payload,
-        # }
-
         return jsonify(payload), 200
 
     except Exception as err:

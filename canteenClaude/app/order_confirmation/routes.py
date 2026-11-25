@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 
 from flask import Blueprint, redirect, render_template, request, url_for
 from sqlalchemy import or_
@@ -39,7 +39,6 @@ def track():
    
     raw_q = request.args.get("order_number", "").strip()
     clean_q = raw_q.lstrip("#")  # Handles both "#ORD-0450" and "ORD-0450"
-    print(f"Raw query: {raw_q}, Clean query: {clean_q}")
     if not clean_q:
         return redirect(url_for("main.index"))  # Adjust to your home blueprint endpoint
 
@@ -60,8 +59,6 @@ def track():
         )
 
     total_amount = 0
-    if order:
-        total_amount = sum(item.quantity * item.unit_price for item in OrderItem.query.filter_by(order_id=order.id).all())
     # Reuses your existing confirmation template's empty/not-found state
     return render_template(
         "order_confirmation/order_confirmation.html",
@@ -79,12 +76,10 @@ def index(order_number):
     clean_number = order_number.strip().lstrip("#")
 
     order = Order.query.filter(Order.order_number.ilike(clean_number)).first()
-    print(order)
     order_items = []
     items_with_details = []
     total_amount = 0
     now = datetime.now(order.created_at.tzinfo) if order and order.created_at.tzinfo else datetime.now()
-    print("order", order)
     if order:
         # Single JOIN query instead of querying MenuItem inside a loop
         results = (
@@ -118,28 +113,10 @@ def index(order_number):
 @order_confirmation_bp.route("/<int:order_id>/status", methods=["GET"])
 def order_status_partial(order_id):
     order = Order.query.get_or_404(order_id)
-    print(order)
     order_status = order.status
     if order_status == 'pending':
         order.status = 'preparing'
     return render_template("partials/_order_status_card.html", order=order, order_status=order_status)
-# @order_confirmation_bp.route("/<order_number>")
-# def index(order_number):
-#     # get the order details from the database using the order_number
-#     order = Order.query.filter_by(order_number=order_number).first()
-#     order_items = OrderItem.query.filter_by(order_id=order.id).all() if order else []
-#     items_with_details = []
-#     for item in order_items:
-#         menu_item = MenuItem.query.get(item.menu_item_id)
-#         if menu_item:
-#             items_with_details.append({
-#                 "name": menu_item.name,
-#                 "quantity": item.quantity,
-#                 "unit_price": item.unit_price,
-#                 "total_price": item.quantity * item.unit_price
-#             })
-        
-#     return render_template("order_confirmation/order_confirmation.html", order=order, order_items=order_items, order_number=order_number, items_with_details=items_with_details )
 
 
 

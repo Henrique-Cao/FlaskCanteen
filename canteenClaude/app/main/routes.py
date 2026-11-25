@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template,redirect, url_for, request, flash
-from app.services.order_service import get_order_by_numeric_input
+from app.services.order_service import format_order_number
 from app.models import Category, MenuItem, Order, OrderItem
 from flask_login import current_user
 main_bp = Blueprint("main", __name__)
@@ -53,14 +53,12 @@ def redirect_tracking():
     if request.method == 'POST':
         # 1. Get submitted digits from <input name="order_number">
         submitted_digits = request.form.get('order_number', '')
-        print(submitted_digits)
-        # 2. Look up order using our service helper
-        order = get_order_by_numeric_input(submitted_digits)
+        # 2. Format the submitted order number
+        order_number = format_order_number(submitted_digits)
         
-        # 3. Redirect if found, otherwise show error
-        print(order)
-        if order:
-            return redirect(url_for('main.confirmation', order_number=order))
+        # 3. Redirect if a number was provided, otherwise show an error
+        if order_number:
+            return redirect(url_for('main.confirmation', order_number=order_number))
         
         flash("No order found with that ID. Please check your receipt and try again.", "danger")
 
