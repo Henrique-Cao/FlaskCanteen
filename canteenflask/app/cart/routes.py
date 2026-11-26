@@ -36,22 +36,23 @@ def cart_modal():
 
 @cart_bp.route("/checkout", methods=["GET"])
 def checkout():
-    try:
-        order = create_order(
-            customer_name=request.form.get("customer_name", "").strip(),
-            phone=request.form.get("phone", "").strip(),
-            cart_items=cart_service.get_cart_items(),
-        )
-    except ValueError as err:
-        # Stays on the same page and swaps the error into #checkout-error
-        return f'<div class="alert alert-danger py-2 small">{err}</div>'
+    # try:
+    #     order = create_order(
+    #         customer_name=request.form.get("customer_name", "").strip(),
+    #         phone=request.form.get("phone", "").strip(),
+    #         cart_items=cart_service.get_cart_items(),
+    #     )
+    # except ValueError as err:
+    #     # Stays on the same page and swaps the error into #checkout-error
+    #     return f'<div class="alert alert-danger py-2 small">{err}</div>'
 
-    cart_service.clear_cart()
+    # cart_service.clear_cart()
 
-    # Route handles directing the browser to the confirmation page
-    response = make_response("", 200)
-    response.headers["HX-Redirect"] = url_for(
-        "order_confirmation.index",
-        order_number=order.order_number,
-    )
-    return response
+    # # Route handles directing the browser to the confirmation page
+    # response = make_response("", 200)
+    # response.headers["HX-Redirect"] = url_for(
+    #     "order_confirmation.index",
+    #     order_number=order.order_number,
+    # )
+    # return response
+    return
