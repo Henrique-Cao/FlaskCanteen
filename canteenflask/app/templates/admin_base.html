@@ -58,24 +58,24 @@
   <nav class="navbar fixed-bottom bg-body border-dashed-top px-2 py-2 d-md-none">
         <div class="container-fluid d-flex justify-content-between px-1">
             
-            <a href="{{url_for('admin.index')}}" class="text-decoration-none d-flex flex-column align-items-center justify-content-center {{ 'bg-primary text-white rounded-3 fw-semibold' if request.endpoint == 'main.index' else 'text-secondary' }} py-2" style="width: 22%;">
+            <a href="{{url_for('admin.index')}}" class="admin-bottom-link text-decoration-none d-flex flex-column align-items-center justify-content-center {{ 'bg-primary text-white rounded-3 fw-semibold' if request.endpoint == 'main.index' else 'text-secondary' }} py-2">
                 <i class="bi bi-bar-chart fs-5 mb-1"></i>
-                <span class="small fw-semibold " style="font-size: 0.75rem;">Analytics</span>
+                <span class="admin-bottom-label small fw-semibold ">Analytics</span>
             </a>
 
-            <a href="{{ url_for('admin.manage_menu') }}" class="text-decoration-none d-flex flex-column align-items-center justify-content-center {{ 'bg-primary text-white rounded-3 fw-semibold' if request.endpoint == 'admin.manage_menu' else 'text-secondary' }} py-2" style="width: 22%;">
+            <a href="{{ url_for('admin.manage_menu') }}" class="admin-bottom-link text-decoration-none d-flex flex-column align-items-center justify-content-center {{ 'bg-primary text-white rounded-3 fw-semibold' if request.endpoint == 'admin.manage_menu' else 'text-secondary' }} py-2">
                 <i class="bi bi-fork-knife fs-5 mb-1"></i>
-                <span class="small" style="font-size: 0.75rem;">Menu</span>
+                <span class="admin-bottom-label small">Menu</span>
             </a>
 
-            <a href="{{ url_for('admin.order_management') }}" class="text-decoration-none d-flex flex-column align-items-center justify-content-center text-secondary py-2" style="width: 22%;">
+            <a href="{{ url_for('admin.order_management') }}" class="admin-bottom-link text-decoration-none d-flex flex-column align-items-center justify-content-center text-secondary py-2">
                 <i class="bi bi-basket fs-5 mb-1"></i>
-                <span class="small" style="font-size: 0.75rem;">Orders</span>
+                <span class="admin-bottom-label small">Orders</span>
             </a>
-            <a href="{{ url_for('admin.order_history') }}" class="text-decoration-none d-flex flex-column align-items-center justify-content-center text-secondary py-2" style="width: 22%;">
+            <a href="{{ url_for('admin.order_history') }}" class="admin-bottom-link text-decoration-none d-flex flex-column align-items-center justify-content-center text-secondary py-2">
                 
                 <i class="bi bi-clock fs-5 mb-1"></i>
-                <span class="small" style="font-size: 0.75rem;">History</span>
+                <span class="admin-bottom-label small">History</span>
             </a>
         </div>
     </nav>

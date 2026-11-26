@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Blueprint, redirect, render_template, request, url_for
 from sqlalchemy import or_
 from app.models import MenuItem, Order, OrderItem
+from app.services.order_service import build_order_item_details
 order_confirmation_bp = Blueprint("order_confirmation", __name__)
 
 
@@ -91,12 +92,7 @@ def index(order_number):
 
         for order_item, menu_item in results:
             order_items.append(order_item)
-            items_with_details.append({
-                "name": menu_item.name,
-                "quantity": order_item.quantity,
-                "unit_price": order_item.unit_price,
-                "total_price": order_item.quantity * order_item.unit_price,
-            })
+            items_with_details.append(build_order_item_details(order_item, menu_item))
 
     total_amount = sum(item["total_price"] for item in items_with_details)
     elapsed_time_mins = (now - order.created_at).total_seconds() / 60 if order else None
@@ -114,7 +110,7 @@ def index(order_number):
 def order_status_partial(order_id):
     order = Order.query.get_or_404(order_id)
     order_status = order.status
-    if order_status == 'pending':
+    if order_status == Order.STATUS_PENDING:
         order.status = 'preparing'
     return render_template("partials/_order_status_card.html", order=order, order_status=order_status)
 

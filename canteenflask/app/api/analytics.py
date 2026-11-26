@@ -9,7 +9,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Tuple
 
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, Response, jsonify, request 
 from app.models import Order  # Adjust model import paths to match your project
 
 analytics_api = Blueprint("analytics_api", __name__)
@@ -56,6 +56,81 @@ def _calculate_sgt_time_windows(time_range: str, now: datetime) -> Tuple[datetim
 
     return start_date, end_date, prev_start, prev_end
 
+
+def _build_kpis(current_orders: List[Order], prev_orders: List[Order]) -> Dict[str, Any]:
+    revenue: float = round(sum(o.total_price for o in current_orders if o.total_price), 2)
+    prev_revenue: float = round(sum(o.total_price for o in prev_orders if o.total_price), 2)
+    revenue_trend: str = f"{((revenue - prev_revenue) / prev_revenue * 100):+.1f}%" if prev_revenue else "+0.0%"
+
+    orders_completed: int = len(current_orders)
+    prev_orders_completed: int = len(prev_orders)
+    orders_trend: str = f"{((orders_completed - prev_orders_completed) / prev_orders_completed * 100):+.1f}%" if prev_orders_completed else "+0.0%"
+
+    prep_times: List[float] = [
+        (o.ready_at - o.created_at).total_seconds() / 60.0
+        for o in current_orders
+        if o.ready_at and o.created_at
+    ]
+    avg_prep: float = round(sum(prep_times) / len(prep_times), 1) if prep_times else 0.0
+
+    prev_prep_times: List[float] = [
+        (o.ready_at - o.created_at).total_seconds() / 60.0
+        for o in prev_orders
+        if o.ready_at and o.created_at
+    ]
+    prev_avg_prep: float = round(sum(prev_prep_times) / len(prev_prep_times), 1) if prev_prep_times else 0.0
+    prep_trend: str = f"{((avg_prep - prev_avg_prep) / prev_avg_prep * 100):+.1f}%" if prev_avg_prep else "+0.0%"
+
+    return {
+        "total_revenue": float(revenue),
+        "orders_completed": orders_completed,
+        "prep_speed": f"{avg_prep:.1f}m",
+        "revenue_trend": revenue_trend,
+        "orders_trend": orders_trend,
+        "prep_trend": prep_trend,
+    }
+
+
+def _build_rush_hours(current_orders: List[Order]) -> Tuple[List[str], List[int]]:
+    hourly_counts: Dict[int, int] = defaultdict(int)
+    for order in current_orders:
+        hourly_counts[order.ready_at.hour] += 1
+
+    rush_categories: List[str] = []
+    rush_data: List[int] = []
+    if hourly_counts:
+        for h in sorted(hourly_counts.keys()):
+            label: str = (
+                "12 AM" if h == 0 else f"{h} AM" if h < 12 else "12 PM" if h == 12 else f"{h - 12} PM"
+            )
+            rush_categories.append(label)
+            rush_data.append(hourly_counts[h])
+
+    return rush_categories, rush_data
+
+
+def _build_sales_distributions(current_orders: List[Order]) -> Tuple[List[Tuple[str, int]], Dict[str, int]]:
+    dish_counts: Dict[str, int] = defaultdict(int)
+    for order in current_orders:
+        for item in order.items:
+            if item.menu_item:
+                dish_counts[item.menu_item.name] += item.quantity
+
+    sorted_dishes: List[Tuple[str, int]] = sorted(dish_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+
+    cat_counts: Dict[str, int] = defaultdict(int)
+    for order in current_orders:
+        for item in order.items:
+            cat_name: str = (
+                item.menu_item.category.name
+                if (item.menu_item and item.menu_item.category)
+                else "Uncategorized"
+            )
+            cat_counts[cat_name] += item.quantity
+
+    return sorted_dishes, cat_counts
+
+
 @analytics_api.route("/", methods=["GET"])
 def get_analytics_data() -> Tuple[Response, int]:
     
@@ -76,13 +151,13 @@ def get_analytics_data() -> Tuple[Response, int]:
 
 
         current_orders: List[Order] = Order.query.filter(
-            Order.status.in_(["completed", "ready"]),
+            Order.status.in_([Order.STATUS_COMPLETED, Order.STATUS_READY]),
             Order.ready_at >= start_date,
             Order.ready_at <= end_date,
         ).all()
         
         prev_orders: List[Order] = Order.query.filter(
-            Order.status.in_(["completed", "ready"]),
+            Order.status.in_([Order.STATUS_COMPLETED, Order.STATUS_READY]),
             Order.created_at >= prev_start,
             Order.created_at < prev_end,
         ).all()
@@ -91,97 +166,27 @@ def get_analytics_data() -> Tuple[Response, int]:
         # ----------------------------------------------------------------------
         # 1. KPI Aggregation & Trend Calculations
         # ----------------------------------------------------------------------
-        # --- KPI Calculations ---
-        revenue: float = round(sum(o.total_price for o in current_orders if o.total_price), 2)
-        prev_revenue: float = round(sum(o.total_price for o in prev_orders if o.total_price), 2)
-        revenue_trend: str = f"{((revenue - prev_revenue) / prev_revenue * 100):+.1f}%" if prev_revenue else "+0.0%"
-
-
-        
-        orders_completed: int = len(current_orders)
-        prev_orders_completed: int = len(prev_orders)
-        orders_trend: str = f"{((orders_completed - prev_orders_completed) / prev_orders_completed * 100):+.1f}%" if prev_orders_completed else "+0.0%"
-
-
-        # Order Prep Time Calculation (in minutes)
-        prep_times: List[float] = [
-            (o.ready_at - o.created_at).total_seconds() / 60.0
-            for o in current_orders
-            if o.ready_at and o.created_at
-        ]
-
-        avg_prep: float = round(sum(prep_times) / len(prep_times), 1) if prep_times else 0.0
-
-        prev_prep_times: List[float] = [
-            (o.ready_at - o.created_at).total_seconds() / 60.0
-            for o in prev_orders
-            if o.ready_at and o.created_at
-        ]
-        prev_avg_prep: float = round(sum(prev_prep_times) / len(prev_prep_times), 1) if prev_prep_times else 0.0
-      
-        prep_trend: str = f"{((avg_prep - prev_avg_prep) / prev_avg_prep * 100):+.1f}%" if prev_avg_prep else "+0.0%"
+        kpis = _build_kpis(current_orders, prev_orders)
         
         
         # ----------------------------------------------------------------------
         # 2. Dynamic Rush Hours Aggregation (Direct SGT Hour Read)
         # ----------------------------------------------------------------------
-        hourly_counts: Dict[int, int] = defaultdict(int)
-        for order in current_orders:
-            hourly_counts[order.ready_at.hour] += 1
-        
-        rush_categories: List[str] = []
-        rush_data: List[int] = []
-
-        if hourly_counts:
-            for h in sorted(hourly_counts.keys()):
-                label: str = (
-                    "12 AM" if h == 0 else f"{h} AM" if h < 12 else "12 PM" if h == 12 else f"{h - 12} PM"
-                )
-                rush_categories.append(label)
-                rush_data.append(hourly_counts[h])
+        rush_categories, rush_data = _build_rush_hours(current_orders)
         
      
 
         # ----------------------------------------------------------------------
-        # 3. Top Selling Dishes (Ranked Top 5)
+        # 3. Top Selling Dishes and Sales Distribution by Category
         # ----------------------------------------------------------------------
-        dish_counts: Dict[str, int] = defaultdict(int)
-        for order in current_orders:
-            for item in order.items:
-                if item.menu_item:
-                    dish_counts[item.menu_item.name] += item.quantity
-
-        sorted_dishes: List[Tuple[str, int]] = sorted(dish_counts.items(), key=lambda x: x[1], reverse=True)[:5]
-
-        
-        # ----------------------------------------------------------------------
-        # 4. Sales Distribution by Category
-        # ----------------------------------------------------------------------
-        cat_counts: Dict[str, int] = defaultdict(int)
-        for order in current_orders:
-            for item in order.items:
-                cat_name: str = (
-                    item.menu_item.category.name
-                    if (item.menu_item and item.menu_item.category)
-                    else "Uncategorized"
-                )
-                cat_counts[cat_name] += item.quantity
+        sorted_dishes, cat_counts = _build_sales_distributions(current_orders)
         
         # ----------------------------------------------------------------------
         # 5. Final Response Payload
         # ----------------------------------------------------------------------
         
         payload: Dict[str, Any] = {
-                "kpis": {
-                    "total_revenue": float(revenue),
-                    "orders_completed": orders_completed,
-                    "prep_speed": f"{avg_prep:.1f}m",
-                    "revenue_trend": revenue_trend,       # Output: "+100%" or "+12.5%"
-                    "orders_trend": orders_trend,         # Output: "+100%" or "+12.5%"
-                    "prep_trend": prep_trend,           # Output: "+100%" or "+12.5%"
-
-
-                },
+                "kpis": kpis,
                 "rush_hours": {
                     "categories": rush_categories,
                     "series": [{"name": "Orders", "data": rush_data}],

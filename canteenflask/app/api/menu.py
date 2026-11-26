@@ -8,6 +8,16 @@ from PIL import Image, ImageOps
 
 menu_api = Blueprint('menu_api', __name__)
 
+
+def _save_menu_image(file, filepath):
+    img = Image.open(file)
+    img = ImageOps.exif_transpose(img)
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.thumbnail((600, 600), Image.Resampling.LANCZOS)
+    img.save(filepath, optimize=True, quality=85)
+
+
 @menu_api.route('/', methods=['GET'])
 def get_all_items():
     items = MenuItem.query.all()
@@ -61,24 +71,7 @@ def add_menu_item():
                 filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], secure_name)
                 
                 try:
-                    # 2. Open the image in memory using Pillow
-                    img = Image.open(file)
-                    
-                    # 3. Strip EXIF data (fixes rotation issues from iPhone photos)
-                    img = ImageOps.exif_transpose(img)
-                    
-                    # 4. Convert to RGB (prevents errors if user uploads a transparent PNG but saves as JPG)
-                    if img.mode != 'RGB':
-                        img = img.convert('RGB')
-                    
-                    # 5. Crop and resize to a perfect, fast-loading 600x600 square
-                    # Image.Resampling.LANCZOS maintains the highest visual quality during resizing
-                    img.thumbnail((600, 600), Image.Resampling.LANCZOS)
-                    
-                    # 6. Save to disk with aggressive web compression (quality=85)
-                    img.save(filepath, optimize=True, quality=85)
-                    
-                    # 7. Set the variable to save to SQLite
+                    _save_menu_image(file, filepath)
                     saved_filename = secure_name
                     
                 except Exception as e:
@@ -131,24 +124,7 @@ def update_menu_item(item_id):
                 filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], secure_name)
                 
                 try:
-                    # 2. Open the image in memory using Pillow
-                    img = Image.open(file)
-                    
-                    # 3. Strip EXIF data (fixes rotation issues from iPhone photos)
-                    img = ImageOps.exif_transpose(img)
-                    
-                    # 4. Convert to RGB (prevents errors if user uploads a transparent PNG but saves as JPG)
-                    if img.mode != 'RGB':
-                        img = img.convert('RGB')
-                    
-                    # 5. Crop and resize to a perfect, fast-loading 600x600 square
-                    # Image.Resampling.LANCZOS maintains the highest visual quality during resizing
-                    img.thumbnail((600, 600), Image.Resampling.LANCZOS)
-                    
-                    # 6. Save to disk with aggressive web compression (quality=85)
-                    img.save(filepath, optimize=True, quality=85)
-                    
-                    # 7. Set the variable to save to SQLite
+                    _save_menu_image(file, filepath)
                     saved_filename = secure_name
                 except Exception as e:
                     flash(f"Image processing failed: {str(e)}")

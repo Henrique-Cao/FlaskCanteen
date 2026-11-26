@@ -3,6 +3,16 @@ from datetime import datetime, timedelta
 from sqlalchemy import or_
 from app.models import Order
 
+
+def build_order_item_details(order_item, menu_item):
+    return {
+        "name": menu_item.name,
+        "quantity": order_item.quantity,
+        "unit_price": order_item.unit_price,
+        "total_price": order_item.quantity * order_item.unit_price,
+    }
+
+
 def get_filtered_orders_query(args):
     """
     Reads request parameters sent from the filter form 

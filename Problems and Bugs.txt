@@ -1,0 +1,23 @@
+Problems and Bugs:
+menu UI: review button
+tracker UI
+
+category bar and search bar in menu
+
+Placing order does not clear session cart
+
+Order description not implemented
+
+cant navigate to other tabs/pages from order confirmation page
+
+Order confirmation tracking only works on seeded data newly inserted data don't work
+
+Admin Orders:
+time elapsed not shown/updated
+Order details alignment needs touchup
+* need to add kitchen pause button
+
+Analytics Dashboard:
+Graph Timing needs updating(currently hard coded)
+
+admin Logout button sometimes don't work / needs to be clicked multiple times

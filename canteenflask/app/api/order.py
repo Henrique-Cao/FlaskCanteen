@@ -10,6 +10,42 @@ SG_TZ = timezone(timedelta(hours=8))
 
 order_api = Blueprint('order_api', __name__)
 
+
+def _next_order_number():
+    existing_order_numbers = Order.query.with_entities(Order.order_number).all()
+    highest_order_number = max(
+        (
+            int(order_number.removeprefix('ORD-'))
+            for (order_number,) in existing_order_numbers
+            if order_number.startswith('ORD-')
+            and order_number.removeprefix('ORD-').isdigit()
+        ),
+        default=0
+    )
+    return f"ORD-{highest_order_number + 1:04d}"
+
+
+def _serialize_created_order(order):
+    return {
+        "success": True,
+        "id": order.id,
+        "customer_name": order.customer_name,
+        "total_price": float(order.total_price),
+        "status": order.status,
+        "created_at": order.created_at.isoformat(),
+        "redirect_url": f"/confirmation/{order.order_number}",
+        "items": [
+            {
+                "menu_item_id": item.menu_item_id,
+                "quantity": item.quantity,
+                "price": float(item.unit_price),
+                "name": item.menu_item.name,
+                "order_number": order.order_number
+            } for item in order.items
+        ]
+    }
+
+
 # Create a new order from the session cart and customer details
 @order_api.route('/', methods=['POST'])
 def create_order():
@@ -28,17 +64,7 @@ def create_order():
     if not customer_name or not phone:
         return jsonify({"error": "Missing required fields: 'customer_name' and 'customer_phone' are mandatory."}), 400
 
-    existing_order_numbers = Order.query.with_entities(Order.order_number).all()
-    highest_order_number = max(
-        (
-            int(order_number.removeprefix('ORD-'))
-            for (order_number,) in existing_order_numbers
-            if order_number.startswith('ORD-')
-            and order_number.removeprefix('ORD-').isdigit()
-        ),
-        default=0
-    )
-    order_number = f"ORD-{highest_order_number + 1:04d}"
+    order_number = _next_order_number()
     # 3. Create the base Order instance
     new_order = Order(
         order_number=order_number,
@@ -76,24 +102,7 @@ def create_order():
     session.modified = True
 
     # 7. Return success payload with confirmation URL for JS navigation
-    return jsonify({
-        "success": True,
-        "id": new_order.id,
-        "customer_name": new_order.customer_name,
-        "total_price": float(new_order.total_price),
-        "status": new_order.status,
-        "created_at": new_order.created_at.isoformat(),
-        "redirect_url": f"/confirmation/{new_order.order_number}",
-        "items": [
-            {
-                "menu_item_id": item.menu_item_id,
-                "quantity": item.quantity,
-                "price": float(item.unit_price),
-                "name": item.menu_item.name,
-                "order_number": new_order.order_number
-            } for item in new_order.items
-        ]
-    }), 201
+    return jsonify(_serialize_created_order(new_order)), 201
 
 
 #create order using session cart
@@ -115,11 +124,8 @@ def create_order2():
         "redirect_url": f"/confirmation/{order.order_number}"
     }), 201
 
-# Get all orders (for admin view)
-@order_api.route('/', methods=['GET'])
-def get_orders():
-    orders = Order.query.order_by(Order.created_at.desc()).all()
-    return jsonify([{
+def _serialize_order(order):
+    return {
         "id": order.id,
         "order_number": order.order_number,
         "customer_name": order.customer_name,
@@ -135,29 +141,19 @@ def get_orders():
                 "name": item.menu_item.name
             } for item in order.items
         ]
-    } for order in orders]), 200
+    }
+
+# Get all orders (for admin view)
+@order_api.route('/', methods=['GET'])
+def get_orders():
+    orders = Order.query.order_by(Order.created_at.desc()).all()
+    return jsonify([_serialize_order(order) for order in orders]), 200
 
 @order_api.route('/active', methods=['GET'])
 def get_active_orders():
     orders = Order.query.order_by(Order.created_at.desc()).all()
 
-    return jsonify([{
-        "id": order.id,
-        "order_number": order.order_number,
-        "customer_name": order.customer_name,
-        "phone": order.phone,
-        "status": order.status,
-        "total_price": float(order.total_price),
-        "created_at": order.created_at.isoformat(),
-        "items": [
-            {
-                "menu_item_id": item.menu_item_id,
-                "quantity": item.quantity,
-                "price": float(item.unit_price),
-                "name": item.menu_item.name
-            } for item in order.items
-        ]
-    } for order in orders]), 200
+    return jsonify([_serialize_order(order) for order in orders]), 200
 
 @order_api.route('/<string:order_number>', methods=['GET'])
 def get_order_details(order_number):

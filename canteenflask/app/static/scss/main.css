@@ -1142,4 +1142,17 @@ p.lead {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
-}/*# sourceMappingURL=main.css.map */
+}
+
+.admin-bottom-link {
+  width: 22%;
+}
+
+.admin-bottom-label {
+  font-size: 0.75rem;
+}
+
+.hero-content-limit {
+  max-width: 440px;
+}
+/*# sourceMappingURL=main.css.map */

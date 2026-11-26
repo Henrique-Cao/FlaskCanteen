@@ -101,7 +101,7 @@ def get_top_selling_items(start_date, end_date, limit=5):
     ).select_from(OrderItem).join(Order).join(MenuItem).filter(
         Order.created_at >= start_date,
         Order.created_at < end_date,
-        Order.status == 'completed'
+        Order.status == Order.STATUS_COMPLETED
     ).group_by(MenuItem.id).order_by(
         desc('total_sold')
     ).limit(limit).all()
@@ -134,7 +134,7 @@ def get_top_category(start_date, end_date, limit=5):
     ).select_from(OrderItem).join(Order).join(MenuItem).filter(
         Order.created_at >= start_date,
         Order.created_at < end_date,
-        Order.status == 'completed'
+        Order.status == Order.STATUS_COMPLETED
     ).join(Category, MenuItem.category_id == Category.id).group_by(
         MenuItem.category_id, Category.name
     ).order_by(
@@ -163,7 +163,7 @@ def get_period_data(start_date, end_date):
     filters = (
         Order.created_at >= start_date,
         Order.created_at < end_date,
-        Order.status == 'completed'
+        Order.status == Order.STATUS_COMPLETED
     )
     revenue = db.session.query(func.sum(Order.total_price)).filter(*filters).scalar()
     meals = db.session.query(func.sum(OrderItem.quantity)).join(
@@ -225,7 +225,7 @@ def get_dashboard_metrics(date_range='today'):
         ).filter(
             Order.created_at >= start_date,
             Order.created_at < end_date,
-            Order.status == 'completed'
+            Order.status == Order.STATUS_COMPLETED
         ).group_by('time_bucket').all()
     
     

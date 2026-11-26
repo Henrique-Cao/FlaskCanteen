@@ -1,23 +1,27 @@
-# 🤝 Contributing to Canteen Order Rail
+# Contributing
 
-First off, thank you for considering contributing to **Canteen Order Rail**! 
+Thank you for helping improve Canteen Order Rail. The Flask application and test suite are in [`canteenClaude/`](canteenClaude/); project guides are in [`docs/`](docs/).
 
-This project is built to deliver a streamlined, highly accessible Kitchen Display System (KDS). To keep the codebase clean, scalable, and maintainable, please take a moment to review these guidelines before submitting code or documentation updates.
+## Set up the project
 
----
+Follow [Getting started](docs/getting-started.md) to create a virtual environment and install application and test dependencies. From `canteenClaude/`, run the suite with:
 
-## 🎯 Core UX & Technical Philosophy
+```bash
+python -m pytest
+```
 
-When working on this codebase, keep our target user and core design principles in mind:
-* **Accessibility First:** The UI is designed for high-contrast, touch-first kitchen display screens. Keep touch targets large (minimum 48px) and visual hierarchy bold and unambiguous.
-* **Low Cognitive Load:** Eliminate clutter. Operators need to assess order status at a glance under time pressure.
-* **Keep Docs in Sync:** Code and documentation evolve together. If you change a route, database schema, or configuration flag, update the corresponding documentation.
+Add focused tests under `canteenClaude/tests/unit/` for isolated logic or `canteenClaude/tests/integration/` for routes, database behavior, and application flows. Reuse the fixtures in `tests/conftest.py`; tests must not use real customer data, the normal database, or the real upload directory.
 
----
+## Before opening a change
 
-## 🚀 Getting Started
+- Keep changes focused and follow existing project patterns.
+- Preserve the customer and staff workflows, and keep interactive controls clear and usable on touch screens.
+- Update the relevant documentation when changing routes, request/response fields, models, configuration, or setup instructions.
+- Run the relevant tests and include the results in your pull request.
+- Do not commit credentials, private customer data, local databases, or uploaded customer content.
 
-1. **Fork or Clone the Repository:**
-   ```bash
-   git clone [https://github.com/your-username/canteen-order-rail.git](https://github.com/your-username/canteen-order-rail.git)
-   cd canteen-order-rail
+## Pull requests
+
+Describe the user-visible change, note any configuration or data-model impact, and include test commands and results. For UI changes, include a screenshot when practical.
+
+The project is licensed under the [MIT License](LICENSE).

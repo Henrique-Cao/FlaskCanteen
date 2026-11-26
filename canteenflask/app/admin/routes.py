@@ -76,20 +76,22 @@ def manage_menu():
     all_items = MenuItem.query.order_by(MenuItem.name.asc()).all()
     
   
-    #2. Create a dictionary to hold items by category in the order of the categories
-    items_by_category = defaultdict(list)
     categories = Category.query.order_by(Category.display_order.asc()).all()
+    categories_by_id = {category.id: category for category in categories}
+    items_by_category = defaultdict(list)
     for category in categories:
-        items_by_category[category] = [item for item in all_items if item.category_id == category.id]
-    
-    category_query = Category.query.order_by(Category.display_order.asc()).all()
+        items_by_category[category] = []
+
     for item in all_items:
-            if item.category is None:
-                items_by_category["Uncategorized"].append(item)
+        category = categories_by_id.get(item.category_id)
+        if category is None:
+            items_by_category["Uncategorized"].append(item)
+        else:
+            items_by_category[category].append(item)
     return render_template('admin/manage_menu.html', 
                            items_by_category=items_by_category, 
                            search_query=search_query,
-                           categories=category_query)
+                           categories=categories)
 
 
 @admin_bp.route('/orders')
@@ -139,7 +141,7 @@ def order_history():
     query = get_filtered_orders_query(request.args)
     
     # Fetch paginated orders from database
-    orders = query.filter_by(status='completed') \
+    orders = query.filter_by(status=Order.STATUS_COMPLETED) \
                         .order_by(Order.created_at.desc()) \
                         .paginate(page=page, per_page=per_page, error_out=False)
 

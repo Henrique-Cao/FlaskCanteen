@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template,redirect, url_for, request, flash
-from app.services.order_service import format_order_number
+from app.services.order_service import build_order_item_details, format_order_number
 from app.models import Category, MenuItem, Order, OrderItem
 from flask_login import current_user
 main_bp = Blueprint("main", __name__)
@@ -34,12 +34,7 @@ def confirmation(order_number):
     for item in order_items:
         menu_item = MenuItem.query.get(item.menu_item_id)
         if menu_item:
-            items_with_details.append({
-                "name": menu_item.name,
-                "quantity": item.quantity,
-                "unit_price": item.unit_price,
-                "total_price": item.quantity * item.unit_price
-            })
+            items_with_details.append(build_order_item_details(item, menu_item))
         
     return render_template("order_confirmation/order_confirmation.html", order=order, order_items=order_items, order_number=order_number, items_with_details=items_with_details )
 
